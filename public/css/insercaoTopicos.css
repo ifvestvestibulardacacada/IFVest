@@ -1,0 +1,150 @@
+*{
+    font-family:'REM', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container{
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.custom-select{
+    position: relative;
+    width: 500px;
+}
+
+.select-box{
+    background-color: white;
+    border: 1px solid #ced4da;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.selected-options{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0;
+}
+
+.tag{
+    background-color: #f2f2f2;
+    color: black;
+    border-radius: 5px;
+    margin-right: 5px;
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+}
+
+.remove-tag{
+    margin-left: 6px;
+    cursor: pointer;
+}
+
+.arrow{
+    margin: 0 10px;
+}
+
+.fa-angle-down{
+    color: #404040;
+    font-size: 30px;
+}
+
+.options{
+    display: none;
+    position: absolute;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-top: none;
+    max-height: 225px;
+    overflow-y: auto;
+    z-index: 1;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+}
+
+.open .options{
+    display: block;
+}
+
+.option-search-tags{
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    padding: 8px 0px;
+    margin: 8px;
+}
+
+.search-tags{
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 14;
+}
+
+.clear{
+    position: absolute;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    color: #000000;
+    top: 26px;
+    left: auto;
+    right: 15px;
+}
+
+.option{
+    padding: 12px;
+    cursor: pointer;
+}
+
+.option.active{
+    color: #000000;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.tag:hover,
+option:hover{
+    background-color: #eaeaea;
+}
+
+.no-result-message{
+    padding: 0px 0px 12px 12px;
+}
+
+.error{
+    color: #ff1a2a;
+    margin-top: 8px;
+}
+
+.btn_submit{
+    padding: 17px 24px;
+    background-color: green;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn_submit:hover{
+    background-color: green;
+}

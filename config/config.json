@@ -1,0 +1,38 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "residentevil6",
+    "database": "ifvest",
+    "host": "localhost",  
+    "dialect": "postgres",
+    "port": "5432"
+  },
+  "test": {
+    "username": "ruan177",
+    "password": "0grC3HvndpJD",
+    "database": "ifvest",
+    "host": "ep-polished-river-a5rjavzx-pooler.us-east-2.aws.neon.tech",
+    "dialect": "postgres",
+    "port": "5432",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true
+      }
+    }
+  },
+  "production": {
+    "username": "ruan177",
+    "password": "0grC3HvndpJD",
+    "database": "ifvest",
+    "host": "ep-polished-river-a5rjavzx-pooler.us-east-2.aws.neon.tech",
+    "dialect": "postgres",
+    "port": "5432",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true
+      }
+    }
+  }
+}

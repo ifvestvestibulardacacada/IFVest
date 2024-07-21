@@ -1,0 +1,38 @@
+.dropdown {
+    position: relative;
+    width: 200px;
+   }
+   
+   #search {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+   }
+   
+  /* Estilos para o dropdown de listagem */
+/* Estilos para o dropdown de listagem */
+#dropdown-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: grid; /* Define o contêiner como uma grade */
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Cria colunas automáticas com largura mínima de 100px */
+    gap: 10px; /* Espaçamento entre os itens */
+    max-height: 200px; /* Altura máxima do dropdown */
+    overflow-y: auto; /* Scroll vertical se necessário */
+}
+
+#dropdown-list li {
+    padding: 5px;
+    cursor: pointer;
+    background-color: #f1f1f1; /* Cor de fundo para os itens */
+    border-radius: 3px; /* Bordas arredondadas para os itens */
+}
+
+#dropdown-list li:hover {
+    background-color: #ddd; /* Cor de fundo ao passar o mouse */
+}
+
+#dropdown-list li:last-child {
+    margin-right: 0; /* Remove o espaço à direita do último item */
+}

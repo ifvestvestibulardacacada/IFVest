@@ -1,0 +1,248 @@
+@font-face {
+    font-family: 'Asana-Math';
+    src: url('../font/asana-math.otf') format('opentype');
+}
+
+
+*{
+    box-sizing: border-box;
+}
+
+
+
+
+footer {
+    bottom: 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+}
+
+footer a {
+    color: rgb(0, 158, 158);
+}
+
+.editor-container {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: absolute;
+    max-width: 85%;
+    max-height: 90%;
+    /* border: 2px solid green; */
+}
+
+.symbols-container{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 800px;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 10px;
+    border:1px solid rgb(210, 210, 210);
+    border-radius: 7px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
+
+    /* border: 2px solid rgb(0, 153, 255); */
+
+}
+
+.symbol-btn {
+    display: flex;
+}
+
+.symbol-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid rgb(208, 208, 208); */
+    background-color: rgb(234, 234, 234);
+    border-radius: 7px;
+    padding: 15px;
+    height: 35px;
+    max-width: auto;
+}
+
+
+.symbol-section button{
+    /* width: cover; */
+    background-color: transparent;
+    border: none;
+}
+
+.symbol-section button img:hover{
+    scale: 115%;
+    cursor: pointer;
+    transition:  0.3s ease-in-out;
+}
+
+.hidden-symbols{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: rgb(234, 234, 234);
+    border-radius: 0px 0px 7px 7px;
+    padding: 10px;
+    margin-left: -15px;
+    position: absolute;
+    width: inherit;
+}
+
+.item {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.equation-editor{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 600px;
+    padding: 20px;
+    border:1px solid rgb(210, 210, 210);
+    border-radius: 7px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
+    /* border: 2px solid rgb(255, 0, 0); */
+}
+
+.editor-close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    font-size: 14pt;
+
+    margin: -15px -15px 10px 0px;
+
+}
+
+.editor-close-btn:hover {
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.equation-btn-box{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    margin: 5px;
+    /* border:1px solid rgb(255, 0, 0); */
+
+}
+
+.equation-btn-box button{
+    background-color: #e4e4e4;
+    border: 1px solid #e4e4e4;
+    border-radius: 5px;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    transition: 0.4s;
+    margin-bottom: 3px;
+}
+
+.equation-btn-box button:hover{
+    background-color: #cacaca;
+    cursor: pointer;
+}
+
+.equation-preview{
+
+    font-family: 'Asana-Math', sans-serif;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 30px;
+    outline: none;
+    padding: 20px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    /* border:1px solid rgb(81, 255, 0); */
+   
+}
+
+.generator-btn{
+    background-color: rgb(0, 110, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11pt;
+    font-weight: 500;
+    width: 100%;
+    height: 35px;
+    border: none;
+    border-radius: 7px;
+    margin-top: 5px;
+    transition: 0.4s ease-in-out;
+}
+
+.generator-btn:hover{
+    background-color: rgb(69, 149, 254);
+    cursor: pointer;
+}
+
+
+.editor-container textarea{
+    font-family: 'Asana-Math', sans-serif;
+    height: 100px;
+    font-size: 15px;
+    resize: none;
+    width: 100%;
+    outline: none;
+    border-radius: 7px;
+    padding-left: 5px;
+    border: 1px solid rgb(180, 180, 180);
+    box-sizing: border-box;
+    padding: 10px 42px 20px 10px;
+}
+
+.editor-btn {
+    background-color: rgb(0, 110, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11pt;
+    font-weight: 500;
+    width: 200px;
+    height: 35px;
+    border: none;
+    border-radius: 7px;
+    transition: 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+.editor-btn:hover{
+    background-color: rgb(69, 149, 254);
+    cursor: pointer;
+}
+
+.hide{
+    display: none;
+}
+
+@media screen and (min-width: 900px) {
+    .editor-container {
+        flex-direction: column;
+    }
+
+
+
+
+}
+
+@media screen and (max-width: 950px) {
+    trix-editor{
+        width: 90%;
+    }
+
+}

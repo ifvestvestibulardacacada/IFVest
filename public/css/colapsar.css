@@ -1,0 +1,42 @@
+ul.left-menu a:link,
+ul.left-menu a:visited,
+ul.left-menu a {
+  text-decoration: none;
+  color: #444;
+}     
+
+ul.left-menu {
+  border-left: solid 5px #d228b0;
+  background: #efefef; 
+  border-radius: 5px;
+  list-style: none;
+  padding-left: 0; 
+  /*width: 182px; Set width if required*/
+}
+
+ul.left-menu ul {
+  padding-left: 0; 
+  list-style: none;
+}
+ul.left-menu ul li {
+  line-height: 1.2em; 
+  cursor: pointer;
+}
+ul.left-menu li a {
+  display: block; 
+  margin-left: 0em; 
+  padding: .5em;
+}
+
+/* Indentation Theme */
+ul.left-menu.theme1 li a {
+  display: block; 
+  margin-left: 0em;
+  padding: .5em;
+}
+ul.left-menu.theme1 li li a {margin-left: 1em;}
+ul.left-menu.theme1 li li li a {margin-left: 2em;}
+ul.left-menu.theme1 li li li li a {margin-left: 3em;}
+ul.left-menu.theme1 li li li li li a {margin-left: 4em;}
+ul.left-menu.theme1 li li li li li li a {margin-left: 5em;} /* etc */
+

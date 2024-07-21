@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/styles.css">
+
+
+        <!-- Outros elementos do head -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <title>Responsive sidebar submenus</title>
+</head>
+<link rel="stylesheet" href="/css/meusSimuladosTable.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    main {
+        margin: 20px;
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+        /* Aumenta o tamanho do título */
+        font-weight: bold;
+        /* Torna o título em negrito */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Estilos gerais para todos os botões */
+    .button-container {
+        display: flex;
+        /* Usa flexbox para alinhar os botões lado a lado */
+        gap: 10px;
+        /* Espaçamento entre os botões */
+        justify-content: center;
+        /* Centraliza os botões horizontalmente */
+        padding: 10px;
+        /* Padding ao redor do contêiner para dar espaço */
+        /* Fundo claro para o contêiner */
+        /* Sombra suave para dar profundidade */
+    }
+
+    .button {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 1px solid black;
+        color: black;
+        cursor: pointer;
+
+    }
+</style>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <main>
+            <h1>Meus Simulados</h1>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descricao</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% simulados.forEach(simulado=> { %>
+                        <tr>
+                            <td>
+                                <%= simulado.titulo %>
+                            </td>
+                            <td>
+                                <%= simulado.descricao %>
+                            </td>
+                            <td>
+                                <%= simulado.tipo %>
+                            </td>
+                            <td>
+                                <div class="button-container">
+                                    <a href="/usuario/simulados/<%= simulado.id %>/fazer" class="button">
+                                        <div class="icon-button">
+                                            <i class="fas fa-play"></i> Fazer Simulado
+                                        </div>
+                                    </a>
+                                    <a href="/usuario/simulados/<%= simulado.id %>/editar" class="button">
+                                        <div class="icon-button">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </div>
+                                    </a>
+                                    <a href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" class="button">
+                                        <div class="icon-button">
+                                            <i class="fas fa-plus"></i> Adicionar Questões
+                                        </div>
+                                    </a>
+                                    <a href="/usuario/simulados/<%= simulado.id %>/remover-questoes" class="button">
+                                        <div class="icon-button">
+                                            <i class="fas fa-minus"></i> Remover Questões
+                                        </div>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+
+
+            <% if (totalPages> 1) { %>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <% if (currentPage> 1) { %>
+                            <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">Anterior</a>
+                            </li>
+                            <% } %>
+                                <% for(let i=1; i <=totalPages; i++) { %>
+                                    <li class="page-item <%= currentPage == i? 'active' : '' %>">
+                                        <a class="page-link" href="?page=<%= i %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+                                        <% if (currentPage < totalPages) { %>
+                                            <li class="page-item"><a class="page-link"
+                                                    href="?page=<%= currentPage + 1 %>">Próximo</a></li>
+                                            <% } %>
+                    </ul>
+                </nav>
+                <% } %>
+        </main>
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+</body>
+
+</html>

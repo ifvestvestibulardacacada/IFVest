@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--========== BOX ICONS ==========-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+        <!--========== CSS ==========-->
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/card.css">
+
+        <title>Responsive sidebar submenus</title>
+    </head>
+    <body>
+        <%- include('../partials/sidebar') %>
+        <link rel="stylesheet" href="/css/Botão.css">
+        <main>
+            <h1>Funcionalidades disponíveis</h1>
+<p>Selecione uma opção</p>
+
+<div class="ag-format-container">
+  <div class="ag-courses_box">
+    <div class="ag-courses_item">
+      <a href="/usuario/perfil" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Perfil
+        </div>
+      </a>
+    </div>
+
+    <div class="ag-courses_item">
+      <a class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Favoritos
+        </div>
+      </a>
+    </div>
+
+    <div class="ag-courses_item">
+      <a href="/usuario/simulados/visualizar/dissertativo" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Simulados
+          (dissertativas)
+        </div>
+      </a>
+    </div>
+
+    <div class="ag-courses_item">
+      <a href="/usuario/simulados/visualizar/objetivo" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Simulados
+          (objetivas)
+        </div>
+      </a>
+    </div>
+
+    <div class="ag-courses_item">
+      <a href="/usuario/simulados/visualizar/aleatorio" class="ag-courses-item_link">
+        <div class="ag-courses-item_bg"></div>
+
+        <div class="ag-courses-item_title">
+          Simulados
+          (Aleatório)
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+        </main>
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+    </body>
+</html>

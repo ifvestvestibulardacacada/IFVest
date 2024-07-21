@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Responsive Video Playlist Tutorial</title>
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="/css/video.css">
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+</head>
+<body>
+    <%- include('../partials/sidebar') %>
+<div class="container">
+    <div class="main-video-container">
+       <iframe
+          id="main-video"
+          src="https://www.youtube.com/embed/qYiZJ4F6lKs?si=c2siWC9y2E2m53Ua"
+          frameborder="0"
+          allowfullscreen
+       class="main-video"></iframe>
+       <h3 class="main-vid-title">teste1</h3>
+    </div>
+ 
+    <div class="video-list-container">
+       <div class="list active" data-youtube-id="qYiZJ4F6lKs?si=c2siWC9y2E2m53Ua">
+          <h3 class="list-title">teste</h3>
+       </div>
+ 
+       <!-- Adicione mais entradas para outros vídeos -->
+       <div class="list active" data-youtube-id="EiKdUgy0wk4?si=qWJeuGyou1IoZE2L">
+          <h3 class="list-title">Teste Tarefa de calculo</h3>
+       </div>
+ 
+       <!-- Adicione mais entradas conforme necessário -->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- custom js file link  -->
+<script src="/js/video.js"></script>
+
+</body>
+</html>
+

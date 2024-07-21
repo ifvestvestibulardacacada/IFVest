@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Verificar Similaridade</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .resultado {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .resultado:hover {
+            transform: translateY(-5px);
+        }
+
+        .pergunta {
+            grid-column: 1;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .resposta {
+            grid-column: 2;
+            color: #666;
+        }
+
+        .acao {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .acao:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <%- include('../partials/sidebar') %>
+    <div class="container">
+        <h1>Resultados da Verificação de Similaridade</h1>
+        <% resultados.forEach(resultado => { %>
+            <div class="resultado">
+                <div class="pergunta"><strong>Pergunta:</strong></div>
+                <div class="resposta"><%= resultado.pergunta %></div>
+                <div class="pergunta"><strong>Resposta:</strong></div>
+                <div class="resposta"><%= resultado.resposta %></div>
+                <a href="/professor/questoes?pergunta=<%= encodeURIComponent(resultado.pergunta) %>" class="acao">Ver na página de minhas questões</a>
+            </div>
+            
+        <% }); %>
+        <a href="/usuario/inicioLogado" class="acao">Voltar</a>
+    </div>
+</body>
+</html>

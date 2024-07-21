@@ -1,0 +1,79 @@
+<!-- arquivo: views/perguntas.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Questões do Simulado</title>
+</head>
+<body>
+  
+</body>
+</html>
+
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--========== BOX ICONS ==========-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+        <!--========== CSS ==========-->
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/textarea.css">
+        <link rel="stylesheet" href="/css/googlef.css">
+
+        <title>Responsive sidebar submenus</title>
+    </head>
+    <body>
+        <%- include('../partials/sidebar') %>
+            <main>
+                <form id="questionario" class="form" action="/usuario/responder-provaX/<%= prova.id %>" method="POST">
+                    <div class="title-div">
+                        <h1>Teste google titulo</h1>
+                        <h4>Redirecionamento em <span id="cronometro">0:00</span></h4>
+                        <p>Teste Descrição.<br></p>
+                    </div>
+
+                    <% for (let i = 0; i < perguntas.length; i++) { %>
+                        <% if (perguntas[i].resposta !== ' ') { %>
+                            <div class="name-div">
+                                <div class="titulo"><p><%= perguntas[i].titulo %></p></div>
+                                <div class="name"><%- perguntas[i].pergunta %><span class="required">*</span></div>
+                                <div class="input-div">
+                                    <% if (perguntas[i] && perguntas[i].resposta) { %>
+                                        <% const resposta = perguntas[i].resposta.split('_'); %>
+                                        <% for (let j = 0; j < resposta.length; j++) { %>
+                                            <input type="radio" id="resposta<%= i %><%= j %>" name="resposta[<%= i %>]" value="<%= resposta[j] %>">
+                                            <label for="resposta<%= i %><%= j %>"><%= resposta[j] %></label><br>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="name-div">
+                                <div class="titulo"><p><%= perguntas[i].titulo %></p></div>
+                                <div class="name"><%- perguntas[i].pergunta %><span class="required">*</span></div>
+                                <br>
+                                <textarea name="resposta[<%= i %>]" id="" cols="30" rows="10" placeholder="Sua resposta"></textarea>
+                            </div>
+                        <% } %>
+                        
+                        
+                    <% } %>
+                    <div class="espaco">
+                        <button class="btn" type="submit">Enviar</button>
+                    </div>
+                    
+                </form>
+                </div>
+                
+            </main>
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+        <script src="/js/provaCronometo.js"></script>
+    </body>
+</html>

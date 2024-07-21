@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <title>Responsive sidebar submenus</title>
+</head>
+
+<body>
+    <style>
+        .simulado-icon {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    
+        .simulado-icon:hover {
+        background-color: #0056b3;
+    }
+
+    .simulado-icon-disabled {
+        background-color: #ccc; /* Cor de fundo cinza claro */
+        color: #666; /* Cor do texto cinza escuro */
+        cursor: not-allowed; /* Muda o cursor para indicar que o link não é clicável */
+    }
+    
+     
+        /* Estilização da tabela */
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center; 
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+            
+    </style>
+    <%- include('../partials/sidebar') %>
+        <!--========== CONTENTS ==========-->
+        <main>
+
+            <h1>Selecione um simulado</h1>
+            <form action="/usuario/simulados/visualizar/<%= tipo %>?titulo=" method="GET">
+                <label for="titulo">Buscar:</label>
+                <input type="text" id="titulo" name="titulo" required>
+                <button type="submit">Buscar</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descricao</th>
+       
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% simulados.forEach(simulado => { %>
+                        <tr>
+                            <td><%= simulado.titulo %></td>
+                            <td><%= simulado.descricao %></td>
+                     
+                            <td>
+                              
+                                    <a href="/usuario/simulados/<%= simulado.id %>/fazer" class="simulado-icon">
+                                        <i class="fas fa-play"></i> Fazer Simulado
+                                    </a>
+                        
+                       
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+
+            
+
+
+
+
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+            </div>
+
+            
+            <link rel="stylesheet" href="/css/styles.css">
+        </main>
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+</body>
+
+</html>

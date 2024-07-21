@@ -1,0 +1,147 @@
+* {
+    font-family: Helvetica;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    padding: 1rem;
+  }
+  
+  h1 {
+    margin-bottom: 1rem;
+  }
+
+  .buttonModal{
+    padding: 0.6rem 1.2rem;
+    background-color: #888;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1rem;
+  }
+  
+  .link-button {
+    background: none; /* Remove a cor de fundo do botão */
+    color: #007bff; /* Define a cor do texto para se parecer com um link */
+    border: none; /* Remove a borda do botão */
+    padding: 0; /* Remove o padding interno do botão */
+    font: inherit; /* Herda a fonte do elemento pai */
+    cursor: pointer; /* Muda o cursor para um ponteiro quando passa o mouse */
+    outline: inherit; /* Herda o contorno do elemento pai */
+   }
+   
+   .link-button:hover {
+    text-decoration: underline; /* Adiciona um sublinhado quando o mouse passa sobre o botão */
+   }
+   
+  button:hover {
+    opacity: 1;
+  }
+  
+  #fade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+  }
+  
+  #modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    max-width: 90%;
+    background-color: #fff;
+    padding: 1.2rem;
+    border-radius: 0.5rem;
+    z-index: 10;
+  }
+  
+  #fade,
+  #modal {
+    transition: 0.5s;
+    opacity: 1;
+    pointer-events: all;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .modal-body p {
+    margin-bottom: 1rem;
+  }
+  
+  #modal.hide,
+  #fade.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  #modal.hide {
+    top: 0;
+  }
+  
+/*  */
+.topico-item {
+    display: flex;
+    /* Use flexbox for layout */
+    align-items: center;
+    /* Align items vertically in the center */
+    gap: 10px;
+    /* Add some space between the elements */
+    padding: 10px;
+    /* Add padding for better spacing */
+    border: 1px solid #ccc;
+    /* Add a border for visual separation */
+    border-radius: 5px;
+    /* Add rounded corners for a softer look */
+    margin-bottom: 10px;
+    /* Add some space between each item */
+}
+
+.topico-item input[type="text"] {
+    flex-grow: 1;
+    /* Allow the input field to take up available space */
+    padding: 5px;
+    /* Add padding inside the input field */
+    border: 1px solid #ccc;
+    /* Add a border for the input field */
+    border-radius: 5px;
+    /* Add rounded corners for the input field */
+}
+
+.topico-item button {
+    background-color: #007bff;
+    /* Set a background color for the button */
+    color: white;
+    /* Set the text color */
+    border: none;
+    /* Remove the default button border */
+    padding: 5px 10px;
+    /* Add padding inside the button */
+    border-radius: 5px;
+    /* Add rounded corners for the button */
+    cursor: pointer;
+    /* Change the cursor to a pointer when hovering */
+    transition: background-color 0.3s ease;
+    /* Smooth transition for hover effect */
+}
+
+.topico-item button:hover {
+    background-color: #0056b3;
+    /* Darken the background color on hover */
+}

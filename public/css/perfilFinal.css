@@ -1,0 +1,47 @@
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+   
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .flex-child {
+    flex-basis: calc(33.33% - 20px);
+    margin-bottom: 20px;
+    background-color: #12385c;
+    padding: 20px;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+  }
+
+.magenta {
+    flex: 0.3;
+}
+
+.image-container {
+    position: relative;
+}
+
+.image-container img {
+    width: 100%;
+}
+
+.green{
+    flex: 0.6;
+}
+
+.image-container .text {
+    position: absolute;
+    bottom: 0;
+    color: white; /* Texto branco */
+    width: 100%;
+    padding: 10px;
+}
+
+@media (max-width: 968px) {
+    .flex-child {
+        flex-basis: 100%;
+    }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+       .voltar-button {
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Página em Manutenção</h1>
+        <p>Agradecemos sua compreensão enquanto realizamos melhorias.</p>
+        <button class="voltar-button" onclick="history.back()">Voltar</button>
+    </div>
+
+    <script>
+        // Adiciona um evento de clique ao botão para ir para trás na história do navegador
+        const voltarButton = document.querySelector('.voltar-button');
+        voltarButton.addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>

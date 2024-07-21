@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: auto;
+            margin-right: auto;
+           
+            width: 70%
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <title>Responsive sidebar submenus</title>
+</head>
+
+<body>
+
+    <%- include('../partials/sidebar') %>
+        <main>
+            <h1>Editar Simulado</h1>
+
+            <form action="/usuario/simulados/<%= simulado.id %>/editar?_method=PATCH" method="POST">
+                <label for="titulo">Título do Simulados:</label>
+                <input type="text" id="titulo" value="<%= simulado.titulo %>" name="titulo" required>
+
+                <label for="descricao">Descricao:</label>
+                <textarea id="descricao" name="descricao" rows="5" cols="50" required><%= simulado.descricao %></textarea>
+
+
+
+                <label for="tipo">Selecione o tipo:</label>
+                <select name="tipo" id="tipo">
+                    <option value="DISSERTATIVO" <%= simulado.tipo === 'DISSERTATIVO' ? 'selected' : '' %>>Dissertativa</option>
+                    <option value="OBJETIVO" <%= simulado.tipo === 'OBJETIVO' ? 'selected' : '' %>>Objetiva</option>
+                    <option value="ALEATORIO" <%= simulado.tipo === 'ALEATORIO' ? 'selected' : '' %>>Aleatoria</option>
+                </select><br>
+
+                <label for="modo">Selecione o Modo:</label>
+                <select name="modo" id="modo">
+                    <option value="1">Normal</option>
+                    <option value="2">Aleatorio</option>
+                </select><br>
+
+                <button type="submit" style="width: 80%">Salvar</button>
+            </form>
+
+        </main>
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+</body>
+
+</html>

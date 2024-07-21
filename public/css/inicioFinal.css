@@ -1,0 +1,19 @@
+.flex-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os filhos sejam envoltos em várias linhas */
+  justify-content: space-between; /* Espaçamento igual entre os filhos */
+}
+
+.flex-child {
+  flex: 1;
+  border: 2px solid yellow;
+  margin-bottom: 10px; /* Espaçamento entre os filhos */
+  box-sizing: border-box; /* Inclui borda no cálculo da largura total */
+}
+
+@media (max-width: 768px) {
+  /* Estilos para telas menores, por exemplo, dispositivos móveis */
+  .flex-child {
+      flex-basis: 100%; /* 100% de largura para ocupar toda a largura disponível */
+  }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Login</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/index.css'>
+
+    <style>
+                select {
+                    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    background: #f0ffffde;
+    color: #514869;
+    font-size: 12pt;
+    box-shadow: 0px 10px 40px #00000056;
+    outline: none;
+    box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-login">
+        <div class="left-login">
+            <h1>Registre-se para<br>Aprender coisas novas</h1>
+            <img src="/img/formula-animate.svg" class="left-login-image" alt="GifAnimado">
+        </div>
+        <form action="/cadastro" method="POST">
+            <div class="right-login">
+                <div class="card-login">
+                    <h1>CADASTRO</h1>
+                    <div class="textfield">
+                        <label for="usuario">Usuário</label>
+                        <input type="text" name="usuario" placeholder="Usuário">
+                    </div>
+                    <div class="textfield">
+                        <label for="nome">Nome</label>
+                        <input type="text" name="nome" placeholder="Nome">
+                    </div>
+                    <div class="textfield">
+                        <label for="email">E-mail</label>
+                        <input type="email" name="email" placeholder="e-mail">
+                    </div>
+                    <div class="textfield">
+                        <label for="senha">Senha</label>
+                        <input type="password" name="senha" placeholder="Senha">
+                    </div>
+                    <div class="textfield">
+                        <label for="perfil">Perfil</label>
+                    <select name="perfil" id="perfil">
+                        <option value="USUARIO">Usuario</option>
+                        <option value="PROFESSOR">Professor</option>
+                    </select><br>
+                    <% if (errorMessage) { %>
+                        <div class="error-message" style="color: red">
+                            <%= errorMessage %>
+                        </div>
+                        <% } %>
+                    </div>
+                    <button class="btn-login">Cadastro</button>
+                    <a href="/login" class="Cadastro-Login">Já possui cadastro? clique aqui</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
+

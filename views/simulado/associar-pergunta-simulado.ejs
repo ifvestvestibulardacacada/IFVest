@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <title>Responsive sidebar submenus</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Estilos do cabeçalho */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        /* Estilos da barra lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #444;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            padding: 10px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            padding: 10px;
+            border-bottom: 1px solid #666;
+        }
+
+        /* Estilos do conteúdo principal */
+        .main-content {
+            margin: 0 auto;
+            /* Centraliza o conteúdo principal */
+            max-width: 800px;
+            /* Define a largura máxima do conteúdo */
+            padding: 20px;
+        }
+
+        .main-content h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Estilos da tabela */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        /* Estilos da paginação */
+        .pagination-container {
+            margin-top: 20px;
+            text-align: center;
+            /* Centraliza a paginação */
+        }
+
+        .pagination-container a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-right: 5px;
+            background-color: #ccc;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination-container a.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* Estilos do formulário */
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+            /* Centraliza o formulário */
+        }
+
+        form select,
+        form input[type="text"],
+        form button,
+        form input[type="submit"] {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        /* Estilos do link de voltar */
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .botao-associar {
+            padding: 10px 20px;
+            width: 20%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+
+            justify-self: center;
+            border: 1px solid #272525;
+        }
+
+        /* Estilos adicionais para a seção de questões por área */
+        .tabela-qnt-area {
+            width: 10%;
+        }
+
+        /* Estilos gerais para a seção */
+        /* Estilos para a pequena tabelas 
+/* Estilo geral para a div que contém todos os itens */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            /* Espalha os itens uniformemente */
+            flex-wrap: wrap;
+            /* Permite que os itens passem para a próxima linha se não houver espaço suficiente */
+        }
+
+        /* Estilo para cada item dentro do container */
+        .item {
+            margin-right: 10px;
+            /* Adiciona espaço à direita de cada item */
+            margin-bottom: 10px;
+            /* Adiciona espaço abaixo de cada item */
+        }
+
+        /* Estilo para o número dentro do item */
+        .numero {
+            font-variant-numeric: oldstyle-nums;
+            /* Exemplo usando oldstyle-nums */
+            font-weight: bold;
+
+        }
+
+        /* Estilos responsivos */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                margin-bottom: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                max-width: none;
+                /* Remove a largura máxima no modo responsivo */
+            }
+
+            .pagination-container {
+                text-align: center;
+            }
+
+            form {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <!--========== CONTENTS ==========-->
+        <main>
+
+            <h1>
+                <%= simulado.titulo %>
+            </h1>
+
+
+
+
+
+
+
+            <h1>Associar questoes</h1>
+            <div>
+                
+                <form action="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" method="GET">
+                    <!-- Campo de filtragem por título -->
+                    <input type="text" name="titulo" placeholder="Filtrar por título">
+                    <button type="submit">Pesquisar</button>
+
+                    <!-- Campo de seleção para áreas -->
+                    <select name="areaId">
+                        <option value="">Todas as áreas</option>
+                        <% Areas.forEach(area=> { %>
+                            <option value="<%= area.id %>">
+                                <%= area.area %>
+                            </option>
+                            <% }); %>
+                    </select>
+                    <button type="submit">Filtrar por área</button>
+
+                    <!-- Campo de seleção para tópicos -->
+                    <select name="topicosSelecionados">
+                        <option value="">Todas os tópicos</option>
+                        <% topicos.forEach(topico=> { %>
+                            <option value="<%= topico.id %>">
+                                <%= topico.materia %>
+                            </option>
+                            <% }); %>
+                    </select>
+                    <button type="submit">Filtrar por tópicos</button>
+
+
+                    <div class="container">
+                        Questões Associadas por Area:
+                        <% Object.entries(questoesPorArea).forEach(([areaId, count])=> { %>
+                            <% const area=Areas.find(area=> area.id === Number(areaId)); %>
+                                <% if (area) { %>
+                                    <span class="item text">
+                                        <%= area.area %>: <span class="numero">
+                                                <%= count %>
+                                            </span>
+                                    </span>
+                                    <% } %>
+
+                                        <% }); %>
+                    </div>
+
+                    <div id="contador-questoes-selecionadas">Questões Selecionadas: <span
+                            id="numero-questoes-selecionadas">0</span></div>
+                </form>
+            </div>
+
+            <form action="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" method="POST">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Título</th>
+                                <th>Questão</th>
+                                <th>Tipo</th>
+                            
+                                <th>Tópico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% questoes.forEach(questao=> { %>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="questao-<%= questao.id %>"
+                                            name="questoesSelecionadas" value="<%= questao.id %>"
+                                            onchange="manipularCheckbox(this)">
+                                    </td>
+                                    <td>
+                                        <%= questao.titulo %>
+                                    </td>
+                                    <td>
+                                        <%= questao.pergunta %>
+                                    </td>
+                                    <td>
+                                        <%= questao.tipo %>
+                                    </td>
+                              
+                                    <td>
+                                        <% questao.Topicos.forEach(topico=> { %>
+                                            <%= topico.materia %>
+                                                <% }); %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Dentro do formulário -->
+                <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
+                <div class="pagination-container">
+                    <% if (page> 1) { %>
+                        <a
+                            href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page - 1 %>">Anterior</a>
+                        <% } %>
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <a href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= i %>"
+                                    class="<%= page === i ? 'active' : '' %>">
+                                    <%= i %>
+                                </a>
+                                <% } %>
+                                    <% if (page < totalPages) { %>
+                                        <a
+                                            href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
+                                        <% } %>
+                </div>
+                <button type="submit" class="botao-associar">Associar Questões</button>
+                <input type="hidden" name="simuladoId" value="<%= simulado.id %>">
+            </form>
+
+            <link rel="stylesheet" href="/css/styles.css">
+        </main>
+        <script>
+            function atualizarContadorQuestoesSelecionadas() {
+                const idsSelecionados = JSON.parse(sessionStorage.getItem('idsSelecionados<%= simulado.id %>') || []);
+                const numeroQuestoesSelecionadas = idsSelecionados.length;
+
+                // Atualiza o elemento HTML com o número de questões selecionadas
+                document.getElementById('numero-questoes-selecionadas').textContent = numeroQuestoesSelecionadas.toString();
+            }
+            function manipularCheckbox(checkbox) {
+                const id = checkbox.value;
+                const chave = 'idsSelecionados<%= simulado.id %>'; // Chave fixa para o sessionStorage
+
+                if (checkbox.checked) {
+                    // Checkbox marcado, adicionar ID
+                    adicionarId(id, chave, checkbox);
+                } else {
+                    // Checkbox desmarcado, remover ID
+                    removerId(id, chave);
+                }
+                atualizarContadorQuestoesSelecionadas();
+            }
+
+            function adicionarId(id, chave, checkbox) {
+                let arrayAtual = JSON.parse(sessionStorage.getItem(chave) || "[]");
+                if (!arrayAtual.includes(id)) {
+                    arrayAtual.push(id);
+                    sessionStorage.setItem(chave, JSON.stringify(arrayAtual));
+                }
+            }
+
+            function removerId(id, chave) {
+                let arrayAtual = JSON.parse(sessionStorage.getItem(chave) || "[]");
+                let arrayFiltrado = arrayAtual.filter(elemento => elemento !== id);
+                sessionStorage.setItem(chave, JSON.stringify(arrayFiltrado));
+            }
+
+            function verificarEAtualizarCheckboxes() {
+                const idsSelecionados = JSON.parse(sessionStorage.getItem('idsSelecionados<%= simulado.id %>') || []);
+                document.querySelectorAll('input[type="checkbox"][name="questoesSelecionadas"]').forEach(checkbox => {
+                    const id = checkbox.value;
+                    if (idsSelecionados.includes(id)) {
+                        checkbox.checked = true;
+                    } else {
+                        checkbox.checked = false;
+                    }
+                });
+            }
+
+            // Certifique-se de chamar essa função após o carregamento completo da página
+            window.addEventListener('load', function () {
+                verificarEAtualizarCheckboxes(); // Para garantir que os checkboxes estejam corretamente marcados/desmarcados
+                atualizarContadorQuestoesSelecionadas(); // Para atualizar o contador no carregamento da página
+            });
+        </script>
+        <script>
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Adiciona um event listener ao botão "Associar Questões"
+                document.querySelector('.botao-associar').addEventListener('click', function (event) {
+                    // Preenche o campo oculto com os IDs selecionados
+                    const selectedQuestionIds = JSON.parse(sessionStorage.getItem('idsSelecionados<%= simulado.id %>'));
+                    const idsAsString = selectedQuestionIds.join(',');
+                    document.getElementById('selectedQuestionIds').value = idsAsString;
+
+                    // Limpa o item 'idsSelecionados' do sessionStorage
+                    sessionStorage.removeItem('idsSelecionados<%= simulado.id %>');
+
+                    // Redireciona para a página de sucesso ou realiza outra ação conforme necessário
+                    // Por exemplo, redirecionar para a mesma página para limpar os checkboxes
+                    this.submit();
+                });
+            });
+
+
+        </script>
+        <script>
+            console.log("Areas:", Areas);
+            console.log("questoesPorArea:", questoesPorArea);
+        </script>
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+</body>
+
+</html>

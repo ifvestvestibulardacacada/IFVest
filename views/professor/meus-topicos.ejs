@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/topicTable.css">
+    <title>Responsive sidebar submenus</title>
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <!--========== CONTENTS ==========-->
+        <main>
+          
+        <h1 class="text-2xl font-bold mb-4">Tópicos</h1>
+        <form action="/professor/topicos" method="GET" class="mb-4">
+            <label for="titulo" class="mr-2">Buscar:</label>
+            <input type="text" id="materia" name="materia" required class="border p-2 rounded">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Buscar</button>
+        </form>
+
+       
+            <table id="topicTable">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% topicos.forEach(topico => { %>
+                        <tr>
+                            <td>
+                                <span class="material-span topic-title"id="span<%= topico.id %>"><%= topico.materia %></span>
+                                <form class="hide" id="editForm<%= topico.id %>" action="/professor/editar-topico" method="POST">
+                                    <input class="py-1 border border-black" type="text" name="materia" value="<%= topico.materia %>" >
+                                    <input type="hidden" name="id" value="<%= topico.id %>" >
+                                    <button type="submit" id="saveButton" class="btn btn-primary bg-lime-600 text-black rounded py-1 px-4 border border-black">Salvar</button>
+                                    <button type="button" id="cancelButton" class="btn btn-secondary bg-red-500 text-black rounded border py-1 px-4 border-black" onclick="ocultarForm(<%= topico.id %>)">Cancelar</button>
+                                </form>
+                                
+                               
+                            </td>
+                            <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" data-id="<%= topico.id %>" onclick="exibirForm(<%= topico.id %>)">Editar</button></td>
+                        </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+
+            <!-- Antes do fechamento do </main> -->
+            <nav aria-label="Navegação">
+                <ul class="pagination">
+                    <% if (page> 1) { %>
+                        <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
+                        <li class="page-item"><a class="page-link" href="?page=<%= page - 1 %>">Anterior</a></li>
+                        <% } %>
+                            <% for(let i=1; i <=totalPages; i++) { %>
+                                <li class="page-item <%= page == i? 'active' : '' %>">
+                                    <a class="page-link" href="?page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+                                    <% if (page < totalPages) { %>
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page=<%= page + 1 %>">Próxima</a></li>
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page=<%= totalPages %>">Última</a></li>
+                                        <% } %>
+                </ul>
+            </nav>
+            <script>
+                function exibirForm(id){
+                    // Oculta o span com o título do tópico
+                    const titleSpan = document.getElementById(`span${id}`);
+                    titleSpan.style.display = 'none';
+    
+                    // Mostra o formulário
+                    const form = document.getElementById(`editForm${id}`);
+                    form.classList.remove('hide');
+    
+                    // Oculta o botão de editar
+                    const editButton = document.querySelector(`#editForm${id} ~ button.editBtn`);
+                    editButton.style.display = 'none';
+                }
+    
+                function ocultarForm(id){
+                    // Mostra o span com o título do tópico
+                    const titleSpan = document.getElementById(`span${id}`);
+                    titleSpan.style.display = '';
+    
+                    // Oculta o formulário
+                    const form = document.getElementById(`editForm${id}`);
+                    form.classList.add('hide');
+    
+                    // Exibe o botão de editar
+                    const editButton = document.querySelector(`#editForm${id} ~ button.editBtn`);
+                    editButton.style.display = '';
+                }
+            </script>
+                
+
+            <a href="/usuario/inicioLogado">Voltar para home</a>
+            <link rel="stylesheet" href="/css/styles.css">
+        </main>
+       
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+</body>
+
+</html>

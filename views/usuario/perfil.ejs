@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--========== BOX ICONS ==========-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!--========== CSS ==========-->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/perfilFinal.css">
+
+  <style>
+    .editar-perfil {
+      color: #FF4500;
+      /* Cor do link */
+      text-decoration: underline;
+      /* Sublinha o link */
+      cursor: pointer;
+      /* Muda o cursor para indicar que é um link */
+    }
+
+    .editar-perfil:hover {
+      color: #FF6347;
+      /* Cor do link ao passar o mouse */
+      text-decoration: none;
+      /* Remove a sublinhação ao passar o mouse */
+    }
+  </style>
+
+  <title>Responsive sidebar submenus</title>
+</head>
+
+<body>
+  <%- include('../partials/sidebar') %>
+    <main>
+      <div class="flex-container">
+
+        <div class="flex-child magenta">
+          <div class="image-container">
+            <img src="<%= usuario.imagemPerfil || '/img/profile.jpg' %>" alt class="d-block ui-w-80">
+            <div class="text">
+              <%= usuario.nome %>
+            </div>
+          </div>
+          <div class="w3-container cor">
+            <p><i class="fa fa-bookmark-o fa-fw "></i>
+              <%= usuario.perfil %>
+            </p>
+            <p><i class="fa fa-home fa-fw"></i>Brasil</p>
+            <p><i class="fa fa-envelope fa-fw"></i>
+              <%= usuario.email %>
+            </p>
+            <hr>
+            <p><i class="fas fa-edit "></i><a href="/usuario/editar" " class=" link-branco
+                editar-perfil">Editar Perfil</a></p>
+
+            <br>
+          </div>
+        </div>
+
+        <div class="flex-child green">
+          <h2 class=""><i class="fa fa-book fa-fw"></i>Funcionalidades:</h2>
+          <div class="">
+            <h5><b>Simulado</b></h5>
+            <p>Aqui você poderá realizar simulados para testar seus conhecimentos</p>
+            <hr>
+          </div>
+          <div class="">
+            <h5><b>Desafios </b></h5>
+            <p>Os desafios são simulados com tempo limite, otimo para treinar para vestibulares</p>
+            <hr>
+          </div>
+          <div class="">
+            <h5><b>Noticias</b></h5>
+            <p>Aqui você pode ver as noticias que mais quentes sobre vestibulares e educação </p>
+            <hr>
+          </div>
+          <div class="">
+            <h5><b>Materias</b></h5>
+            <p>Aqui você poderá ver todas as materias que disponibilizamos em nosso site</p>
+            <hr>
+          </div>
+        </div>
+
+        <div class="flex-child purple">
+          <h2 class=""><i class="fa fa-star fa-fw"></i>Favoritos</h2>
+          <div class="">
+            <h5><b>Portugues</b></h5>
+            <p>Atalho para a materia de portugues</p>
+            <hr>
+          </div>
+          <div class="">
+            <h5><b>Matematica</b></h5>
+            <p>Atalho para a materia de matematica</p>
+            <hr>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!--========== MAIN JS ==========-->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

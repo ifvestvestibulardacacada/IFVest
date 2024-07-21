@@ -1,0 +1,67 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: #333;
+    /* Cor de fundo do botão */
+    color: #fff;
+    /* Cor do texto do botão */
+    text-decoration: none;
+    /* Remove o sublinhado do link */
+    border-radius: 4px;
+    /* Arredonda os cantos do botão */
+    transition: background-color 0.3s ease;
+    /* Animação suave ao passar o mouse */
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+    /* Cor de fundo do botão ao passar o mouse */
+}
+
+.pagination {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.pagination li {
+    display: block;
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: block;
+    padding: 5px 10px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination li.active a {
+    background-color: #0056b3;
+    color: white;
+}
+
+.pagination li a:hover {
+    background-color: #007bff;
+}
+.hide {
+display: none;
+}

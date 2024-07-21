@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina de editar usuario</title>
+    <link rel="stylesheet" href="/css/perfilUsuario.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            Configurações da conta
+        </h4>
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <h5 class="list-group-item list-group-item-action active" data-toggle="list">
+                        <%= usuario.perfil %>
+                    </h5>
+                    <div class="list-group list-group-flush account-settings-links">
+
+                        <a class="list-group-item list-group-item-action active" data-toggle="list"
+                            href="#account-general">Geral</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-change-password">Mudar senha</a>
+                            <% if (usuario.perfil === "USUARIO" ) { %>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-delete">Deletar Conta</a>
+                            <% } %>
+                            <a class="list-group-item list-group-item-action" style=" text-decoration: underline;"
+                            href="/usuario/perfil">Voltar</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account-general">
+                            <div class="card-body media align-items-center">
+                                <img src="<%= session.imagemPerfil || 'https://bootdey.com/img/Content/avatar/avatar1.png' %>"
+                                    alt class="d-block ui-w-80">
+                                <form action="/uploads/" method="post" enctype="multipart/form-data">
+                                    <div class="media-body ml-4">
+                                        <label class="btn btn-outline-primary">
+                                            Selecionar imagem
+                                            <input type="file" class="account-settings-fileinput" accept="image/*"
+                                                name="image" style="display: none;">
+                                        </label>
+                                        <button type="submit" class="btn btn btn-primary">Save Image</button>
+                                        <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <hr class="border-light m-0">
+                            <div class="card-body">
+                                <form action="/usuario/editar/<%= usuario.id %>?_method=PATCH" method="POST">
+                                    <div class="form-group">
+                                        <label class="form-label">Nome de usuario</label>
+                                        <input type="text" class="form-control mb-1" name="usuario"
+                                            placeholder="<%= usuario.usuario %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Nome</label>
+                                        <input type="text" class="form-control" name="nome"
+                                            placeholder="<%= usuario.nome %>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="text" class="form-control mb-1" name="email"
+                                            placeholder="<%= usuario.email %>">
+
+                                    </div>
+
+                                    <div class="text-right mt-3" style="margin-right: 1rem;">
+                                        <button type="submit" class="btn btn-primary">Salvar as alterações</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="account-change-password">
+                            <form action="/usuario/editar/<%= usuario.id %>?_method=PATCH" method="POST">
+                                <div class="card-body pb-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Digite sua senha atual</label>
+                                        <input type="password" name="senha" class="form-control"
+                                            placeholder="***********">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Digite a nova senha</label>
+                                        <input type="password" name="" class="form-control" placeholder="***********">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Digite a nova senha novamente</label>
+                                        <input type="password" name="novasenha" class="form-control"
+                                            placeholder="***********">
+                                    </div>
+                                </div>
+                                <div class="text-right mt-3" style="margin-right: 2rem;;">
+                                    <button type="submit" class="btn btn-primary">Salvar as alterações</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                        <div class="tab-pane fade" id="account-delete">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Atenção!</strong> A exclusão da sua conta é irreversível. Todos os seus dados e
+                                informações serão permanentemente removidos.
+                            </div>
+                            <form id="deleteAccountForm" action="/usuario/<%= usuario.id %>?_method=DELETE"
+                                method="POST">
+                                <div class="form-group">
+                                    <label for="confirmDelete">Digite "DELETAR" para confirmar:</label>
+                                    <input type="text" class="form-control" id="confirmDelete" name="confirmDelete"
+                                        required>
+                                </div>
+                                <div class="text-right" style="margin-right: 1rem;">
+                                    <button type="submit" class="btn btn-danger">Deletar conta</button>
+                                </div>
+                            </form>
+                        </div>
+                        <a href="/usuario/perfil">Voltar </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <script>
+            document.getElementById('deleteAccountForm').addEventListener('submit', function (e) {
+                var confirmDelete = document.getElementById('confirmDelete').value;
+                if (confirmDelete !== 'DELETAR') {
+                    alert('Por favor, digite "DELETAR" no campo para confirmar a exclusão.');
+                    e.preventDefault();
+                } else if (!confirm('Tem certeza de que deseja deletar sua conta? Esta ação não pode ser desfeita.')) {
+                    e.preventDefault();
+                }
+            });
+        </script>
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript">
+
+        </script>
+</body>
+
+</html>

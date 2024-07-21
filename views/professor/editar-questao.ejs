@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+   
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <title>Responsive sidebar submenus</title>
+
+    <link rel="stylesheet" href="/css/editorPaginaEdiitar.css">
+    <link rel="stylesheet" href="/css/icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.0/trix.js"></script>
+<style>
+
+        .resposta-item {
+            display: flex;
+            /* Use flexbox for layout */
+            align-items: center;
+            /* Align items vertically in the center */
+            gap: 10px;
+            /* Add some space between the elements */
+            padding: 10px;
+            /* Add padding for better spacing */
+            border: 1px solid #ccc;
+            /* Add a border for visual separation */
+            border-radius: 5px;
+            /* Add rounded corners for a softer look */
+            margin-bottom: 10px;
+            /* Add some space between each item */
+        }
+
+        .resposta-item input[type="text"] {
+            flex-grow: 1;
+            /* Allow the input field to take up available space */
+            padding: 5px;
+            /* Add padding inside the input field */
+            border: 1px solid #ccc;
+            /* Add a border for the input field */
+            border-radius: 5px;
+            /* Add rounded corners for the input field */
+        }
+
+        .resposta-item button {
+            background-color: #007bff;
+            /* Set a background color for the button */
+            color: white;
+            /* Set the text color */
+            border: none;
+            /* Remove the default button border */
+            padding: 5px 10px;
+            /* Add padding inside the button */
+            border-radius: 5px;
+            /* Add rounded corners for the button */
+            cursor: pointer;
+            /* Change the cursor to a pointer when hovering */
+            transition: background-color 0.3s ease;
+            /* Smooth transition for hover effect */
+        }
+
+        .resposta-item button:hover {
+            background-color: #0056b3;
+            /* Darken the background color on hover */
+        }
+
+        main {
+            margin-top: 60px;
+            /* Ajuste este valor conforme necessário */
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <%- include('../partials/sidebar') %>
+        <main>
+            <div class="container">
+
+                <h1>Editar Questão</h1>
+                <form action="/professor/editar-questao?_method=PATCH" method="POST">
+                    <input type="hidden" id="id" name="id" value="<%= questao.id %>">
+                    <div class="titulo">
+                        <label for="titulo">TITULO:</label>
+                        <input type="text" id="titulo" name="titulo" value="<%= questao.titulo %>" required>
+                    </div>
+                    <div class="coluna-esquerda">
+
+                        <%- include('../partials/painel') %>
+                            <div id="content" contenteditable="true" spellcheck="false">
+                                <%= questao.pergunta %>
+                            </div>
+                            <%- include('../partials/editorEquacao') %>
+
+                            <% if (questao.tipo==="OBJETIVA" ) { %>
+                                <div id="respostas-container">
+                                    <span> Adicione as alternativas e selecione apenas a(s) resposta(s)
+                                        correta(s)</span>
+
+                                    <% questao.Opcoes.forEach((opcao, index)=> { %>
+                                        <div class="resposta-item">
+                                            <input type="checkbox" name="correta[]" value="<%= opcao.id %>">
+                                            <input type="hidden" name="opcoesIds[]" value="<%= opcao.id %>">
+                                            <% if (opcao.descricao.includes('/uploads')) { %>
+                                                <!-- Se a descrição contiver uma tag de imagem, renderiza como HTML -->
+                                                <input type="text" name="opcoes[<%= opcao.id %>]"
+                                                placeholder="Sua resposta" >
+                                    
+                                                <input type="file" name="files[]" id="inputFile" class="input-resposta" placeholder="Sua resposta" onchange="previewImage(this);">
+                                                <img id="imagePreview" src="<%= opcao.descricao %>"
+                                                    alt="Descrição da opção <%= index + 1 %>" width="150" height="200">
+                                                <% } else { %>
+
+                                                    <input type="text" name="opcoes[<%= opcao.id %>]"
+                                                        placeholder="Sua resposta" value="<%= opcao.descricao %>">
+                                                    <% } %>
+                                        </div>
+                                        <% }); %>
+                                </div>
+                    </div>
+                    <% } else { %>
+                        <label for="descricao">Resposta :</label>
+                        <textarea id="descricao" name="resposta" rows="5" cols="50"
+                            required> <%= questao.resposta %></textarea>
+                        <% } %>
+
+                            <div style=" margin-left: 10.5rem;">
+                                <input type="hidden" id="pergunta" name="pergunta">
+
+                            </div>
+                            <button type="submit" class="botao-registro">Registrar</button>
+            </div>
+
+
+
+            </form>
+
+            </div>
+            </div>
+        </main>
+
+
+        <script>
+
+        </script>
+
+     
+            <script>
+                // Função para salvar o conteúdo do editor no localStorage
+                function saveEditorContent() {
+                    const editorContent = document.getElementById('content').innerHTML;
+                    localStorage.setItem('editorContent', editorContent);
+                }
+
+                // Adicionar evento de escuta para o elemento do editor
+                document.getElementById('content').addEventListener('input', saveEditorContent);
+            </script>
+            <script>
+                // Função para enviar o conteúdo do editor como parte do formulário
+                function sendEditorContent() {
+                    const editorContent = localStorage.getItem('editorContent');
+                    document.getElementById('pergunta').value = editorContent;
+                }
+
+                // Adicionar evento de escuta para o botão de envio do formulário
+                document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+            </script>
+          
+
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+        <script src="/js/editor.js"></script>
+        <script src="/js/jscolor.min.js"></script>
+        <script type="module"src="/js/index.js"></script>
+</body>
+
+</html>

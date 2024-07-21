@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Prova</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Adicione aqui os links para os estilos CSS necessários -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/googlef2.css">
+    <link rel="stylesheet" href="/css/textarea.css">
+    <style>
+        .opcao {
+            display: flex;
+            place-content: start;
+            margin-left: 2rem;
+        }
+
+        .letra {
+            margin-right: 10px;
+            /* Ajuste o valor conforme necessário */
+        }
+
+        .radio-input {
+            margin-right: 10px;
+            /* Ajuste o valor conforme necessário */
+        }
+
+        .opcao-correta {
+            background-color: #d4edda;
+            /* Verde claro */
+        }
+
+        .opcao-incorreta {
+            background-color: #f8d7da;
+            /* Vermelho claro */
+        }
+    </style>
+    < </head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <main>
+
+            <form id="questionario" class="form" method="POST">
+                <div class="title-div">
+                    <h1>Teste de questões <%= simulado.tipo %>
+                    </h1>
+                </div>
+
+
+
+                <% questoes.forEach(questao=> { %>
+                    <div class="name-div">
+                        <div class="titulo">
+                            <p>
+                                <%= questao.titulo %>
+                            </p>
+                        </div>
+                        <div class="name"><%- questao.pergunta %><span class="required">*</span></div>
+
+
+                        if
+                        <div class="opcao-correta">
+                            <input type="radio" checked>
+                            <label class="opcao-texto">
+                                <%= questao.Opcoes[0].descricao %>
+                            </label>
+                        </div>
+
+                        <% const respostaUsuario=respostasUsuario.find(r=> r.questaoId === questao.id); %>
+                            <% if (respostaUsuario) { %>
+
+                                <div
+                                    class="<%= respostaUsuario.opcao.descricao === questao.Opcoes[0].descricao ? 'opcao-correta' : 'opcao-incorreta' %>">
+
+                                    <input type="radio" checked>
+                                    <label class="opcao-texto">
+                                        <%= respostaUsuario.opcao.descricao %>
+                                    </label>
+                                </div>
+                                <% } else { %>
+                                    <p>Você não respondeu a esta questão.</p>
+                                    <% } %>
+                    </div>
+                    <% }) %>
+
+
+
+
+        </main>
+        <!-- Adicione aqui os scripts JS necessários -->
+        <script src="/js/main.js"></script>
+        <script src="/js/prova.js"></script>
+</body>
+
+</html>
