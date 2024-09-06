@@ -1,11 +1,12 @@
 {
   "development": {
     "username": "postgres",
-    "password": "residentevil6",
+    "password": "852002",
     "database": "ifvest",
     "host": "localhost",  
     "dialect": "postgres",
     "port": "5432"
+
   },
   "test": {
     "username": "ruan177",
@@ -36,3 +37,4 @@
     }
   }
 }
+

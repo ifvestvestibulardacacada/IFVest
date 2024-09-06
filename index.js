@@ -3,7 +3,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 
 
-const { usuarios, simulados, inicio, professor, uploads } = require('./controllers');
+const { usuarios, simulados, inicio, professor, uploads, informacao } = require('./controllers');
 
 const app = express();
 
@@ -59,7 +59,8 @@ app.use(secure_pass);
 app.use('/usuario', usuarios);
 // app.use('/simulados', simulados)
 app.use('/professor', professor);
-app.use("/uploads",  uploads) /// usuario, usuarios(lista com os usuarios)
+app.use("/uploads",  uploads); /// usuario, usuarios(lista com os usuarios)
+app.use("/informacao", informacao);
 // app.use('/comentario', comentarios); //comentarios do usuario
 // app.use('/prof', AreaProfessor);
 

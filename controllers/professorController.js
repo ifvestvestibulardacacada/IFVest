@@ -14,6 +14,8 @@ const roteador = Router()
 const { criarOuAtualizarVestibular } = require('../utils/vestibularUtil')
 const upload = require('../midlewares/multerConfig');
 
+const { comparaPerguntasIAGemini } = require('../geminiIA/geminiService');
+
 const { removeFileFromUploads } = require('../utils/removeImage')
 
 
@@ -106,6 +108,8 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
       }
     }
 
+    //await comparaPerguntasIAGemini(pergunta);
+    
     res.status(201).redirect('/usuario/inicioLogado');
   } catch (error) {
     console.error(error);
