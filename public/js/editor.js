@@ -1,69 +1,69 @@
-function formatDoc(cmd, value = null) {
-    if (value) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd);
-    }
-}
+// function formatDoc(cmd, value = null) {
+//     if (value) {
+//         document.execCommand(cmd, false, value);
+//     } else {
+//         document.execCommand(cmd);
+//     }
+// }
 
-function addLink() {
-    const url = prompt('Insert url');
-    formatDoc('createLink', url);
-}
-
-
-
-
-const content = document.getElementById('content');
-
-content.addEventListener('mouseenter', function () {
-    const a = content.querySelectorAll('a');
-    a.forEach(item => {
-        item.addEventListener('mouseenter', function () {
-            content.setAttribute('contenteditable', false);
-            item.target = '_blank';
-        })
-        item.addEventListener('mouseleave', function () {
-            content.setAttribute('contenteditable', true);
-        })
-    })
-})
-
-
-const showCode = document.getElementById('show-code');
-let active = false;
-
-showCode.addEventListener('click', function () {
-    showCode.dataset.active = !active;
-    active = !active
-    if (active) {
-        content.textContent = content.innerHTML;
-        content.setAttribute('contenteditable', false);
-    } else {
-        content.innerHTML = content.textContent;
-        content.setAttribute('contenteditable', true);
-    }
-})
+// function addLink() {
+//     const url = prompt('Insert url');
+//     formatDoc('createLink', url);
+// }
 
 
 
-const filename = document.getElementById('filename');
 
-function fileHandle(value) {
-    if (value === 'new') {
-        content.innerHTML = '';
-        filename.value = 'untitled';
-    } else if (value === 'txt') {
-        const blob = new Blob([content.innerText])
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${filename.value}.txt`;
-        link.click();
-    } else if (value === 'pdf') {
-        html2pdf(content).save(filename.value);
-    }
-}
+// const content = document.getElementById('content');
+
+// content.addEventListener('mouseenter', function () {
+//     const a = content.querySelectorAll('a');
+//     a.forEach(item => {
+//         item.addEventListener('mouseenter', function () {
+//             content.setAttribute('contenteditable', false);
+//             item.target = '_blank';
+//         })
+//         item.addEventListener('mouseleave', function () {
+//             content.setAttribute('contenteditable', true);
+//         })
+//     })
+// })
+
+
+// const showCode = document.getElementById('show-code');
+// let active = false;
+
+// showCode.addEventListener('click', function () {
+//     showCode.dataset.active = !active;
+//     active = !active
+//     if (active) {
+//         content.textContent = content.innerHTML;
+//         content.setAttribute('contenteditable', false);
+//     } else {
+//         content.innerHTML = content.textContent;
+//         content.setAttribute('contenteditable', true);
+//     }
+// })
+
+
+
+// const filename = document.getElementById('filename');
+
+// function fileHandle(value) {
+//     if (value === 'new') {
+//         content.innerHTML = '';
+//         filename.value = 'untitled';
+//     } else if (value === 'txt') {
+//         const blob = new Blob([content.innerText])
+//         const url = URL.createObjectURL(blob)
+//         const link = document.createElement('a');
+//         link.href = url;
+//         link.download = `${filename.value}.txt`;
+//         link.click();
+//     } else if (value === 'pdf') {
+//         html2pdf(content).save(filename.value);
+//     }
+// }
 
 function addResposta() {
 
@@ -85,7 +85,7 @@ function addResposta() {
     inputFile.name = "files[]"; // Todos os botões de opção compartilham o mesmo nome
     inputFile.id = "inputFile"
     inputFile.classList.add('input-resposta')
-    inputFile.placeholder = "Sua resposta"
+
     inputFile.onchange = function() {
         // Aqui você pode chamar a função uploadImage com o primeiro arquivo selecionado
         previewImage(this);
@@ -96,6 +96,7 @@ function addResposta() {
     imagePreview.id = "imagePreview";
     imagePreview.style.width = "150px";
     imagePreview.style.height = "75px";
+    imagePreview.src = "/img/logofoto.jpg"
     // Conta o número total de itens de resposta para definir o valor do botão de opção
     const totalRespostas = container.querySelectorAll('.resposta-item').length + 1;
 
@@ -128,19 +129,6 @@ function addResposta() {
 
 
 // Chame a função no evento DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function () {
-
-
-    // Função para enviar o formulário
-    document.querySelector('form').addEventListener('submit', function (event) {
-        // Impede o envio do formulário para poder testar
-
-        // Aqui você pode adicionar qualquer lógica adicional antes de enviar o formulário
-
-        // Permita que o formulário seja enviado normalmente
-        this.submit(); // Descomente esta linha para enviar o formulário após o teste
-    });
-});
 
 
 function updateTopicos(Areas) {
@@ -182,52 +170,8 @@ function updateTopicos(Areas) {
 }
 // Chame a função após adicionar um novo elemento
 
-document.getElementById('vestibularId').addEventListener('change', function () {
-    var input = document.getElementById('meuInput');
-    if (this.value === 'outro') {
-        // Mostra o campo de entrada se o usuário selecionar "Outro"
-        input.style.display = 'block';
-    } else {
-        // Esconde o campo de entrada para outras opções
-        input.style.display = 'none';
-        input.value = ''; // Limpa o valor do campo de entrada
-    }
-});
 
 
-function uploadImage(file) {
-    if (file) {
-        let formData = new FormData();
-        formData.append('image', file);
-
-        fetch('/uploads/editor', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                let img = document.createElement('img');
-
-                img.src = data;
-                img.style.width = "200px";
-                img.style.height = "150px";
-
-                imgurl = img.outerHTML;
-                console.log(imgurl);
-                let content = document.getElementById('content');
-                let input = document.getElementById('inputTexto')
-                input.value = imgurl
-                content.innerHTML += imgurl;
-
-                localStorage.setItem('editorContent', content.innerHTML);
-
-
-            })
-            .catch(error => {
-                console.error('Erro no upload:', error);
-            });
-    }
-}
 
 function previewImage(inputElement) {
     const reader = new FileReader();

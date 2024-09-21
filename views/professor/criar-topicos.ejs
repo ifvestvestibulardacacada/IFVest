@@ -4,65 +4,191 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <title>Criar um tópico</title>
+    <style>
+    body {
+      background-color: #f7fafc; /* Light gray background */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
+    .container { /* Wrapper for the form */
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .title { /* Form title */
+      margin-bottom: 16px;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #37474f;
+    }
+
+    .label { /* Label for select element */
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #37474f;
+    }
+
+    .select { /* Select element styles */
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+
+    .select:focus {
+      outline: none;
+      border-color: #9ca3af;
+    }
+
+    .topic-container { /* Container for topic inputs and buttons */
+      margin-top: 16px;
+    }
+
+    .topic-group { /* Each topic input and remove button group */
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .button-group { /* Each topic input and remove button group */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .topic-input { /* Topic input field */
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+
+    .remove-button { /* Remove topic button */
+      margin-left: 8px;
+      padding: 8px 16px;
+      color: #fff;
+      background-color: #28a745; /* Green color */
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .remove-button:hover { /* Button hover effect */
+      background-color: #34d067;
+    }
+
+    .add-topic-button { /* Add new topic button */
+      display: block;
+      margin-top: 16px;
+      padding: 8px 16px;
+      color: #fff;
+      background-color: #198754; /* Blue color */
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .add-topic-button:hover {
+      background-color: #20a87a;
+    }
+
+    .submit-button { /* Submit button */
+      display: block;
+      margin-top: 16px;
+      padding: 8px 16px;
+      color: #fff;
+      background-color: #dc3545; /* Red color */
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .submit-button:hover {
+      background-color:   
+ #e9576b;
+    }
+    .flex-col-gap-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Ajustar o valor de acordo com a sua unidade Tailwind */
+}
+    </style>
     <link rel="stylesheet" href="/css/styles.css">
-   
-
-
   </head>
   <%- include('../partials/sidebar') %>
-  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <div class="mb-4">
-            <h2 class="text-xl font-semibold text-gray-700">Criar um tópico</h2>
+  <body>
+    <div class="container">
+      <div >
+        <h2 class="titulo">Criar um tópico</h2>
+      </div>
+      <form action="/professor/registrar-topico" method="POST">
+        <div class="topic-group">
+          <label for="areaId" class="label">Selecione uma área:</label>
+          <select name="areaId" id="areaId" class="select">
+            <option value="">Selecione uma opção</option>
+            <% Areas.forEach(area => { %>
+              <option value="<%= area.id %>"><%= area.area %></option>
+            <% }) %>
+          </select>
         </div>
-        <form action="/professor/registrar-topico" method="POST">
-            <div class="mb-4">
-                <label for="areaId" class="block text-sm font-medium text-gray-700">Selecione uma área:</label>
-                <select name="areaId" id="areaId" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="">Selecione uma opção</option>
-                    <% Areas.forEach(area => { %>
-                        <option value="<%= area.id %>"><%= area.area %></option>
-                    <% }) %>
-                </select>
+        <div id="topico-container">
+          <div class="flex-col-gap-2">
+            <div class="topic-group">
+              <input type="text" name="topicos[]" placeholder="Digite o tópico" class="topic-input">
+              <button class="remove-button" type="button" onclick="removeTopico(this)">Remover Tópico</button>
             </div>
-            <div id="topico-container">
-                <div class="flex flex-col gap-2">
-                    <div class="flex items-center">
-                        <input type="text" name="topicos[]" placeholder="Digite o tópico" class="border border-gray-300 rounded-md p-2 w-full">
-                        <button class="ml-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700" type="button" onclick="removeTopico(this)">Remover Tópico</button>
-                    </div>
-                </div>
-                <button type="button" class="px-4 py-2 mt-4 text-white bg-green-600 rounded hover:bg-green-700" onclick="addTopico()">Adicionar Novo Tópico</button>
-                <button type="submit" class="px-4 py-2 mt-4 text-white bg-red-600 rounded hover:bg-red-700">Registrar</button>
-            </div>
-        </form>
+          </div>
+          
+        </div>
+        <div class="button-group">
+            <button type="button" class="add-topic-button" onclick="addTopico()">Adicionar Novo Tópico</button>
+            <button type="submit" class="submit-button">Registrar</button>
+        </div>
+
+      </form>
     </div>
     <script>
-        function addTopico() {
-            const container = document.getElementById("topico-container");
-            const div = document.createElement("div");
-            div.className = "flex items-center";
+      function addTopico() {
+        const container = document.getElementById("topico-container");
+        const div = document.createElement("div");
+        div.className = "topic-group";
 
-            const input = document.createElement("input");
-            input.type = "text";
-            input.name = "topicos[]";
-            input.placeholder = "Digite o tópico";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = "topicos[]";
+        input.placeholder = "Digite o tópico";
+        input.className = "topic-input";
 
-            const button = document.createElement("button");
-            button.type = "button";
-            button.textContent = "Remover topico";
-            button.onclick = function() {
-                div.remove();
-            };
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "Remover topico";
+        button.className = "remove-button";
+        button.onclick = function() {
+          div.remove();
+        };
 
-            div.appendChild(input);
-            div.appendChild(button);
-            container.appendChild(div);
-        }
+        div.appendChild(input);
+        div.appendChild(button);
+        container.appendChild(div);
+      }
     </script>
-</body>
+  </body>
 </html>
+

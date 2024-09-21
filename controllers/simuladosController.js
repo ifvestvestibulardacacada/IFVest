@@ -11,7 +11,7 @@ const { PerguntasProvas } = require('../models');
 const { Resposta } = require('../models');
 const roteador = Router()
 const { Op } = require('sequelize');
-
+const QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
 // Rota para visualizar questionários
 // simuladosController.js
 roteador.get('/:id/editar', async (req, res) => {
@@ -19,9 +19,9 @@ roteador.get('/:id/editar', async (req, res) => {
 
   const simulado = await Simulados.findOne({
     where: { id: simuladoId },
-    
+
   });
-  res.render('simulado/editar-simulado', {simulado});
+  res.render('simulado/editar-simulado', { simulado });
 });
 roteador.patch('/:simuladoId/editar', async (req, res) => {
   try {
@@ -41,7 +41,7 @@ roteador.patch('/:simuladoId/editar', async (req, res) => {
       throw new Error('Simulado não encontrado ou não atualizado');
     }
     res.redirect("/usuario/Simulados")
-    
+
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -377,13 +377,15 @@ roteador.get('/:simuladoId/fazer', async (req, res) => {
           as: 'vestibular' // Certifique-se de que este alias corresponda ao definido na associação
         }]
       }],
-      
+
     });
 
 
 
+
+
     res.render('prova/prova', { simulado });
-    // res.send(simulado)
+//  res.send(simulado)
   } catch (error) {
     console.error('Erro ao buscar perguntas da prova:', error);
     res.status(500).send('Erro ao buscar perguntas da prova.');
@@ -423,7 +425,7 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
       }],
       order: [['createdAt', 'DESC']],
     });
-  
+
 
     // Prepara os dados para a view
     const dadosParaView = {

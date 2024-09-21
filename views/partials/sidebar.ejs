@@ -1,17 +1,21 @@
 <!--========== HEADER ==========-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
 <style>
     #perfilImage {
         cursor: pointer;
     }
-    .nav__logo-img {
-    width: 50px;
-    height: 50px;
-}
-.nav__link.active {
-    color: #12B886; /* Altera a cor do texto para verde */
-}
 
+    .nav__logo-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .nav__link.active {
+        color: #12B886;
+        /* Altera a cor do texto para verde */
+    }
 </style>
 <header class="header">
     <div class="header__container">
@@ -27,18 +31,19 @@
             <i class='bx bx-menu' id="header-toggle"></i>
         </div>
 
-      
+
         <div style="display: flex; align-items: center;">
             <a href="/usuario/perfil" class="header__logo-name" style="margin-right: 10px;">
                 <%= nomeUsuario %>
             </a>
-           
-            <img src="<%= imagemPerfil ? imagemPerfil : '/img/profile.jpg' %>" alt="Perfil" class="header__img" id="perfilImage">
+
+            <img src="<%= imagemPerfil ? imagemPerfil : '/img/profile.jpg' %>" alt="Perfil" class="header__img"
+                id="perfilImage">
 
 
-            
+
         </div>
- 
+
 
     </div>
 </header>
@@ -48,8 +53,8 @@
     <nav class="nav__container">
         <div>
             <a href="/usuario/iniciologado" class="nav__link nav__logo">
-                <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/12B886/if.png" alt="if"/>
-                
+                <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/12B886/if.png" alt="if" />
+
             </a>
 
             <div class="nav__list">
@@ -65,7 +70,7 @@
                         <a href="/usuario/perfil" class="nav__link">
                             <i class='bx bx-user nav__icon'></i>
                             <span class="nav__name">Perfil</span>
-                           
+
                         </a>
 
 
@@ -77,7 +82,7 @@
                 <div class="nav__items">
                     <h3 class="nav__subtitle">Menu</h3>
 
-                   
+
 
                     <a href="#" class="nav__link">
                         <i class='bx bx-compass nav__icon'></i>
@@ -87,82 +92,83 @@
 
                     <div class="nav__dropdown">
                         <a href="/usuario/video" class="nav__link">
-                            <i class='bx bxs-video nav__icon' ></i>
+                            <i class='bx bxs-video nav__icon'></i>
                             <span class="nav__name">Videos</span>
-                            
+
                         </a>
 
 
 
                     </div>
                     <% if (perfilUsuario==="PROFESSOR" ) { %>
-                    <div class="nav__dropdown">
-                        <a href="#" class="nav__link">
-                            <i class='bx bx-question-mark nav__icon' ></i>
-                            
-                            <span class="nav__name">Questões</span>
-                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                        </a>
+                        <div class="nav__dropdown">
+                            <a href="#" class="nav__link">
+                                <i class='bx bx-question-mark nav__icon'></i>
 
-                        <div class="nav__dropdown-collapse">
-                            <div class="nav__dropdown-content">
+                                <span class="nav__name">Questões</span>
+                                <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                            </a>
 
-                                    
-                                        <a href="/professor/registrar-questao/objetiva"
-                                        class="nav__dropdown-item">  <i class='bx bx-checkbox-square' ></i>Objetiva</a>
-                                    <a href="/professor/registrar-questao/dissertativa"
-                                        class="nav__dropdown-item"><i class='bx bxs-paint' ></i> Dissertativa</a>
-                              
-                                      
-                                    <a href="/professor/questoes" class="nav__dropdown-item"><i class='bx bxs-paint' ></i>Minhas questões</a>
-                                    <a href="/professor/manutencao" class="nav__dropdown-item"><i class='bx bxs-paint' ></i>Verificação IA</a>
-                           
+                            <div class="nav__dropdown-collapse">
+                                <div class="nav__dropdown-content">
 
+
+                                    <a href="/professor/registrar-questao/objetiva" class="nav__dropdown-item"> <i
+                                            class='bx bx-checkbox-square'></i>Objetiva</a>
+                                    <a href="/professor/registrar-questao/dissertativa" class="nav__dropdown-item"><i
+                                            class='bx bxs-paint'></i> Dissertativa</a>
+
+
+                                    <a href="/professor/questoes" class="nav__dropdown-item"><i
+                                            class='bx bxs-paint'></i>Minhas questões</a>
+
+
+
+                                </div>
                             </div>
+
                         </div>
-
-                    </div>
-                    <div class="nav__dropdown">
-                        <a href="#" class="nav__link">
-                            <i class='bx bx-check-square nav__icon'></i>
-                            <span class="nav__name">Topicos</span>
-                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                        </a>
+                        <div class="nav__dropdown">
+                            <a href="#" class="nav__link">
+                                <i class='bx bx-check-square nav__icon'></i>
+                                <span class="nav__name">Topicos</span>
+                                <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                            </a>
 
 
-                        <div class="nav__dropdown-collapse">
-                            <div class="nav__dropdown-content">
+                            <div class="nav__dropdown-collapse">
+                                <div class="nav__dropdown-content">
 
-                                <a href="/professor/criar-topicos" class="nav__dropdown-item">Criar Topicos</a>
-                                <a href="/professor/topicos" class="nav__dropdown-item">Meus Topicos</a>
+                                    <a href="/professor/criar-topicos" class="nav__dropdown-item">Criar Topicos</a>
+                                    <a href="/professor/topicos" class="nav__dropdown-item">Meus Topicos</a>
+                                </div>
                             </div>
+
                         </div>
-
-                    </div>
-                    <% } %>
-                    <div class="nav__dropdown">
-                        <a href="#" class="nav__link">
-                            <i class='bx bx-book-heart nav__icon'></i>
-                            <span class="nav__name">Simulados</span>
-                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                        </a>
+                        <% } %>
+                            <div class="nav__dropdown">
+                                <a href="#" class="nav__link">
+                                    <i class='bx bx-book-heart nav__icon'></i>
+                                    <span class="nav__name">Simulados</span>
+                                    <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                                </a>
 
 
-                        <div class="nav__dropdown-collapse">
-                            <div class="nav__dropdown-content">
-  
+                                <div class="nav__dropdown-collapse">
+                                    <div class="nav__dropdown-content">
+
                                         <a href="/usuario/criar-simulado" class="nav__dropdown-item">Criar Simulado</a>
                                         <a href="/usuario/Simulados" class="nav__dropdown-item">Meus Simulados</a>
                                         <!-- <a href="/usuario/seleciona-simulado" class="nav__dropdown-item">Consultar simulados</a> -->
 
 
-                            </div>
-                        </div>
+                                    </div>
+                                </div>
 
-                    </div>
+                            </div>
                 </div>
             </div>
-          
+
         </div>
 
         <form action="/logoff" method="post" class="nav__logout-form">
@@ -171,19 +177,19 @@
                 <span class="nav__name">Log Out</span>
             </a>
         </form>
-       
+
     </nav>
 </div>
 <script>
-    document.getElementById('perfilImage').addEventListener('click', function() {
+    document.getElementById('perfilImage').addEventListener('click', function () {
         window.location.href = '/usuario/perfil';
     });
 </script>
 <script>
-    document.getElementById('logout-link').addEventListener('click', function(event) {
+    document.getElementById('logout-link').addEventListener('click', function (event) {
         event.preventDefault(); // Impede o comportamento padrão do link
         document.querySelector('.nav__logout-form').submit(); // Envia o formulário
     });
-    </script>
+</script>
 
 <!--========== CONTENTS ==========-->

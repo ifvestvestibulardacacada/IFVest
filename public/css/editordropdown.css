@@ -1,4 +1,4 @@
-.dropdown {
+/* .dropdown {
     position: relative;
     width: 200px;
    }
@@ -9,30 +9,72 @@
     box-sizing: border-box;
    }
    
-  /* Estilos para o dropdown de listagem */
-/* Estilos para o dropdown de listagem */
+
 #dropdown-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    display: grid; /* Define o contêiner como uma grade */
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Cria colunas automáticas com largura mínima de 100px */
-    gap: 10px; /* Espaçamento entre os itens */
-    max-height: 200px; /* Altura máxima do dropdown */
-    overflow-y: auto; /* Scroll vertical se necessário */
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+    gap: 10px; 
+    max-height: 200px; 
+    overflow-y: auto;
 }
 
 #dropdown-list li {
     padding: 5px;
     cursor: pointer;
-    background-color: #f1f1f1; /* Cor de fundo para os itens */
-    border-radius: 3px; /* Bordas arredondadas para os itens */
+    background-color: #f1f1f1; 
+    border-radius: 3px; 
 }
 
 #dropdown-list li:hover {
-    background-color: #ddd; /* Cor de fundo ao passar o mouse */
+    background-color: #ddd;
 }
 
 #dropdown-list li:last-child {
-    margin-right: 0; /* Remove o espaço à direita do último item */
+    margin-right: 0; 
+} */
+
+.dropdown {
+    position: relative;
+    width: 300px; 
+}
+
+#search {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#dropdown-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 5px;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#dropdown-list li {
+    padding: 5px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+}
+
+#dropdown-list li:hover {
+    background-color: #e6e6e6;
+}
+
+#dropdown-list li:last-child {
+    margin-right: 0;
 }

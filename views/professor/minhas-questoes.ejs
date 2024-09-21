@@ -13,218 +13,210 @@
 
     <title>Responsive sidebar submenus</title>
     <style>
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      body {
-          font-family: Arial, sans-serif;
-          line-height: 1.6;
-          background-color: #f5f5f5;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
 
-      .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-      }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-      /* Estilos do cabeçalho */
-      header {
-          background-color: #333;
-          color: #fff;
-          padding: 10px;
-      }
+        /* Estilos do cabeçalho */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
 
-      /* Estilos da barra lateral */
-      .sidebar {
-          width: 250px;
-          background-color: #444;
-          color: #fff;
-          position: fixed;
-          left: 0;
-          top: 0;
-          height: 100%;
-          overflow-y: auto;
-      }
+        /* Estilos da barra lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #444;
+            color: #fff;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            overflow-y: auto;
+        }
 
-      .sidebar h2 {
-          padding: 10px;
-      }
+        .sidebar h2 {
+            padding: 10px;
+        }
 
-      .sidebar ul {
-          list-style-type: none;
-          padding: 0;
-      }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-      .sidebar li {
-          padding: 10px;
-          border-bottom: 1px solid #666;
-      }
+        .sidebar li {
+            padding: 10px;
+            border-bottom: 1px solid #666;
+        }
 
-      /* Estilos do conteúdo principal */
-      .main-content {
-          margin: 0 auto;
-          /* Centraliza o conteúdo principal */
-          max-width: 800px;
-          /* Define a largura máxima do conteúdo */
-          padding: 20px;
-      }
+        /* Estilos do conteúdo principal */
+        .main-content {
+            margin: 0 auto;
+            /* Centraliza o conteúdo principal */
+            max-width: 800px;
+            /* Define a largura máxima do conteúdo */
+            padding: 20px;
+        }
 
-      .main-content h1 {
-          margin-bottom: 20px;
-      }
+        .main-content h1 {
+            margin-bottom: 20px;
+        }
 
-      /* Estilos da tabela */
-      .table-container {
-          overflow-x: auto;
-      }
+        /* Estilos da tabela */
+        .table-container {
+            overflow-x: auto;
+        }
 
-      table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 20px;
-      }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-      table th,
-      table td {
-          padding: 10px;
-          border: 1px solid #ccc;
-      }
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
 
-      /* Estilos da paginação */
-      .pagination-container {
-          margin-top: 20px;
-          text-align: center;
-          /* Centraliza a paginação */
-      }
+        /* Estilos da paginação */
+        .pagination-container {
+            margin-top: 20px;
+            text-align: center;
+            /* Centraliza a paginação */
+        }
 
-      .pagination-container a {
-          display: inline-block;
-          padding: 8px 16px;
-          margin-right: 5px;
-          background-color: #ccc;
-          color: #333;
-          text-decoration: none;
-          border-radius: 5px;
-      }
+        .pagination-container a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-right: 5px;
+            background-color: #ccc;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
 
-      .pagination-container a.active {
-          background-color: #333;
-          color: #fff;
-      }
+        .pagination-container a.active {
+            background-color: #333;
+            color: #fff;
+        }
 
-      /* Estilos do formulário */
-      form {
-          margin-bottom: 20px;
-          text-align: center;
-          /* Centraliza o formulário */
-      }
+        /* Estilos do formulário */
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+            /* Centraliza o formulário */
+        }
 
-      form select,
-      form input[type="text"],
-      form button,
-      form input[type="submit"] {
-          padding: 10px;
-          margin-right: 10px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-      }
+        form select,
+        form input[type="text"],
+        form button,
+        form input[type="submit"] {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-      form input[type="checkbox"] {
-          margin-right: 5px;
-      }
+        form input[type="checkbox"] {
+            margin-right: 5px;
+        }
 
-      /* Estilos do link de voltar */
-      .back-link {
-          display: block;
-          margin-top: 20px;
-          color: #333;
-          text-decoration: none;
-          border-bottom: 1px solid #333;
-          padding-bottom: 5px;
-      }
+        /* Estilos do link de voltar */
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
 
-      .botao-associar {
-          padding: 10px 20px;
-          width: 20%;
-          background-color: #007bff;
-          color: #fff;
-          border: none;
-          border-radius: 3px;
-          cursor: pointer;
-          font-size: 14px;
-          margin-top: 10px;
+        .botao-associar {
+            padding: 10px 20px;
+            width: 20%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
 
-          justify-self: center;
-          border: 1px solid #272525;
-      }
+            justify-self: center;
+            border: 1px solid #272525;
+        }
 
-      /* Estilos adicionais para a seção de questões por área */
-      .tabela-qnt-area {
-          width: 10%;
-      }
+        /* Estilos adicionais para a seção de questões por área */
+        .tabela-qnt-area {
+            width: 10%;
+        }
 
-      /* Estilos gerais para a seção */
-      /* Estilos para a pequena tabelas 
+        /* Estilos gerais para a seção */
+        /* Estilos para a pequena tabelas 
 /* Estilo geral para a div que contém todos os itens */
-      .container {
-          display: flex;
-          justify-content: space-between;
-          /* Espalha os itens uniformemente */
-          flex-wrap: wrap;
-          /* Permite que os itens passem para a próxima linha se não houver espaço suficiente */
-      }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            /* Espalha os itens uniformemente */
+            flex-wrap: wrap;
+            /* Permite que os itens passem para a próxima linha se não houver espaço suficiente */
+        }
 
-      /* Estilo para cada item dentro do container */
-      .item {
-          margin-right: 10px;
-          /* Adiciona espaço à direita de cada item */
-          margin-bottom: 10px;
-          /* Adiciona espaço abaixo de cada item */
-      }
+        /* Estilo para cada item dentro do container */
+        .item {
+            margin-right: 10px;
+            /* Adiciona espaço à direita de cada item */
+            margin-bottom: 10px;
+            /* Adiciona espaço abaixo de cada item */
+        }
 
-      /* Estilo para o número dentro do item */
-      .numero {
-          font-variant-numeric: oldstyle-nums;
-          /* Exemplo usando oldstyle-nums */
-          font-weight: bold;
+        /* Estilo para o número dentro do item */
+        .numero {
+            font-variant-numeric: oldstyle-nums;
+            /* Exemplo usando oldstyle-nums */
+            font-weight: bold;
 
-      }
+        }
 
-      /* Estilos responsivos */
-      @media screen and (max-width: 768px) {
-          .sidebar {
-              width: 100%;
-              position: relative;
-              margin-bottom: 20px;
-          }
+        /* Estilos responsivos */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                margin-bottom: 20px;
+            }
 
-          .main-content {
-              margin-left: 0;
-              max-width: none;
-              /* Remove a largura máxima no modo responsivo */
-          }
+            .main-content {
+                margin-left: 0;
+                max-width: none;
+                /* Remove a largura máxima no modo responsivo */
+            }
 
-          .pagination-container {
-              text-align: center;
-          }
+            .pagination-container {
+                text-align: center;
+            }
 
-          form {
-              text-align: center;
-          }
-      }
-  </style>
-</head>
-
-<body>
-    <%- include('../partials/sidebar') %>
-        <!--========== CONTENTS ==========-->
-        <main>
-            <style>
-                table {
+            form {
+                text-align: center;
+            }
+        }
+        table {
                     width: 100%;
                     border-collapse: collapse;
                 }
@@ -259,34 +251,71 @@
                     background-color: #0056b3;
                     /* Cor de fundo do botão ao passar o mouse */
                 }
+
                 .pagination {
-    list-style-type: none;
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
-  }
+                    list-style-type: none;
+                    display: flex;
+                    justify-content: center;
+                    padding: 20px 0;
+                }
 
- .pagination li {
-    display: block;
-    margin: 0 5px;
-  }
+                .pagination li {
+                    display: block;
+                    margin: 0 5px;
+                }
 
- .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    text-decoration: none;
-    border-radius: 5px;
-  }
+                .pagination li a {
+                    display: block;
+                    padding: 5px 10px;
+                    color: #333;
+                    text-decoration: none;
+                    border-radius: 5px;
+                }
 
- .pagination li.active a {
-    background-color: #0056b3;
-    color: white;
-  }
+                .pagination li.active a {
+                    background-color: #0056b3;
+                    color: white;
+                }
 
- .pagination li a:hover {
-    background-color: #007bff;
-  }
+                .pagination li a:hover {
+                    background-color: #007bff;
+                }
+
+                .conteudo-com-html {
+                    white-space: pre-wrap;
+                }
+                .button-container {
+        display: flex;
+        /* Usa flexbox para alinhar os botões lado a lado */
+        gap: 10px;
+        /* Espaçamento entre os botões */
+        justify-content: center;
+        /* Centraliza os botões horizontalmente */
+        padding: 10px;
+        /* Padding ao redor do contêiner para dar espaço */
+        /* Fundo claro para o contêiner */
+        /* Sombra suave para dar profundidade */
+    }
+
+    .button {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 1px solid black;
+        color: black;
+        cursor: pointer;
+
+    }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <!--========== CONTENTS ==========-->
+        <main>
+            <style>
 
             </style>
 
@@ -295,75 +324,100 @@
 
             <!-- Adicione isso antes da tabela na página minhas-questoes.ejs -->
             <form action="/professor/questoes" method="GET">
-              <!-- Campo de filtragem por título -->
-              <input type="text" name="titulo" placeholder="Filtrar por título">
-              <button type="submit">Pesquisar</button>
+                <!-- Campo de filtragem por título -->
+                <input type="text" name="titulo" placeholder="Filtrar por título">
+                <button type="submit">Pesquisar</button>
 
-              <!-- Campo de seleção para áreas -->
-              <select name="areaId">
-                <option value="">Todas as áreas</option>
-                <% Areas.forEach(area=> { %>
-                    <option value="<%= area.id %>">
-                        <%= area.area %>
-                    </option>
-                <% }); %>
-              </select>
-              <button type="submit">Filtrar por área</button>
+                <!-- Campo de seleção para áreas -->
+                <select name="areaId">
+                    <option value="">Todas as áreas</option>
+                    <% Areas.forEach(area=> { %>
+                        <option value="<%= area.id %>">
+                            <%= area.area %>
+                        </option>
+                        <% }); %>
+                </select>
+                <button type="submit">Filtrar por área</button>
 
-             <!-- Campo de seleção para tópicos -->
-             <select name="topicosSelecionados">
-              <option value="">Todas os tópicos</option>
-              <% topicos.forEach(topico=> { %>
-                  <option value="<%= topico.id %>">
-                      <%= topico.materia %>
-                  </option>
-                  <% }); %>
-            </select>
-              <button type="submit">Filtrar por tópicos</button>
+                <!-- Campo de seleção para tópicos -->
+                <select name="topicosSelecionados">
+                    <option value="">Todas os tópicos</option>
+                    <% topicos.forEach(topico=> { %>
+                        <option value="<%= topico.id %>">
+                            <%= topico.materia %>
+                        </option>
+                        <% }); %>
+                </select>
+                <button type="submit">Filtrar por tópicos</button>
             </form>
             <!-- Adicione campos de filtro no topo da página -->
-            <table>
-              <thead>
-                <tr>
-                  <th>Título</th>
-                  <th>Questão</th>
-                  <th>Tipo</th>
-                  <th>Área</th>
-                  <th>Tópico</th>
-                  <th>Ação</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% questoes.forEach(questao => { %>
-                  <tr>
-                    <td><%= questao.titulo %></td>
-                    <td><%= questao.pergunta %></td>
-                    <td><%= questao.tipo %></td>
-                    <td><%= questao.Area? questao.Area.nome : 'Área não definida' %></td> <!-- Verifica se a área existe -->
-                    <td><%= questao.Topicos.map(topico => topico.materia).join(', ') %></td> <!-- Exibe os tópicos separados por vírgula -->
-                    <td><a href="/professor/editar-questao/<%= questao.id %>">Editar</a></td>
-                  </tr>
-                <% }); %>
-              </tbody>
+            <table id="tabela-questoes">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+
+                        <th>Tipo</th>
+
+                        <th>Tópicos</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+
+                    <tbody>
+                        <% questoes.forEach(questao=> { %>
+                            <tr>
+                                <td>
+                                    <%= questao.titulo %>
+                                </td>
+
+
+                                <td>
+                                    <%= questao.tipo %>
+                                </td>
+
+                                <td>
+                                    <%= questao.Topicos.map(topico=> topico.materia).join(', ') %>
+                                </td> <!-- Exibe os tópicos separados por vírgula -->
+                                <td>
+                                    <div class="button-container">
+                                        <a href="/professor/editar-questao/<%= questao.id %>" class="button">
+                                            <div class="icon-button">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </div>
+                                        </a>
+                                
+                                    </div>
+                               
+                                   
+                                  
+                                </td>
+
+                            </tr>
+                            <% }); %>
+                    </tbody>
             </table>
-<!-- Antes do fechamento do </main> -->
-<nav aria-label="Navegação">
-    <ul class="pagination">
-      <% if (page > 1) { %>
-        <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
-        <li class="page-item"><a class="page-link" href="?page=<%= page - 1 %>">Anterior</a></li>
-      <% } %>
-      <% for(let i = 1; i <= totalPages; i++) { %>
-        <li class="page-item <%= page == i? 'active' : '' %>">
-          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-        </li>
-      <% } %>
-      <% if (page < totalPages) { %>
-        <li class="page-item"><a class="page-link" href="?page=<%= page + 1 %>">Próxima</a></li>
-        <li class="page-item"><a class="page-link" href="?page=<%= totalPages %>">Última</a></li>
-      <% } %>
-    </ul>
-  </nav>
+            <!-- Antes do fechamento do </main> -->
+            <nav aria-label="Navegação">
+                <ul class="pagination">
+                    <% if (page> 1) { %>
+                        <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
+                        <li class="page-item"><a class="page-link" href="?page=<%= page - 1 %>">Anterior</a></li>
+                        <% } %>
+                            <% for(let i=1; i <=totalPages; i++) { %>
+                                <li class="page-item <%= page == i? 'active' : '' %>">
+                                    <a class="page-link" href="?page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+                                    <% if (page < totalPages) { %>
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page=<%= page + 1 %>">Próxima</a></li>
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page=<%= totalPages %>">Última</a></li>
+                                        <% } %>
+                </ul>
+            </nav>
 
 
             <a href="/usuario/inicioLogado">Voltar para home</a>

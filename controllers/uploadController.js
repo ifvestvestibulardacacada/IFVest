@@ -15,7 +15,7 @@ roteador.post('/', upload.single('image'), async (req, res) => {
     // Atualiza o campo imagemPerfil do usuário no banco de dados
     const usuario = await Usuario.findByPk(idUsuario)
      
-    if(usuario.imagemPerfil.startsWith("/uploads")){
+    if(usuario.imagemPerfil){
         await removeFileFromUploads(usuario.imagemPerfil);
     }
 
@@ -26,16 +26,28 @@ roteador.post('/', upload.single('image'), async (req, res) => {
 
     return res.status(200).redirect(`/usuario/perfil`);
 });
-
 roteador.post('/editor', upload.single('image'), async (req, res) => {
     if (!req.file) {
-        return res.status(400).send('Nenhum arquivo enviado.');
+      return res.status(400).send('Nenhum arquivo enviado.');
     }
-
-    const imageUrl = `/uploads/${req.file.filename}`;
-
-    return res.status(200).send(JSON.stringify(imageUrl));
-});
+  
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedMimes.includes(req.file.mimetype)) {
+      return res.status(400).send('Tipo de arquivo inválido.');
+    }
+  
+    const url = `/uploads/${req.file.filename}`;
+  
+    try {
+      // Lógica adicional para compressão da imagem, se necessário
+      // ...
+  
+      return res.status(200).json({ url });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send('Erro ao salvar a imagem.');
+    }
+  });
 
 
 module.exports = roteador;

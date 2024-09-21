@@ -9,7 +9,10 @@ const app = express()
 roteador.get('/home', (req, res) => {
     res.status(200).render('usuario/inicio');
 });
-
+roteador.get('/editor',  async (req, res) => {
+    res.status(200).render('professor/editor');
+  } )
+  
 
 // rota de deslogar usuario
 roteador.post('/logoff', (req, res) => {

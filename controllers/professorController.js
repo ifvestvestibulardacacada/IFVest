@@ -1,24 +1,22 @@
 const { Router } = require('express');
-const { Usuario } = require('../models');
-const { Favorito } = require('../models');
 const { Topico } = require('../models');
 const { Opcao } = require('../models');
 const { Simulados } = require('../models');
 const { Questões } = require('../models');
 const { Vestibular } = require('../models');
 const { Area } = require('../models');
-const { PerguntasProvas } = require('../models');
-const { Resposta } = require('../models');
+
 const { Op, NUMBER } = require('sequelize');
 const roteador = Router()
 const { criarOuAtualizarVestibular } = require('../utils/vestibularUtil')
-const upload = require('../midlewares/multerConfig');
-
+const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const { removeFileFromUploads } = require('../utils/removeImage')
 
 
 
-
+roteador.get('/editor',  async (req, res) => {
+  res.status(200).render('professor/editor');
+} )
 
 roteador.get('/registrar-questao/:tipo', async (req, res) => {
   if (!req.session.login) {
@@ -59,13 +57,14 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
   });
 
   // Retorna os simulados filtrados
-  res.status(200).render('professor/criar-questao', { Areas, tipo, simulados, Vestibulares });
+  res.status(200).render('professor/editor', { Areas, tipo, simulados, Vestibulares });
 
 });
 
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
     const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados, novoVestibular, vestibularId } = req.body;
+
 
     const anoVestibular = Number(req.body.anoVestibular);
     const tipo = req.params.tipo.toUpperCase();
@@ -114,17 +113,7 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
 });
 
 // Renderiza a pagina de Verificar-similaridade
-roteador.get('/verificar-similaridade', async (req, res) => {
-  try {
-      // Executa a função comparaPerguntasIAGemini e obtém os resultados
-      const { resultados } = await comparaPerguntasIAGemini();
-      // Renderiza a página com os resultados
-      res.status(200).render('professor/verificar-similaridade', { resultados });
-  } catch (error) {
-      console.error(error);
-      res.status(500).redirect('/usuario/inicioLogado'); // Certifique-se de ter uma view de erro
-  }
-});
+
 
 roteador.get('/manutencao', async (req, res) => {
 
@@ -278,21 +267,40 @@ roteador.post('/editar-topico', async (req, res) => {
     res.status(500).send('Erro ao atualizar o tópico.');
   }
 });
+
 roteador.get('/editar-questao/:id', async (req, res) => {
   const { id } = req.params;
-  const Topicos = await Topico.findAll()
+
+
   try {
+
+    const Topicos = await Topico.findAll()
+    const Vestibulares = await Vestibular.findAll();
+    const Areas = await Area.findAll({
+      include: [{
+        model: Topico,
+        as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
+      }]
+  
+    })
     const questao = await Questões.findByPk(id, {
       include: [{
         model: Opcao,
         as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+      }, {
+        model: Topico,
+        as: 'Topicos'
       }]
     });
+
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
+
+  
+   
     // res.send(JSON.stringify(questao))
-    res.render('professor/editar-questao', { questao, Topicos });
+    res.render('professor/editar-questao', { questao, Topicos, Vestibulares, Areas });
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar questão');
@@ -300,28 +308,56 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 
 });
 
+
+
+
+
+
+
 // rota incompleta
 roteador.patch('/editar-questao', async (req, res) => {
   try {
     const { id, titulo, opcoesIds, pergunta, resposta, opcoes, correta } = req.body;
+    const {areaId, topicosSelecionados, vestibularId, } = req.body;
   
 
+   
+    await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
+    
     const questao = await Questões.findByPk(id, {
       include: [{
         model: Opcao,
         as: 'Opcoes'
-      }]
+      }
+    ]
     });
+  
 
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
+    
+    if (
+      vestibularId && vestibularId !== questao.vestibularId
+    ) {
+      // Atualizar a área da questão
+      await Questões.update({
+   
+        vestibularId: vestibularId,
+      }, {
+        where: { id: id }
+      });
+    }
+    
+  
 
-    // Atualiza informações gerais da questão
+        // Atualiza informações gerais da questão
     await Questões.update({
       titulo: titulo,
       pergunta: pergunta,
       resposta: resposta,
+   
+    
     }, {
       where: { id: id }
     });
@@ -364,6 +400,22 @@ roteador.patch('/editar-questao', async (req, res) => {
         });
       }
     }
+
+    res.redirect('/professor/questoes');
+
+  } catch (error) {
+    console.error('Erro ao atualizar questão:', error);
+    res.status(500).send('Erro ao atualizar questão.');
+  }
+});
+
+roteador.patch('/editar-questao', async (req, res) => {
+  try {
+    
+    const {topicosSelecionados, novoVestibular, vestibularId, anoVestibular} = req.body;
+  
+
+  
 
     res.redirect('/professor/questoes');
 

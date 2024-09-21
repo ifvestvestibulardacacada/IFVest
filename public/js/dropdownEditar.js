@@ -1,5 +1,5 @@
 // Function to add items to the dropdown
-function addItemsToDropdown(Areas) {
+function addItemsToDropdown(Areas, Topicos) {
     const areaSelect = document.getElementById('areaId');
     const selectedAreaId = areaSelect.value;
     const selectedArea = Areas.find(area => area.id === parseInt(selectedAreaId));
@@ -14,11 +14,22 @@ function addItemsToDropdown(Areas) {
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
         checkbox.value = topico.id;
-        checkbox.id = 'topico-' + topico.id;
 
         const label = document.createElement('label');
         label.htmlFor = 'topico-' + topico.id;
         label.textContent = topico.materia;
+        
+    
+
+        let isSelected = false;
+        Topicos.forEach(t => {
+            if (t.id === topico.id) {
+                isSelected = true;
+                return false; // Sair do loop interno
+            }
+        });
+
+        checkbox.checked = isSelected;// Inicializa como não selecionado
 
         checkbox.addEventListener('change', function () {
             updateSelectedTopics();
@@ -29,6 +40,7 @@ function addItemsToDropdown(Areas) {
         dropdownList.appendChild(listItem);
     });
 }
+
 
 // Function to update selected topics
 function updateSelectedTopics() {

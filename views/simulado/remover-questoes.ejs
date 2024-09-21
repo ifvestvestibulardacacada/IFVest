@@ -242,7 +242,7 @@
                         <tr>
                             <th></th>
                             <th>Título</th>
-                            <th>Questão</th>
+                            <th>Tipo</th>
                             
                         </tr>
                     </thead>
@@ -253,7 +253,9 @@
                                     <input type="checkbox" id="questao-<%= questao.id %>" name="questoesSelecionadas" value="<%= questao.id %>">
                                 </td>
                                 <td><%= questao.titulo %></td>
-                                <td><%= questao.pergunta %></td>
+                                <td>
+                                    <%= questao.tipo %>
+                                </td>
                                
                             </tr>
                         <% }); %>

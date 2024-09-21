@@ -132,18 +132,17 @@ comparisonSection.addEventListener('mouseout', () => {
 })
 
 insertBtn.addEventListener('click', () => {
-    // MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-    var equationElement = document.createElement('div');
-    equationElement.innerHTML = equationPreview.innerHTML;
-    
-    // Convertendo o conteúdo da equação em HTML para inserir no editor
-    var equationHtml = equationElement.outerHTML;
-
-    content.innerHTML += equationHtml;
+    var latex = equationPreview.outerHTML
+    var range = quill.getSelection(true);
+    quill.deleteText(range.index, range.length);
+    quill.insertEmbed(range.index, 'mathjax', latex);
+    quill.insertText(range.index + range.length + 1 , ' ');
+    quill.setSelection(range.index + range.length + 1);
     symbolsBox.classList.add('hide');
     editorContainer.classList.add('hide');
-})
+    // Se houver uma seleção, substitua-a pela fórmula
 
+  });
 symbolButtons.forEach(element => {
 
     let button = new Button();

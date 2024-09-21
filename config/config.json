@@ -8,18 +8,12 @@
     "port": "5432"
   },
   "test": {
-    "username": "ruan177",
-    "password": "0grC3HvndpJD",
-    "database": "ifvest",
-    "host": "ep-polished-river-a5rjavzx-pooler.us-east-2.aws.neon.tech",
+"username": "ifvestjc_user",
+    "password": "boso_W{w+VKg",
+    "database": "ifvestjc_ifdb",
+    "host": "localhost",
     "dialect": "postgres",
-    "port": "5432",
-    "ssl": true,
-    "dialectOptions": {
-      "ssl": {
-        "require": true
-      }
-    }
+    "port": "5432"
   },
   "production": {
     "username": "ruan177",
