@@ -19,13 +19,13 @@
 <body>
     <%- include('../partials/sidebar') %>
         <div class="container">
-
+            <h1 class="title">Criar Questão</h1>
             <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
                 <div class="titulo">
                     <label for="titulo">TITULO:</label>
-                    <input type="text" id="titulo" name="titulo">
+                    <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) ">
                 </div>
-                <h4>Editor</h4>
+                <h4>Enunciado</h4>
                 <button type="button" id="delta" style="display:none; " disabled>Show delta in console</button>
                 <button type="button" id="editor-open-btn">Adicionar Equação</button>
                 <%- include('../partials/editorEquacao') %>
@@ -51,7 +51,7 @@
                                         <h4>Area e Topicos</h4>
                                         <div>
                                             <label for="areaId">Selecione uma área:</label>
-                                            <select name="areaId" id="areaId"
+                                            <select name="areaId" id="areaId" required
                                                 onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>)">
                                                 <option value="">Selecione uma opção</option>
                                                 <% Areas.forEach(area=> { %>
@@ -66,7 +66,7 @@
                                         <div class="dropdown" style="display: none;" id="topicosSearchContainer">
                                             <input type="text" id="search" placeholder="Pesquisar...">
 
-                                            <ul id="dropdown-list">
+                                            <ul id="dropdown-list" required>
 
                                                 <!-- Adicione mais itens conforme necessário -->
                                             </ul>
@@ -79,28 +79,7 @@
                                         <a href="/professor/criar-topicos">Não encontrou o tópico que
                                             procura?
                                             Clique aqui para criar um novo tópico</a>
-                                            <h4>Vestibular e Ano</h4>
-                                        <div>
-                                            <label for="simuladoId">Selecione Vestibular (Opcional):</label>
-                                            <select id="vestibularId" name="vestibularId">
-                                                <option value="">Selecione uma opção</option>
-                                                <% Vestibulares.forEach(vestibular=> { %>
-                                                    <option value="<%= vestibular.id %>">
-                                                        <%= vestibular.nome %>, <%= vestibular.ano %>
-                                                    </option>
-                                                    <% }); %>
-                                                        <option value="outro">Adicionar Vestibular</option>
-                                            </select>
-                                            <input type="text" id="meuInput" name="novoVestibular"
-                                                style="display: none;">
-
-                                        </div>
-                                        <div>
-
-                                            <label for="simuladoId">Selecione o ano (Opcional):</label>
-                                            <input type="number" min="1990" max="2024" name="anoVestibular" step="1"
-                                                value="" />
-                                        </div>
+                                     
                                     </div>
                                     <div class="button-container">
                                         <button type="submit" class="botao-registro">Registrar</button>

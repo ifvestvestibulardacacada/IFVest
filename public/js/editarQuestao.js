@@ -150,20 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('vestibularId').addEventListener('change', function () {
-        var input = document.getElementById('meuInput');
-       
-        if (this.value === 'outro') {
-            // Mostra o campo de entrada se o usuário selecionar "Outro"
-            input.style.display = 'block';
-            div.style.display = 'block';
-        } else {
-            // Esconde o campo de entrada para outras opções
-            input.style.display = 'none';
-            input.value = ''; // Limpa o valor do campo de entrada
-           
-        }
-    });
 
     // Função para enviar o formulário
     document.querySelector('form').addEventListener('submit', function (event) {

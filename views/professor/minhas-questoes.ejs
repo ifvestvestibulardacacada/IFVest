@@ -385,7 +385,15 @@
                                                 <i class="fas fa-edit"></i> Editar
                                             </div>
                                         </a>
-                                
+                                        <a class="button" onclick="confirmDelete(<%= questao.id %>)">
+                                            <div class="icon-button">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </div>
+                                        </a>
+                                        <form id="deleteForm<%= questao.id %>" action="/professor/excluir-questao/<%= questao.id %>?_method=DELETE" method="POST">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                        </form>
+                                    </div>
                                     </div>
                                
                                    
@@ -426,6 +434,15 @@
 
         <!--========== MAIN JS ==========-->
         <script src="/js/main.js"></script>
+        
+<script>
+function confirmDelete(questaoId) {
+    if (confirm("Tem certeza que deseja excluir esta questão? Esta ação não pode ser desfeita.")) {
+        document.getElementById(`deleteForm${questaoId}`).submit();
+    }
+}
+
+            </script>
 </body>
 
 </html>

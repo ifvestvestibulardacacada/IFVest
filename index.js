@@ -1,7 +1,7 @@
 const express = require('express');
 const methodOverride = require('method-override');
 const session = require('express-session');
-
+const bodyParser = require('body-parser');
 
 const { usuarios, simulados, inicio, professor, uploads } = require('./controllers');
 
@@ -14,7 +14,7 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: false
 };
-
+app.use(bodyParser.json());
 app.use(session(sessionOptions));
 
 const secure_pass = (req, res, next) => {

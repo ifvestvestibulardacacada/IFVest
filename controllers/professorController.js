@@ -8,15 +8,10 @@ const { Area } = require('../models');
 
 const { Op, NUMBER } = require('sequelize');
 const roteador = Router()
-const { criarOuAtualizarVestibular } = require('../utils/vestibularUtil')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const { removeFileFromUploads } = require('../utils/removeImage')
 
 
-
-roteador.get('/editor',  async (req, res) => {
-  res.status(200).render('professor/editor');
-} )
 
 roteador.get('/registrar-questao/:tipo', async (req, res) => {
   if (!req.session.login) {
@@ -33,7 +28,7 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
       as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
     }]
   })
-  const Vestibulares = await Vestibular.findAll();
+ 
 
   // Mapeamento dos tipos de questões aos tipos de simulados
   const tipoSimuladoMap = {
@@ -57,21 +52,18 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
   });
 
   // Retorna os simulados filtrados
-  res.status(200).render('professor/editor', { Areas, tipo, simulados, Vestibulares });
+  res.status(200).render('professor/criar-questao', { Areas, tipo, simulados });
 
 });
 
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
-    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados, novoVestibular, vestibularId } = req.body;
+    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados,  } = req.body;
 
 
-    const anoVestibular = Number(req.body.anoVestibular);
+   
     const tipo = req.params.tipo.toUpperCase();
     const usuarioId = req.session.idUsuario;
-
-
-    const vestibular = await criarOuAtualizarVestibular(vestibularId, novoVestibular, anoVestibular);
 
     // Aqui, você pode criar a questão usando newVestibularId
     const questao = await Questões.create({
@@ -80,8 +72,7 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
       areaId,
       usuarioId,
       resposta,
-      tipo,
-      vestibularId: vestibular.id, // Usa o novo ID do vestibular
+      tipo, // Usa o novo ID do vestibular
     });
 
 
@@ -275,7 +266,7 @@ roteador.get('/editar-questao/:id', async (req, res) => {
   try {
 
     const Topicos = await Topico.findAll()
-    const Vestibulares = await Vestibular.findAll();
+   
     const Areas = await Area.findAll({
       include: [{
         model: Topico,
@@ -300,7 +291,7 @@ roteador.get('/editar-questao/:id', async (req, res) => {
   
    
     // res.send(JSON.stringify(questao))
-    res.render('professor/editar-questao', { questao, Topicos, Vestibulares, Areas });
+    res.render('professor/editar-questao', { questao, Topicos, Areas });
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar questão');
@@ -318,11 +309,11 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 roteador.patch('/editar-questao', async (req, res) => {
   try {
     const { id, titulo, opcoesIds, pergunta, resposta, opcoes, correta } = req.body;
-    const {areaId, topicosSelecionados, vestibularId, } = req.body;
+    const {areaId, topicosSelecionados, dados } = req.body;
   
 
    
-    await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
+    // await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
     
     const questao = await Questões.findByPk(id, {
       include: [{
@@ -331,99 +322,80 @@ roteador.patch('/editar-questao', async (req, res) => {
       }
     ]
     });
-  
+ 
 
-    if (!questao) {
-      return res.status(404).send('Questão não encontrada');
-    }
-    
-    if (
-      vestibularId && vestibularId !== questao.vestibularId
-    ) {
-      // Atualizar a área da questão
-      await Questões.update({
-   
-        vestibularId: vestibularId,
-      }, {
-        where: { id: id }
-      });
-    }
+    // if (!questao) {
+    //   return res.status(404).send('Questão não encontrada');
+    // }
     
   
 
-        // Atualiza informações gerais da questão
-    await Questões.update({
-      titulo: titulo,
-      pergunta: pergunta,
-      resposta: resposta,
+    //     // Atualiza informações gerais da questão
+    // await Questões.update({
+    //   titulo: titulo,
+    //   pergunta: pergunta,
+    //   resposta: resposta,
    
-    
-    }, {
-      where: { id: id }
-    });
+    // }, {
+    //   where: { id: id }
+    // });
 
     // Atualiza opções da questão
-    for (const opcaoId of opcoesIds) {
-      const index = opcoesIds.indexOf(Number(opcaoId)) + 1; // Corrige o índice baseado no array opcoesIds
 
-      // Atualiza descrição da opção
-      const opcaoAnterior = await Opcao.findByPk(Number(opcaoId))
-    
-      if (opcaoAnterior.descricao.startsWith("/uploads")) {
-        await removeFileFromUploads(opcaoAnterior.descricao);
+
+      
+      const objetos = JSON.parse(dados)
+  
+      console.log(objetos)
+
+      for (const objeto of objetos) {
+         // Corrige o índice baseado no array opcoesIds
+  
+        // Atualiza descrição da opção
+        const opcaoAnterior = await Opcao.findByPk(objeto.id)
+      
+        if (opcaoAnterior.descricao.startsWith("/uploads")) {
+          await removeFileFromUploads(opcaoAnterior.descricao);
+        }
+  
+        await Opcao.update({
+          descricao: objeto.resposta,
+        }, {
+          where: {
+            id: opcaoAnterior.id
+          }
+        });
       }
+   
+  
+        // Atualiza o campo correto se aplicável
 
+      
+    console.log(typeof(correta))
+    if (correta !== undefined && parseInt(correta) > 0) { // Validação básica
       await Opcao.update({
-        descricao: opcoes[index],
+        correta: false
+      }, {
+        where: {questao_id: questao.id}
+      });
+    
+      await Opcao.update({
+        correta: true
       }, {
         where: {
-          id: opcaoId
+          id: parseInt(correta)
         }
       });
-
-      // Atualiza o campo correto se aplicável
-      if (correta !== undefined && correta === opcaoId.toString()) {
-        await Opcao.update({
-          correta: true,
-        }, {
-          where: {
-            id: opcaoId
-          }
-        });
-      } else {
-        await Opcao.update({
-          correta: false,
-        }, {
-          where: {
-            id: opcaoId
-          }
-        });
-      }
     }
 
-    res.redirect('/professor/questoes');
-
+        // res.redirect('/professor/questoes');
   } catch (error) {
     console.error('Erro ao atualizar questão:', error);
     res.status(500).send('Erro ao atualizar questão.');
   }
 });
 
-roteador.patch('/editar-questao', async (req, res) => {
-  try {
-    
-    const {topicosSelecionados, novoVestibular, vestibularId, anoVestibular} = req.body;
-  
 
-  
-
-    res.redirect('/professor/questoes');
-
-  } catch (error) {
-    console.error('Erro ao atualizar questão:', error);
-    res.status(500).send('Erro ao atualizar questão.');
-  }
-});
 
 //Rota para registrar novo tópico
 // professorController.js
@@ -442,14 +414,12 @@ roteador.post('/registrar-topico', async (req, res) => {
     const { topicos, areaId } = req.body;
     const usuarioId = req.session.idUsuario;
 
-    //const tipoQuestao = req.session.tipoQuestao
 
     if (!topicos || !areaId || !usuarioId) {
       return res.status(400).json({ message: 'Os campos topicos e areaId são obrigatórios.' });
     }
 
-    // Supondo que 'topicos' seja um array de strings representando os nomes dos tópicos
-    const novosTopicos = await Promise.all(topicos.map(topico => {
+    await Promise.all(topicos.map(topico => {
       return Topico.create({
         materia: topico, // Supondo que cada tópico seja uma string
         areaId: areaId,
@@ -457,18 +427,38 @@ roteador.post('/registrar-topico', async (req, res) => {
       });
     }));
 
-    // Enviar uma resposta de sucesso com os novos tópicos criados
     res.redirect('/usuario/inicioLogado')
-    // if (tipoQuestao === 'OBJETIVA') {
-    //   res.redirect('/professor/registrar-questao/OBJETIVA');
-    // } else if (tipoQuestao === 'DISSERTATIVA') {
-    //   res.redirect('/professor/registrar-questao/DISSERTATIVA');
-    // } else {
-    //   res.redirect('/usuario/inicioLogado');
-    // }
+
   } catch (error) {
     console.error('Error creating topics:', error);
     res.status(500).send('Ocorreu um erro ao criar os tópicos.');
+  }
+});
+
+// Rota para excluir uma questão
+roteador.delete('/excluir-questao/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Busca a questão pelo ID
+    const questao = await Questões.findByPk(id);
+    
+    if (!questao) {
+      return res.status(404).send('Questão não encontrada');
+    }
+
+    // Exclui as opções da questão
+    await Opcao.destroy({
+      where: { questao_id: questao.id }
+    });
+
+    // Exclui a questão
+    await questao.destroy();
+
+    res.status(200).redirect('/usuario/inicioLogado')
+  } catch (error) {
+    console.error('Erro ao excluir questão:', error);
+    res.status(500).send('Ocorreu um erro ao excluir a questão');
   }
 });
 
