@@ -308,12 +308,10 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 // rota incompleta
 roteador.patch('/editar-questao', async (req, res) => {
   try {
-    const { id, titulo, opcoesIds, pergunta, resposta, opcoes, correta } = req.body;
+    const { id, titulo, pergunta, resposta, correta } = req.body;
     const {areaId, topicosSelecionados, dados } = req.body;
-  
-
-   
-    // await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
+     
+    await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
     
     const questao = await Questões.findByPk(id, {
       include: [{
@@ -324,42 +322,34 @@ roteador.patch('/editar-questao', async (req, res) => {
     });
  
 
-    // if (!questao) {
-    //   return res.status(404).send('Questão não encontrada');
-    // }
-    
-  
+    if (!questao) {
+      return res.status(404).send('Questão não encontrada');
+    }
 
-    //     // Atualiza informações gerais da questão
-    // await Questões.update({
-    //   titulo: titulo,
-    //   pergunta: pergunta,
-    //   resposta: resposta,
+        // Atualiza informações gerais da questão
+    await Questões.update({
+      titulo: titulo,
+      pergunta: pergunta,
+      resposta: resposta,
    
-    // }, {
-    //   where: { id: id }
-    // });
-
-    // Atualiza opções da questão
-
-
+    }, {
+      where: { id: id }
+    });
       
-      const objetos = JSON.parse(dados)
+      const opcoes = JSON.parse(dados)
   
-      console.log(objetos)
-
-      for (const objeto of objetos) {
+      for (const opcao of opcoes) {
          // Corrige o índice baseado no array opcoesIds
   
         // Atualiza descrição da opção
-        const opcaoAnterior = await Opcao.findByPk(objeto.id)
+        const opcaoAnterior = await Opcao.findByPk(opcao.id)
       
         if (opcaoAnterior.descricao.startsWith("/uploads")) {
           await removeFileFromUploads(opcaoAnterior.descricao);
         }
   
         await Opcao.update({
-          descricao: objeto.resposta,
+          descricao: opcao.resposta,
         }, {
           where: {
             id: opcaoAnterior.id
@@ -367,11 +357,6 @@ roteador.patch('/editar-questao', async (req, res) => {
         });
       }
    
-  
-        // Atualiza o campo correto se aplicável
-
-      
-    console.log(typeof(correta))
     if (correta !== undefined && parseInt(correta) > 0) { // Validação básica
       await Opcao.update({
         correta: false
@@ -388,7 +373,7 @@ roteador.patch('/editar-questao', async (req, res) => {
       });
     }
 
-        // res.redirect('/professor/questoes');
+    res.redirect('/professor/questoes');
   } catch (error) {
     console.error('Erro ao atualizar questão:', error);
     res.status(500).send('Erro ao atualizar questão.');
@@ -411,23 +396,23 @@ roteador.get('/criar-topicos', async (req, res) => {
 
 roteador.post('/registrar-topico', async (req, res) => {
   try {
-    const { topicos, areaId } = req.body;
+    const { topico, areaIdTopico } = req.body;
     const usuarioId = req.session.idUsuario;
 
-
-    if (!topicos || !areaId || !usuarioId) {
-      return res.status(400).json({ message: 'Os campos topicos e areaId são obrigatórios.' });
+    // Verifica se os campos obrigatórios estão preenchidos
+    if (!topico || !areaIdTopico || !usuarioId) {
+      return res.status(400).json({ message: 'Os campos tópico e areaId são obrigatórios.' });
     }
 
-    await Promise.all(topicos.map(topico => {
-      return Topico.create({
-        materia: topico, // Supondo que cada tópico seja uma string
-        areaId: areaId,
-        usuarioId: usuarioId
-      });
-    }));
+    // Cria um novo tópico
+    const novoTopico = await Topico.create({
+      materia: topico, // Supondo que cada tópico seja uma string
+      areaId: areaIdTopico, // Corrigido para usar areaIdTopico
+      usuarioId: usuarioId
+    });
 
-    res.redirect('/usuario/inicioLogado')
+    // Retorna o novo tópico criado como resposta JSON
+    return res.status(201).json(novoTopico); // Status 201 para criação bem-sucedida
 
   } catch (error) {
     console.error('Error creating topics:', error);

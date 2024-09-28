@@ -8,11 +8,15 @@
     <link rel="stylesheet" href="/css/editordropdown.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/editorPaginaEdiitar.css">
+    <link rel="stylesheet" href="/css/criar_questao.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <style>
-        
+
+.title {
+            text-align: center;
+        }
+
     </style>
 </head>
 
@@ -23,7 +27,7 @@
             <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
                 <div class="titulo">
                     <label for="titulo">TITULO:</label>
-                    <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) ">
+                    <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) " required>
                 </div>
                 <h4>Enunciado</h4>
                 <button type="button" id="delta" style="display:none; " disabled>Show delta in console</button>
@@ -31,7 +35,7 @@
                 <%- include('../partials/editorEquacao') %>
                     <div id="editor-container"></div>
                     <%- include('../partials/editorEquacao') %>
-                    <h4>Resposta</h4>
+                        <h4>Resposta</h4>
                         <% if ( tipo==="objetiva" ) { %>
                             <div id="respostas-container">
                                 <span> Adicione o tipo de resposta e selecione apenas a(s) resposta(s)
@@ -42,7 +46,7 @@
                             <button type="button" onclick="addResposta()">Adicionar resposta</button>
 
                             <% } else { %>
-                              
+
                                 <textarea id="descricao" name="resposta" rows="5" cols="50" required> </textarea>
                                 <% } %>
                                     <input type="hidden" id="respostasSelecionadas" name="respostasSelecionadas">
@@ -76,23 +80,26 @@
 
 
                                         <!-- Modal para usuario adicionar novos tópicos -->
-                                        <a href="/professor/criar-topicos">Não encontrou o tópico que
-                                            procura?
-                                            Clique aqui para criar um novo tópico</a>
-                                     
+                                        <a href="#" onclick="showCreateTopicModal()" id="create-topic-link">Não
+                                            encontrou o tópico que procura? Clique aqui para criar um novo tópico</a>
+
+
                                     </div>
                                     <div class="button-container">
                                         <button type="submit" class="botao-registro">Registrar</button>
                                     </div>
         </div>
-   
+
         </form>
+        <%- include('../partials/modalTopicos') %>
+
         <script src="/js/editor.js"></script>
         <script src="/js/main.js"></script>
         <script src="/js/dropdown.js"></script>
         <script src="/js/quill.js"></script>
         <script src="/js/editorInputs.js"></script>
         <script type="module" src="/js/index.js"></script>
+  
 </body>
 
 </html>

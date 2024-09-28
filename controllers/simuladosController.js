@@ -46,7 +46,7 @@ roteador.patch('/:simuladoId/editar', async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
-roteador.get('/', async (req, res) => {
+roteador.get('/meus-simulados', async (req, res) => {
   try {
     const idUsuario = req.session.idUsuario;
     const page = parseInt(req.query.page) || 1; // Página atual
@@ -85,7 +85,7 @@ roteador.get('/visualizar/:tipo', async (req, res) => {
 
     const todosSimulados = await Simulados.findAll({
       where: {
-        tipo: tipo,
+        
         '$Questões.id$': {
           [Op.not]: null
         },
@@ -121,6 +121,7 @@ roteador.get('/visualizar/:tipo', async (req, res) => {
     res.status(500).send('Ocorreu um erro ao recuperar os questionários.');
   }
 });
+
 // Rota para associar uma pergunta a um questionário (formulário)
 // Exemplo de rota com paginação
 roteador.get('/:simuladoId/remover-questoes', async (req, res) => {

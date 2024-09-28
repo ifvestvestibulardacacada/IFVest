@@ -297,6 +297,8 @@
                          
                                 <th>Tipo</th>
 
+                                <th>Questão</th>
+
                                 <th>Tópico</th>
                             </tr>
                         </thead>
@@ -315,7 +317,12 @@
                                     <td>
                                         <%= questao.tipo %>
                                     </td>
-
+                                    <td>
+                                        <div class="name" data-delta='<%= questao.pergunta %>'>
+                                            <!-- O conteúdo será inserido via JavaScript -->
+                                            <span class="required">*</span>
+                                        </div>
+                                    </td>
                                     <td>
                                         <% questao.Topicos.forEach(topico=> { %>
                                             <%= topico.materia %>
@@ -429,7 +436,7 @@
 
         <!--========== MAIN JS ==========-->
         <script src="/js/main.js"></script>
-
+        <script src="/js/quillContentHtmlTable.js"></script>
 </body>
 
 </html>

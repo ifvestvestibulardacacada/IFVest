@@ -3,7 +3,7 @@ document.getElementById('delta').onclick = () => {
     console.log(quill.getContents());
 };
 var quill = new Quill('#editor-container', {
-    placeholder: 'Click the MathJax button to insert a formula.',
+    placeholder: 'Adicione aqui o Enunciado da questão',
     theme: 'snow',
     imageResize: {
         displaySize: true
