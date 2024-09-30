@@ -31,10 +31,6 @@ roteador.post('/editor', upload.single('image'), async (req, res) => {
       return res.status(400).send('Nenhum arquivo enviado.');
     }
   
-    const allowedMimes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (!allowedMimes.includes(req.file.mimetype)) {
-      return res.status(400).send('Tipo de arquivo inválido.');
-    }
   
     const url = `/uploads/${req.file.filename}`;
   
@@ -42,7 +38,7 @@ roteador.post('/editor', upload.single('image'), async (req, res) => {
       // Lógica adicional para compressão da imagem, se necessário
       // ...
   
-      return res.status(200).json({ url });
+      return res.status(200).json(url);
     } catch (error) {
       console.error(error);
       return res.status(500).send('Erro ao salvar a imagem.');

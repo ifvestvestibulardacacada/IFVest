@@ -258,6 +258,20 @@ roteador.post('/editar-topico', async (req, res) => {
     res.status(500).send('Erro ao atualizar o tópico.');
   }
 });
+roteador.get('/topicos/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const topics = await Topico.findAll({
+      where: { areaId: id },
+      // Selecione apenas os atributos necessários
+    });
+    res.status(200).json(topics);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro ao buscar tópicos' });
+  }
+});
 
 roteador.get('/editar-questao/:id', async (req, res) => {
   const { id } = req.params;

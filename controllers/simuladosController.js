@@ -74,14 +74,14 @@ roteador.get('/meus-simulados', async (req, res) => {
 // simuladosController.js
 
 // Rota para visualizar questionários
-roteador.get('/visualizar/:tipo', async (req, res) => {
+roteador.get('/visualizar', async (req, res) => {
   try {
-    const tipo = req.params.tipo.toUpperCase();
-    const tiposPermitidos = ['DISSERTATIVO', 'OBJETIVO', 'ALEATORIO'];
+    // 
+    // const tiposPermitidos = ['DISSERTATIVO', 'OBJETIVO', 'ALEATORIO'];
     let simulados;
-    if (!tiposPermitidos.includes(tipo)) {
-      return res.status(400).send('Tipo de simulado inválido.');
-    }
+    // if (!tiposPermitidos.includes(tipo)) {
+    //   return res.status(400).send('Tipo de simulado inválido.');
+    
 
     const todosSimulados = await Simulados.findAll({
       where: {
@@ -107,15 +107,19 @@ roteador.get('/visualizar/:tipo', async (req, res) => {
       ]
     });
 
+    simulados = todosSimulados;
     // Filtra os simulados pelo título, se o parâmetro de consulta 'titulo' estiver presente
     const tituloBusca = req.query.titulo;
     if (tituloBusca) {
       simulados = todosSimulados.filter(s => s.titulo.toLowerCase().includes(tituloBusca.toLowerCase()));
-    } else {
-      simulados = todosSimulados;
-    }
+    } 
 
-    res.render('simulado/simulados', { simulados, tipo });
+    const tipo =  req.query.tipo;
+    if (tipo) {
+      simulados = todosSimulados.filter(s => s.tipo.includes(tipo));
+    } 
+    
+    res.render('simulado/simulados', { simulados });
   } catch (error) {
     console.error(error);
     res.status(500).send('Ocorreu um erro ao recuperar os questionários.');

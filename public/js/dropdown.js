@@ -74,7 +74,43 @@ function handleSearch(inputValue) {
     });
 }
 
+async function loadTopicDropdown(AreaId) {
+    const response = await fetch(`/professor/topicos/${AreaId}`);
+   
+    const data = await response.json();
+    const topicos = data;
+console.log(data)
+
+    const dropdownList = document.getElementById('dropdown-list');
+    dropdownList.innerHTML = '';
+
+    topicos.forEach(topic => {
+        const listItem = document.createElement('li');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'topicosSelecionados[]';
+        checkbox.value = topic.id;
+
+        const label = document.createElement('label');
+        label.htmlFor = 'topico-' + topic.id;
+        label.textContent = topic.materia;
+
+        checkbox.checked = topic.selected; // Inicializa como selecionado
+
+        checkbox.addEventListener('change', function () {
+            updateSelectedTopics();
+        });
+
+        listItem.appendChild(checkbox);
+        listItem.appendChild(label);
+        dropdownList.appendChild(listItem);
+    });
+}
 // Event listener for search input
 document.getElementById('search').addEventListener('input', function() {
     handleSearch(this.value);
+});
+document.getElementById('areaId').addEventListener('change', async function() {
+    const AreaId = this.value;
+    await loadTopicDropdown(AreaId);
 });

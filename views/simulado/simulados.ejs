@@ -51,18 +51,32 @@
         th {
             background-color: #f2f2f2;
         }
-            
+        .filtros{
+            display: flex;
+        }
     </style>
     <%- include('../partials/sidebar') %>
         <!--========== CONTENTS ==========-->
         <main>
 
             <h1>Selecione um simulado</h1>
-            <form action="/usuario/simulados/visualizar/<%= tipo %>?titulo=" method="GET">
-                <label for="titulo">Buscar:</label>
-                <input type="text" id="titulo" name="titulo" required>
-                <button type="submit">Buscar</button>
-            </form>
+            <div class="filtros">
+                <form action="/usuario/simulados/visualizar?titulo=" method="GET">
+                    <label for="titulo">Buscar:</label>
+                    <input type="text" id="titulo" name="titulo" required>
+                    <button type="submit">Pesquisar</button>
+                </form>
+                <form action="/usuario/simulados/visualizar" method="GET">
+                <label for="tipo">Selecione o tipo:</label>
+                    <select name="tipo" id="tipo">
+                        <option value="DISSERTATIVO">Dissertativo</option>
+                        <option value="OBJETIVO">Objetivo</option>
+                        <option value="ALEATORIO">Aleatorio</option>
+                    </select>
+                    <button type="submit">Filtrar por tipo</button>
+                </form>
+            </div>
+          
             <table>
                 <thead>
                     <tr>

@@ -56,7 +56,7 @@
                                         <div>
                                             <label for="areaId">Selecione uma área:</label>
                                             <select name="areaId" id="areaId" required
-                                                onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>)">
+                                               >
                                                 <option value="">Selecione uma opção</option>
                                                 <% Areas.forEach(area=> { %>
                                                     <option value="<%= area.id %>">

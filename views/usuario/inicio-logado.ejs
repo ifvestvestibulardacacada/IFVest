@@ -33,7 +33,7 @@
     </div>
 
     <div class="ag-courses_item">
-      <a class="ag-courses-item_link">
+      <a href="/usuario/Simulados/meus-simulados"  class="ag-courses-item_link">
         <div class="ag-courses-item_bg"></div>
 
         <div class="ag-courses-item_title">
@@ -43,37 +43,38 @@
     </div>
 
     <div class="ag-courses_item">
-      <a href="/usuario/simulados/visualizar/dissertativo" class="ag-courses-item_link">
+      <a href="/usuario/simulados/visualizar" class="ag-courses-item_link">
         <div class="ag-courses-item_bg"></div>
 
         <div class="ag-courses-item_title">
           Simulados
-          (dissertativas)
+          
         </div>
       </a>
     </div>
+
 
     <div class="ag-courses_item">
-      <a href="/usuario/simulados/visualizar/objetivo" class="ag-courses-item_link">
+      <a href="/usuario/criar-simulado" class="ag-courses-item_link">
         <div class="ag-courses-item_bg"></div>
 
         <div class="ag-courses-item_title">
-          Simulados
-          (objetivas)
+          Criar Simulado
+          
         </div>
       </a>
     </div>
-
+    <% if (perfilUsuario==="PROFESSOR" ) { %>
     <div class="ag-courses_item">
-      <a href="/usuario/simulados/visualizar/aleatorio" class="ag-courses-item_link">
+      <a href="/professor/questoes" class="ag-courses-item_link">
         <div class="ag-courses-item_bg"></div>
 
         <div class="ag-courses-item_title">
-          Simulados
-          (Aleatório)
+         Minhas Questões
         </div>
       </a>
     </div>
+    <% } %>
   </div>
 </div>
         </main>

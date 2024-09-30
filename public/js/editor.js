@@ -31,7 +31,7 @@ function addResposta() {
     imagePreview.id = "imagePreview";
     imagePreview.style.width = "150px";
     imagePreview.style.height = "75px";
-    imagePreview.src = "/img/logofoto.jpg"
+  
     // Conta o número total de itens de resposta para definir o valor do botão de opção
     const totalRespostas = container.querySelectorAll('.resposta-item').length + 1;
 
@@ -137,7 +137,7 @@ function previewImage(inputElement) {
                     imgurl = img.outerHTML;
                     const textInput = inputElement.parentElement.querySelector('input[type="text"]');
                     textInput.value = data;
-                    textInput.readOnly = true;
+                    textInput.type = "hidden";
                    
                     // Se necessário, atualiza outros elementos ou lógica com a resposta do servidor
                     console.log('Imagem enviada para o servidor:', data);
