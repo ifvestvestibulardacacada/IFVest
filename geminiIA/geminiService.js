@@ -1,5 +1,7 @@
+//IA
+
 // const { model } = require("./config");
-// const { cacheManager } = require("./config");
+// //const { cacheManager } = require("./config");
 // const { generationConfig, safetySettings } = require("./geminiIAutils");
 // const { Questões } = require('../models');
 
@@ -16,13 +18,13 @@
 //             history: [],
 //         });
 //     } catch (error){
-//         console.error("Erro ao inicializar o chat:", error.message || error);
+//         console.error("Erro ao inicializar o chat:", error);
 //     }
 // }
 
 // function criarPrompt(grupoPerguntas){
 //     // Criação do prompt concatenado
-//     return `Seja curto e objetivo, compare as questões e responda para cada uma com apenas "A questão é semelhante a uma pergunta já existente" caso haja uma pergunta semelhante, mas perguntada de outra forma. Responda com apenas "Não há questão semelhante" caso não haja nenhuma questão semelhante. Por fim quero que você informe a numeração da questão que possua semelhança` +
+//     return `Seja curto e objetivo, compare as questões e responda para cada uma com apenas "A questão é semelhante a uma pergunta já existente" e informe a qual ela é semelhante caso haja uma pergunta semelhante, mas perguntada de outra forma. Responda com apenas "Não há questão semelhante" caso não haja nenhuma questão semelhante.` +
 //         grupoPerguntas.map((pergunta, index) => `${index + 1}. "${pergunta.pergunta}"`).join('\n'); // Cria uma string formatada para serem enviadas para IA.    método .map() é usado para iterar sobre cada pergunta no array e transformar cada elemento em um novo formato.     método .join('\n') pega o array resultante do .map() e o converte em uma única string
 // }
 

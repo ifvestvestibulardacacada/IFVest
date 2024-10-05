@@ -149,15 +149,6 @@ body *{
     box-shadow: 0px 10px 40px -12px #00ff8052;
 }
 
-.infiniteLogo {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -250px; /* Aumente este valor conforme necessário */
-}
-
 @media only screen and (max-width:950px){
     .card-login{
         width: 85%;

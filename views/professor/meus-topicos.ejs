@@ -7,11 +7,138 @@
 
     <!--========== BOX ICONS ==========-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    
     <!--========== CSS ==========-->
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/topicTable.css">
     <title>Responsive sidebar submenus</title>
+    <style>
+        /* Text */
+.text-2xl {
+  font-size: 1.25rem;
+}
+.font-bold {
+  font-weight: bold;
+}
+
+/* Spacing */
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* Background */
+.bg-white {
+  background-color: white;
+}
+
+/* Hover effect */
+.bg-white:hover {
+  background-color: white;
+}
+
+/* Color */
+.text-black {
+  color: black;
+}
+
+/* Padding */
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Border */
+.border {
+  border-width: 1px;
+}
+.border-black {
+  border-color: black;
+}
+
+/* Rounded corners */
+.rounded {
+  border-radius: 0.25rem;
+}
+
+/* Cursor style */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Material span */
+.material-span {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.87);
+  box-sizing: border-box;
+}
+
+/* Hide element */
+.hide {
+  display: none !important;
+}
+
+/* Button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.page-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1rem;
+  padding: 0.5rem 0.75rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+}
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -0.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+    </style>
 </head>
 
 <body>
@@ -22,8 +149,8 @@
         <h1 class="text-2xl font-bold mb-4">Tópicos</h1>
         <form action="/professor/topicos" method="GET" class="mb-4">
             <label for="titulo" class="mr-2">Buscar:</label>
-            <input type="text" id="materia" name="materia" required class="border p-2 rounded">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Buscar</button>
+            <input type="text" id="materia" name="materia" required class="py-2">
+            <button type="submit" class="btn">Buscar</button>
         </form>
 
        
@@ -38,17 +165,17 @@
                     <% topicos.forEach(topico => { %>
                         <tr>
                             <td>
-                                <span class="material-span topic-title"id="span<%= topico.id %>"><%= topico.materia %></span>
+                                <span class="material-span "id="span<%= topico.id %>"><%= topico.materia %></span>
                                 <form class="hide" id="editForm<%= topico.id %>" action="/professor/editar-topico" method="POST">
-                                    <input class="py-1 border border-black" type="text" name="materia" value="<%= topico.materia %>" >
+                                    <input class="py-2 border border-black" type="text" name="materia" value="<%= topico.materia %>" >
                                     <input type="hidden" name="id" value="<%= topico.id %>" >
-                                    <button type="submit" id="saveButton" class="btn btn-primary bg-lime-600 text-black rounded py-1 px-4 border border-black">Salvar</button>
-                                    <button type="button" id="cancelButton" class="btn btn-secondary bg-red-500 text-black rounded border py-1 px-4 border-black" onclick="ocultarForm(<%= topico.id %>)">Cancelar</button>
+                                    <button type="submit" id="saveButton" class=" btn ">Salvar</button>
+                                    <button type="button" id="cancelButton" class=" btn " onclick="ocultarForm(<%= topico.id %>)">Cancelar</button>
                                 </form>
                                 
                                
                             </td>
-                            <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" data-id="<%= topico.id %>" onclick="exibirForm(<%= topico.id %>)">Editar</button></td>
+                            <td><button class="btn" data-id="<%= topico.id %>" onclick="exibirForm(<%= topico.id %>)">Editar</button></td>
                         </td>
                         </tr>
                     <% }) %>

@@ -1,24 +1,16 @@
 const { Router } = require('express');
-const { Usuario } = require('../models');
-const { Favorito } = require('../models');
 const { Topico } = require('../models');
 const { Opcao } = require('../models');
 const { Simulados } = require('../models');
 const { Questões } = require('../models');
 const { Vestibular } = require('../models');
 const { Area } = require('../models');
-const { PerguntasProvas } = require('../models');
-const { Resposta } = require('../models');
+
 const { Op, NUMBER } = require('sequelize');
 const roteador = Router()
-const { criarOuAtualizarVestibular } = require('../utils/vestibularUtil')
-const upload = require('../midlewares/multerConfig');
-
-const { comparaPerguntasIAGemini } = require('../geminiIA/geminiService');
-
+const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const { removeFileFromUploads } = require('../utils/removeImage')
-
-
+const { comparaPerguntasIAGemini } = require('../geminiIA/geminiService');
 
 
 
@@ -37,7 +29,7 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
       as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
     }]
   })
-  const Vestibulares = await Vestibular.findAll();
+ 
 
   // Mapeamento dos tipos de questões aos tipos de simulados
   const tipoSimuladoMap = {
@@ -61,20 +53,18 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
   });
 
   // Retorna os simulados filtrados
-  res.status(200).render('professor/criar-questao', { Areas, tipo, simulados, Vestibulares });
+  res.status(200).render('professor/criar-questao', { Areas, tipo, simulados });
 
 });
 
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
-    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados, novoVestibular, vestibularId } = req.body;
+    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados,  } = req.body;
 
-    const anoVestibular = Number(req.body.anoVestibular);
+
+   
     const tipo = req.params.tipo.toUpperCase();
     const usuarioId = req.session.idUsuario;
-
-
-    const vestibular = await criarOuAtualizarVestibular(vestibularId, novoVestibular, anoVestibular);
 
     // Aqui, você pode criar a questão usando newVestibularId
     const questao = await Questões.create({
@@ -83,8 +73,7 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
       areaId,
       usuarioId,
       resposta,
-      tipo,
-      vestibularId: vestibular.id, // Usa o novo ID do vestibular
+      tipo, // Usa o novo ID do vestibular
     });
 
 
@@ -108,14 +97,16 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
       }
     }
 
+    //IA
     //await comparaPerguntasIAGemini(pergunta);
-    
+
     res.status(201).redirect('/usuario/inicioLogado');
   } catch (error) {
     console.error(error);
     res.status(500).redirect('/usuario/inicioLogado');
   }
 });
+
 
 // Renderiza a pagina de Verificar-similaridade
 roteador.get('/verificar-similaridade', async (req, res) => {
@@ -282,21 +273,54 @@ roteador.post('/editar-topico', async (req, res) => {
     res.status(500).send('Erro ao atualizar o tópico.');
   }
 });
+roteador.get('/topicos/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const topics = await Topico.findAll({
+      where: { areaId: id },
+      // Selecione apenas os atributos necessários
+    });
+    res.status(200).json(topics);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro ao buscar tópicos' });
+  }
+});
+
 roteador.get('/editar-questao/:id', async (req, res) => {
   const { id } = req.params;
-  const Topicos = await Topico.findAll()
+
+
   try {
+
+    const Topicos = await Topico.findAll()
+   
+    const Areas = await Area.findAll({
+      include: [{
+        model: Topico,
+        as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
+      }]
+  
+    })
     const questao = await Questões.findByPk(id, {
       include: [{
         model: Opcao,
         as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+      }, {
+        model: Topico,
+        as: 'Topicos'
       }]
     });
+
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
+
+  
+   
     // res.send(JSON.stringify(questao))
-    res.render('professor/editar-questao', { questao, Topicos });
+    res.render('professor/editar-questao', { questao, Topicos, Areas });
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar questão');
@@ -304,78 +328,88 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 
 });
 
+
+
+
+
+
+
 // rota incompleta
 roteador.patch('/editar-questao', async (req, res) => {
   try {
-    const { id, titulo, opcoesIds, pergunta, resposta, opcoes, correta } = req.body;
-  
-
+    const { id, titulo, pergunta, resposta, correta } = req.body;
+    const {areaId, topicosSelecionados, dados } = req.body;
+     
+    await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
+    
     const questao = await Questões.findByPk(id, {
       include: [{
         model: Opcao,
         as: 'Opcoes'
-      }]
+      }
+    ]
     });
+ 
 
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
 
-    // Atualiza informações gerais da questão
+        // Atualiza informações gerais da questão
     await Questões.update({
       titulo: titulo,
       pergunta: pergunta,
       resposta: resposta,
+   
     }, {
       where: { id: id }
     });
-
-    // Atualiza opções da questão
-    for (const opcaoId of opcoesIds) {
-      const index = opcoesIds.indexOf(Number(opcaoId)) + 1; // Corrige o índice baseado no array opcoesIds
-
-      // Atualiza descrição da opção
-      const opcaoAnterior = await Opcao.findByPk(Number(opcaoId))
-    
-      if (opcaoAnterior.descricao.startsWith("/uploads")) {
-        await removeFileFromUploads(opcaoAnterior.descricao);
+      
+      const opcoes = JSON.parse(dados)
+  
+      for (const opcao of opcoes) {
+         // Corrige o índice baseado no array opcoesIds
+  
+        // Atualiza descrição da opção
+        const opcaoAnterior = await Opcao.findByPk(opcao.id)
+      
+        if (opcaoAnterior.descricao.startsWith("/uploads")) {
+          await removeFileFromUploads(opcaoAnterior.descricao);
+        }
+  
+        await Opcao.update({
+          descricao: opcao.resposta,
+        }, {
+          where: {
+            id: opcaoAnterior.id
+          }
+        });
       }
-
+   
+    if (correta !== undefined && parseInt(correta) > 0) { // Validação básica
       await Opcao.update({
-        descricao: opcoes[index],
+        correta: false
+      }, {
+        where: {questao_id: questao.id}
+      });
+    
+      await Opcao.update({
+        correta: true
       }, {
         where: {
-          id: opcaoId
+          id: parseInt(correta)
         }
       });
-
-      // Atualiza o campo correto se aplicável
-      if (correta !== undefined && correta === opcaoId.toString()) {
-        await Opcao.update({
-          correta: true,
-        }, {
-          where: {
-            id: opcaoId
-          }
-        });
-      } else {
-        await Opcao.update({
-          correta: false,
-        }, {
-          where: {
-            id: opcaoId
-          }
-        });
-      }
     }
 
     res.redirect('/professor/questoes');
-
   } catch (error) {
     console.error('Erro ao atualizar questão:', error);
     res.status(500).send('Erro ao atualizar questão.');
   }
 });
+
+
 
 //Rota para registrar novo tópico
 // professorController.js
@@ -391,36 +425,54 @@ roteador.get('/criar-topicos', async (req, res) => {
 
 roteador.post('/registrar-topico', async (req, res) => {
   try {
-    const { topicos, areaId } = req.body;
+    const { topico, areaIdTopico } = req.body;
     const usuarioId = req.session.idUsuario;
 
-    //const tipoQuestao = req.session.tipoQuestao
-
-    if (!topicos || !areaId || !usuarioId) {
-      return res.status(400).json({ message: 'Os campos topicos e areaId são obrigatórios.' });
+    // Verifica se os campos obrigatórios estão preenchidos
+    if (!topico || !areaIdTopico || !usuarioId) {
+      return res.status(400).json({ message: 'Os campos tópico e areaId são obrigatórios.' });
     }
 
-    // Supondo que 'topicos' seja um array de strings representando os nomes dos tópicos
-    const novosTopicos = await Promise.all(topicos.map(topico => {
-      return Topico.create({
-        materia: topico, // Supondo que cada tópico seja uma string
-        areaId: areaId,
-        usuarioId: usuarioId
-      });
-    }));
+    // Cria um novo tópico
+    const novoTopico = await Topico.create({
+      materia: topico, // Supondo que cada tópico seja uma string
+      areaId: areaIdTopico, // Corrigido para usar areaIdTopico
+      usuarioId: usuarioId
+    });
 
-    // Enviar uma resposta de sucesso com os novos tópicos criados
-    res.redirect('/usuario/inicioLogado')
-    // if (tipoQuestao === 'OBJETIVA') {
-    //   res.redirect('/professor/registrar-questao/OBJETIVA');
-    // } else if (tipoQuestao === 'DISSERTATIVA') {
-    //   res.redirect('/professor/registrar-questao/DISSERTATIVA');
-    // } else {
-    //   res.redirect('/usuario/inicioLogado');
-    // }
+    // Retorna o novo tópico criado como resposta JSON
+    return res.status(201).json(novoTopico); // Status 201 para criação bem-sucedida
+
   } catch (error) {
     console.error('Error creating topics:', error);
     res.status(500).send('Ocorreu um erro ao criar os tópicos.');
+  }
+});
+
+// Rota para excluir uma questão
+roteador.delete('/excluir-questao/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Busca a questão pelo ID
+    const questao = await Questões.findByPk(id);
+    
+    if (!questao) {
+      return res.status(404).send('Questão não encontrada');
+    }
+
+    // Exclui as opções da questão
+    await Opcao.destroy({
+      where: { questao_id: questao.id }
+    });
+
+    // Exclui a questão
+    await questao.destroy();
+
+    res.status(200).redirect('/usuario/inicioLogado')
+  } catch (error) {
+    console.error('Erro ao excluir questão:', error);
+    res.status(500).send('Ocorreu um erro ao excluir a questão');
   }
 });
 

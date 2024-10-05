@@ -13,9 +13,10 @@
 
 
         <!-- Outros elementos do head -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-
+    <script src="/js/gerarPDF.js"></script>
+    
     <title>Responsive sidebar submenus</title>
 </head>
 <link rel="stylesheet" href="/css/meusSimuladosTable.css">
@@ -116,6 +117,11 @@
                                     <a href="/usuario/simulados/<%= simulado.id %>/editar" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-edit"></i> Editar
+                                        </div>
+                                    </a>
+                                    <a href="/usuario/simulados/<%= simulado.id %>/imprimir" class="button" id="generate-pdf">
+                                        <div class="icon-button">
+                                            <i class="fa-sharp fa-solid fa-download"></i> Imprimir
                                         </div>
                                     </a>
                                     <a href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" class="button">

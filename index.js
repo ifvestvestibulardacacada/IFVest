@@ -1,7 +1,7 @@
 const express = require('express');
 const methodOverride = require('method-override');
 const session = require('express-session');
-
+const bodyParser = require('body-parser');
 
 const { usuarios, simulados, inicio, professor, uploads, informacao } = require('./controllers');
 
@@ -14,7 +14,7 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: false
 };
-
+app.use(bodyParser.json());
 app.use(session(sessionOptions));
 
 const secure_pass = (req, res, next) => {
@@ -59,8 +59,8 @@ app.use(secure_pass);
 app.use('/usuario', usuarios);
 // app.use('/simulados', simulados)
 app.use('/professor', professor);
-app.use("/uploads",  uploads); /// usuario, usuarios(lista com os usuarios)
-app.use("/informacao", informacao);
+app.use("/uploads",  uploads) /// usuario, usuarios(lista com os usuarios)
+app.use("/desenvolvedores", informacao); //area dos desenvolvedores
 // app.use('/comentario', comentarios); //comentarios do usuario
 // app.use('/prof', AreaProfessor);
 

@@ -20,7 +20,7 @@ roteador.get('/perfil', async (req, res) => {
   if (usuario == null) {
     res.status(200).redirect('/usuario/login');
   } else {
-    res.status(200).render('usuario/perfil', { usuario});
+    res.status(200).render('usuario/perfil_usuario', { usuario});
   }
 });
 
@@ -173,7 +173,7 @@ roteador.get('/video', (req, res) => {
   res.status(200).render('conteudo/video', {});
 });
 
- roteador.use('/simulados', simulados)
+roteador.use('/simulados', simulados)
 
 module.exports = roteador;
 

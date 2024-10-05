@@ -11,18 +11,22 @@ const { PerguntasProvas } = require('../models');
 const { Resposta } = require('../models');
 const roteador = Router()
 const { Op } = require('sequelize');
-
+const QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
 // Rota para visualizar questionários
 // simuladosController.js
+
 roteador.get('/:id/editar', async (req, res) => {
   const simuladoId = req.params.id
 
   const simulado = await Simulados.findOne({
     where: { id: simuladoId },
-    
+
   });
-  res.render('simulado/editar-simulado', {simulado});
+  res.render('simulado/editar-simulado', { simulado });
 });
+
 roteador.patch('/:simuladoId/editar', async (req, res) => {
   try {
     const { simuladoId } = req.params; // Corrigindo a desestruturação para usar simuladoId
@@ -41,12 +45,13 @@ roteador.patch('/:simuladoId/editar', async (req, res) => {
       throw new Error('Simulado não encontrado ou não atualizado');
     }
     res.redirect("/usuario/Simulados")
-    
+
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 });
-roteador.get('/', async (req, res) => {
+
+roteador.get('/meus-simulados', async (req, res) => {
   try {
     const idUsuario = req.session.idUsuario;
     const page = parseInt(req.query.page) || 1; // Página atual
@@ -74,18 +79,18 @@ roteador.get('/', async (req, res) => {
 // simuladosController.js
 
 // Rota para visualizar questionários
-roteador.get('/visualizar/:tipo', async (req, res) => {
+roteador.get('/visualizar', async (req, res) => {
   try {
-    const tipo = req.params.tipo.toUpperCase();
-    const tiposPermitidos = ['DISSERTATIVO', 'OBJETIVO', 'ALEATORIO'];
+    // 
+    // const tiposPermitidos = ['DISSERTATIVO', 'OBJETIVO', 'ALEATORIO'];
     let simulados;
-    if (!tiposPermitidos.includes(tipo)) {
-      return res.status(400).send('Tipo de simulado inválido.');
-    }
+    // if (!tiposPermitidos.includes(tipo)) {
+    //   return res.status(400).send('Tipo de simulado inválido.');
+    
 
     const todosSimulados = await Simulados.findAll({
       where: {
-        tipo: tipo,
+        
         '$Questões.id$': {
           [Op.not]: null
         },
@@ -107,20 +112,25 @@ roteador.get('/visualizar/:tipo', async (req, res) => {
       ]
     });
 
+    simulados = todosSimulados;
     // Filtra os simulados pelo título, se o parâmetro de consulta 'titulo' estiver presente
     const tituloBusca = req.query.titulo;
     if (tituloBusca) {
       simulados = todosSimulados.filter(s => s.titulo.toLowerCase().includes(tituloBusca.toLowerCase()));
-    } else {
-      simulados = todosSimulados;
-    }
+    } 
 
-    res.render('simulado/simulados', { simulados, tipo });
+    const tipo =  req.query.tipo;
+    if (tipo) {
+      simulados = todosSimulados.filter(s => s.tipo.includes(tipo));
+    } 
+    
+    res.render('simulado/simulados', { simulados });
   } catch (error) {
     console.error(error);
     res.status(500).send('Ocorreu um erro ao recuperar os questionários.');
   }
 });
+
 // Rota para associar uma pergunta a um questionário (formulário)
 // Exemplo de rota com paginação
 roteador.get('/:simuladoId/remover-questoes', async (req, res) => {
@@ -377,19 +387,78 @@ roteador.get('/:simuladoId/fazer', async (req, res) => {
           as: 'vestibular' // Certifique-se de que este alias corresponda ao definido na associação
         }]
       }],
-      
+
     });
 
-
-
     res.render('prova/prova', { simulado });
-    // res.send(simulado)
+//  res.send(simulado)
   } catch (error) {
     console.error('Erro ao buscar perguntas da prova:', error);
     res.status(500).send('Erro ao buscar perguntas da prova.');
   }
 });
 
+roteador.get('/:simuladoId/imprimir', async (req, res) => {
+  try {
+    const simuladoId = req.params.simuladoId;
+
+    // Busca o simulado no banco de dados
+    const simulado = await Simulados.findByPk(simuladoId, {
+      include: [{
+        model: Questões,
+        as: 'Questões',
+        include: [{
+          model: Opcao,
+          as: 'Opcoes'
+        },
+        {
+          model: Vestibular,
+          as: 'vestibular'
+        }]
+      }],
+    });
+
+    // Crie um novo documento PDF
+    const doc = new PDFDocument();
+
+    // Define o cabeçalho para o download do PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="simulado_${simuladoId}.pdf"`);
+
+    // Começa a escrever no PDF
+    doc.pipe(res);
+
+    // Título do simulado
+    doc.fontSize(18).text(`Simulado: ${simulado.titulo}`, { align: 'center' });
+    doc.moveDown();
+
+    // Itera pelas questões do simulado
+    simulado.Questões.forEach((questao, questaoIndex) => {
+      doc.fontSize(14).text(`Questão ${questaoIndex + 1}: ${questao.titulo}`);
+      
+      if (questao.tipo === 'OBJETIVA') {
+        // Adiciona as opções da questão objetiva
+        questao.Opcoes.forEach((opcao, opcaoIndex) => {
+          doc.fontSize(12).text(`${String.fromCharCode(97 + opcaoIndex)}) ${opcao.descricao}`);
+        });
+      } else if (questao.tipo === 'DISSERTATIVA') {
+        // Adiciona um espaço para resposta
+        doc.moveDown();
+        doc.fontSize(12).text('Resposta: _______________________________________________', { continued: true });
+        doc.moveDown();
+      }
+
+      doc.moveDown(); // Adiciona um espaço entre as questões
+    });
+
+    // Finaliza o documento
+    doc.end();
+
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    res.status(500).send('Erro ao gerar PDF');
+  }
+});
 
 roteador.get('/:simuladoId/gabarito', async (req, res) => {
   const userId = req.session.idUsuario;
@@ -423,7 +492,7 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
       }],
       order: [['createdAt', 'DESC']],
     });
-  
+
 
     // Prepara os dados para a view
     const dadosParaView = {
