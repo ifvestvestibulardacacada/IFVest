@@ -9,14 +9,21 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='/css/index.css'>
 </head>
+<style>
+    /* footer.css */
 
+
+
+
+
+</style>
 <body>
     <div class="main-login">
         <div class="left-login">
             <h1>Faça login<br>E começe a aprender</h1>
             <img src="/img/gif.svg" class="left-login-image" alt="GifAnimado">
         </div>
-        <form action="/login" method="post">
+        <form id="loginform"action="/login" method="post">
             <div class="right-login">
                 <div class="card-login">
                     <h1>LOGIN</h1>
@@ -33,24 +40,28 @@
                             <%= errorMessage %>
                         </div>
                         <% } %>
+                      
                             <button class="btn-login">Login</button>
                             <a href="/cadastro" class="Cadastro-Login">Não possui login? clique aqui</a>
                 </div>
-
+              
+                    <div class="oferecimento-container">
+                  
+                        <a style="color: white; margin-left: 1px;"> <!-- Margem esquerda para separar o texto da imagem -->
+                            <img src="/img/infinite_logo.png" alt="Infinite Logo" style="width: 200px; height: 
+                            200px;" />
+                        </a>
+                    </div>
+                
             </div>
         </form>
     </div>
-        <footer>
-        <div class="rodape" style="text-align:center; display: flex; justify-content: center; align-items: center;">
-            <div class="oferecimento-container">
-          
-                <a style="color: white; margin-left: 5px;"> <!-- Margem esquerda para separar o texto da imagem -->
-                    <img src="/img/infinite_logo.png" alt="Infinite Logo" style="width: 250px; height: 
-                    250px;" />
-                </a>
-            </div>
-        </div>
-    </footer>
+      
+
+    
 </body>
 
 </html>
+
+    /* CSS Geral */
+

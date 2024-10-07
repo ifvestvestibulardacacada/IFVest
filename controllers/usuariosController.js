@@ -1,176 +1,177 @@
 const { Router } = require('express');
 const { Usuario } = require('../models');
-const { Favorito } = require('../models');
-const { Topico } = require('../models');
 const { Simulados } = require('../models');
-const { Questões } = require('../models');
-const { Area } = require('../models');
-const { PerguntasProvas } = require('../models');
-const { Resposta } = require('../models');
+
 const simulados = require('./simuladosController')
 const roteador = Router()
 const bcrypt = require('bcrypt');
-// rota de perfil de usuario removi as outras paginas iguais e adicionei o tipo de perfil ao usuario
+
 roteador.get('/perfil', async (req, res) => {
   const id = req.session.idUsuario;
+  try {
+    const usuario = await Usuario.findByPk(id);
 
-  const usuario = await Usuario.findByPk(id);
-
-  console.log(usuario.perfil);
-  if (usuario == null) {
-    res.status(200).redirect('/usuario/login');
-  } else {
-    res.status(200).render('usuario/perfil_usuario', { usuario});
+    if (!usuario) {
+      throw new Error("Usuario não encontrado")
+    }
+    res.status(200).render('usuario/perfil_usuario', { usuario });
+  } catch (err) {
+    console.error(err)
+    res.redirect('/perfil');
   }
 });
-
 
 roteador.get('/inicioLogado', async (req, res) => {
   const id = req.session.idUsuario;
+  try {
+    const usuario = await Usuario.findByPk(id);
 
-  const usuario = await Usuario.findByPk(id);
-  if (usuario == null) {
-    res.status(200).redirect('/usuario/login');
-  } else {
-
+    if (!usuario) {
+      throw new Error("Usuario não encontrado")
+    }
     res.status(200).render('usuario/inicio-logado');
+  } catch (err) {
+    console.error(err)
+    req.session.destroy();
+    res.redirect('/login');
   }
-
 });
 
-
-
-//rota de alterar funciona
 roteador.get('/editar', async (req, res) => {
-  // Certifique-se de que o usuário está autenticado e tem uma sessão
-  if (!req.session.idUsuario) {
-      return res.status(403).send('Você precisa estar logado para acessar esta página.');
+  try {
+    let errorMessage = req.session.errorMessage;
+
+    if (!req.session.idUsuario) {
+      throw new Error('Você precisa estar logado para acessar esta página.');
+    }
+    const usuario = await Usuario.findByPk(req.session.idUsuario);
+
+    if (!usuario) {
+      throw new Error('Usuário não encontrado.');
+    }
+
+
+    if (errorMessage === null) {
+      errorMessage = " ";
+    }
+
+    req.session.errorMessage = null;
+    res.render('usuario/editar-usuario', { usuario, session: req.session, errorMessage });
+  } catch (err) {
+    console.error(err)
+    res.redirect('/login');
   }
-
-  // Recupera o usuário do banco de dados usando o ID da sessão
-  // Substitua 'Usuario' pelo nome do seu modelo de usuário
-  const usuario = await Usuario.findByPk(req.session.idUsuario);
-
-  // Verifica se o usuário foi encontrado
-  if (!usuario) {
-      return res.status(404).send('Usuário não encontrado.');
-  }
-
-  // Renderiza a página de edição com os dados do usuário e a sessão
-  res.render('usuario/editar-usuario', { usuario, session: req.session });
 });
-
-//rota de alterar funciona
- // Certifique-se de ter o bcrypt instalado e importado
 
 roteador.patch('/editar/:id', async (req, res) => {
- try {
+  try {
     const id = req.session.idUsuario;
     const idUsuarioParaEditar = Number(req.params.id);
 
     if (id !== idUsuarioParaEditar) {
-      return res.status(403).send('Você não tem permissão para editar este perfil.');
+      req.session.destroy();
     }
 
     const { senha, nome, usuario, email, novasenha } = req.body;
 
-    // Verificar se a senha atual e a nova senha foram fornecidas
     if (senha && novasenha) {
-      // Buscar o usuário pelo ID para verificar a senha atual
       const usuarioAtual = await Usuario.findByPk(idUsuarioParaEditar);
 
-      // Verificar se a senha fornecida corresponde à senha atual
+      if (!usuarioAtual) {
+        throw new Error('Usuario não encontrado.');
+      }
+
       const senhaCorreta = await bcrypt.compare(senha, usuarioAtual.senha);
 
       if (!senhaCorreta) {
-        return res.status(400).send('A senha atual está incorreta.');
+        throw new Error('A senha ou usuario atual está incorreto.');
       }
 
-      // Se a senha estiver correta, atualizar a senha para a nova senha
       const novaSenhaHash = await bcrypt.hash(novasenha, 10); // Hash da nova senha
+
+      if (!novaSenhaHash) {
+        throw new Error('Senha não alterada.');
+      }
+
       await Usuario.update({ senha: novaSenhaHash }, { where: { id: idUsuarioParaEditar } });
     }
 
-    // Atualizar outros campos se fornecidos
+   
+    nome? await Usuario.update({nome: nome},{ where: { id: idUsuarioParaEditar } }) : "";
+    usuario? await Usuario.update({usuario: usuario},{ where: { id: idUsuarioParaEditar } }) : ""; 
+    email? await Usuario.update({email: email},{ where: { id: idUsuarioParaEditar } }) : "";
 
-    const dadosParaAtualizar = {};
-    if (nome) dadosParaAtualizar.nome = nome;
-    if (usuario) dadosParaAtualizar.usuario = usuario;
-    if (email) dadosParaAtualizar.email = email;
 
-    if (Object.keys(dadosParaAtualizar).length > 0) {
-      await Usuario.update(dadosParaAtualizar, { where: { id: idUsuarioParaEditar } });
-    }
-
-    return res.status(200).redirect(`/usuario/perfil`);
- } catch (err) {
+    res.status(200).redirect(`/usuario/perfil`);
+  } catch (err) {
     console.error(err);
-    return res.status(500).redirect('/inicio');
- }
+    req.session.errorMessage = err.message;
+    res.redirect('back')
+  }
 });
- 
 
-//rota de deletar funciona
+
 roteador.delete('/:id', async (req, res) => {
 
   const id = req.session.idUsuario;
-
   try {
-
     if (id != req.params.id) {
       throw new Error("Erro ao excluir usuario")
     }
 
-    await Usuario.destroy(
-      {
-        where:
-        {
-          id: req.params.id
-        }
+    await Usuario.destroy({
+      where: {
+        id: req.params.id
       }
+    }
     );
     req.session.destroy();
     res.status(200).redirect('/usuario/login');
   } catch (err) {
     console.log(err)
-    console.log("erro ao deletar")
-    //req.session.destroy();
-    res.status(500).redirect('/inicio');
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
 });
 
-// pagina para criar simulado
 roteador.get('/criar-simulado', async (req, res) => {
+  let errorMessage = req.session.errorMessage;
+  if (errorMessage === null) {
+    errorMessage = " ";
+  }
 
-  res.render('simulado/criar-simulado' );
+  req.session.errorMessage = null;
+
+  res.render('simulado/criar-simulado', { errorMessage });
 });
 
-// Rota para lidar com o envio do formulário
 roteador.post('/criar-simulado', async (req, res) => {
   const { titulo, descricao, tipo } = req.body;
-  const usuarioId1 = req.session.idUsuario;
+  const usuarioId = req.session.idUsuario;
   const tipoformatado = tipo.toUpperCase()
-  if(!titulo || !descricao || !tipo){
+
+  if (!titulo || !descricao || !tipo) {
     throw new Error("Dados Invalidos !!! ")
   }
 
   try {
-    // Crie um novo questionário no banco de dados usando Sequelize
     const simulado = await Simulados.create({
       titulo,
-      descricao,      
-      usuarioId: usuarioId1,
+      descricao,
+      usuarioId: usuarioId,
       tipo: tipoformatado
     });
 
+    if (!simulado) {
+      throw new Error("Simulado não criado!!! ")
+    }
+
     res.redirect(`/usuario/Simulados/${simulado.id}/adicionar-questoes`);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Ocorreu um erro ao criar o questionário.');
+  } catch (err) {
+    console.error(err);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
-});
-roteador.get('/video', (req, res) => {
-  res.status(200).render('conteudo/video', {});
 });
 
 roteador.use('/simulados', simulados)

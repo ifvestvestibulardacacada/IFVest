@@ -23,7 +23,15 @@
 <body>
     <%- include('../partials/sidebar') %>
         <div class="container">
+           
             <h1 class="title">Criar Questão</h1>
+            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
             <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
                 <div class="titulo">
                     <label for="titulo">TITULO:</label>

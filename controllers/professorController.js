@@ -14,56 +14,74 @@ const { removeFileFromUploads } = require('../utils/removeImage')
 
 
 roteador.get('/registrar-questao/:tipo', async (req, res) => {
-  if (!req.session.login) {
-    return res.status(401).redirect('/usuario/login');
-  }
-
-  const tipo = req.params.tipo.toLowerCase();
-  const usuarioId = req.session.idUsuario;
-  //req.session.tipoQuestao = tipo; // Armazena o tipo de questão na sessão
-
-  const Areas = await Area.findAll({
-    include: [{
-      model: Topico,
-      as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
-    }]
-  })
- 
-
-  // Mapeamento dos tipos de questões aos tipos de simulados
-  const tipoSimuladoMap = {
-    "objetiva": ['ALEATORIO', 'OBJETIVO'],
-    "dissertativa": ['DISSERTATIVO', 'ALEATORIO']
-  };
-
-  // Verifica se o tipo de questão é válido
-  if (!tipoSimuladoMap[tipo]) {
-    return res.status(400).send('Tipo de questão inválido');
-  }
-
-  // Consulta todos os simulados do usuário, filtrando por tipo
-  const simulados = await Simulados.findAll({
-    where: {
-      usuarioId: usuarioId,
-      tipo: {
-        [Op.in]: tipoSimuladoMap[tipo]
-      }
+  try {
+    if (!req.session.login) {
+      return res.status(401).redirect('/usuario/login');
     }
-  });
 
-  // Retorna os simulados filtrados
-  res.status(200).render('professor/criar-questao', { Areas, tipo, simulados });
+    const tipo = req.params.tipo.toLowerCase();
+    const usuarioId = req.session.idUsuario;
+    //req.session.tipoQuestao = tipo; // Armazena o tipo de questão na sessão
 
+    const Areas = await Area.findAll({
+      include: [{
+        model: Topico,
+        as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
+      }]
+    })
+
+
+    // Mapeamento dos tipos de questões aos tipos de simulados
+    const tipoSimuladoMap = {
+      "objetiva": ['ALEATORIO', 'OBJETIVO'],
+      "dissertativa": ['DISSERTATIVO', 'ALEATORIO']
+    };
+
+    // Verifica se o tipo de questão é válido
+    if (!tipoSimuladoMap[tipo]) {
+      return res.status(400).send('Tipo de questão inválido');
+    }
+
+    // Consulta todos os simulados do usuário, filtrando por tipo
+    const simulados = await Simulados.findAll({
+      where: {
+        usuarioId: usuarioId,
+        tipo: {
+          [Op.in]: tipoSimuladoMap[tipo]
+        }
+      }
+    });
+    let errorMessage = req.session.errorMessage;
+
+    if (errorMessage === null) {
+      errorMessage = " ";
+    }
+
+    req.session.errorMessage = null;
+
+    // Retorna os simulados filtrados
+    res.status(200).render('professor/criar-questao', { Areas, tipo, simulados, errorMessage });
+  } catch (error) {
+    console.error(err)
+
+    res.status(500).redirect('/usuario/inicioLogado');
+  }
 });
 
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
-    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados,  } = req.body;
+    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados, } = req.body;
 
 
-   
+
     const tipo = req.params.tipo.toUpperCase();
     const usuarioId = req.session.idUsuario;
+    if (!pergunta) {
+      throw new Error("Pergunta não pode ser vazio")
+    }
+    if (!topicosSelecionados) {
+      throw new Error("Selecione pelo menos um tópico")
+    }
 
     // Aqui, você pode criar a questão usando newVestibularId
     const questao = await Questões.create({
@@ -97,9 +115,10 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
     }
 
     res.status(201).redirect('/usuario/inicioLogado');
-  } catch (error) {
-    console.error(error);
-    res.status(500).redirect('/usuario/inicioLogado');
+  } catch (err) {
+    console.error(err);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
 });
 
@@ -177,15 +196,15 @@ roteador.get('/questoes', async (req, res) => {
     if (titulo) {
       questoesFiltradas = questoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
     }
-    if (areaId && areaId!== "") {
+    if (areaId && areaId !== "") {
       questoesFiltradas = questoes.filter(questao => questao.areaId === Number(areaId));
     }
-    if (topicosSelecionados && topicosSelecionados!== "") {
+    if (topicosSelecionados && topicosSelecionados !== "") {
       // Conversão de topicosSelecionados para Array de IDs
-      const topicosIds = Array.isArray(topicosSelecionados)? topicosSelecionados : topicosSelecionados.split(',').map(id => parseInt(id));
+      const topicosIds = Array.isArray(topicosSelecionados) ? topicosSelecionados : topicosSelecionados.split(',').map(id => parseInt(id));
       questoesFiltradas = questoes.filter(questao => {
         // Garante que questao.topicos seja um array
-        const topicos = Array.isArray(questao.Topicos)? questao.Topicos : [];
+        const topicos = Array.isArray(questao.Topicos) ? questao.Topicos : [];
         return topicos.some(topico => topicosIds.includes(topico.id));
       });
     }
@@ -193,7 +212,14 @@ roteador.get('/questoes', async (req, res) => {
       questoesFiltradas = questoes.filter(questao => questao.pergunta.toLowerCase().includes(pergunta.toLowerCase()));
     }
 
-    res.status(200).render('professor/minhas-questoes', { questoes: questoesFiltradas, totalPages, page, Areas, topicos });
+    let errorMessage = req.session.errorMessage;
+
+    if (errorMessage === null) {
+      errorMessage = " ";
+    }
+
+    req.session.errorMessage = null;
+    res.status(200).render('professor/minhas-questoes', { questoes: questoesFiltradas, totalPages, page, Areas, topicos, errorMessage });
   } catch (err) {
     req.session.destroy();
     res.status(500).redirect('/usuario/inicioLogado');
@@ -232,9 +258,14 @@ roteador.get('/topicos', async (req, res) => {
     } else {
       topicos = topicosSemFiltro
     }
+    let errorMessage = req.session.errorMessage;
 
+    if (errorMessage === null) {
+      errorMessage = " ";
+    }
 
-    res.status(200).render('professor/meus-topicos', { topicos, totalPages, page });
+    req.session.errorMessage = null;
+    res.status(200).render('professor/meus-topicos', { topicos, totalPages, page, errorMessage });
 
   } catch (err) {
     req.sesssion.destroy();
@@ -255,17 +286,19 @@ roteador.post('/editar-topico', async (req, res) => {
     res.redirect('/professor/topicos');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Erro ao atualizar o tópico.');
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
 });
 roteador.get('/topicos/:id', async (req, res) => {
   const { id } = req.params;
-  
+
   try {
     const topics = await Topico.findAll({
       where: { areaId: id },
       // Selecione apenas os atributos necessários
     });
+
     res.status(200).json(topics);
   } catch (error) {
     console.error(error);
@@ -280,13 +313,13 @@ roteador.get('/editar-questao/:id', async (req, res) => {
   try {
 
     const Topicos = await Topico.findAll()
-   
+
     const Areas = await Area.findAll({
       include: [{
         model: Topico,
         as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
       }]
-  
+
     })
     const questao = await Questões.findByPk(id, {
       include: [{
@@ -302,10 +335,16 @@ roteador.get('/editar-questao/:id', async (req, res) => {
       return res.status(404).send('Questão não encontrada');
     }
 
-  
-   
+    let errorMessage = req.session.errorMessage;
+
+    if (errorMessage === null) {
+      errorMessage = " ";
+    }
+
+    req.session.errorMessage = null;
+
     // res.send(JSON.stringify(questao))
-    res.render('professor/editar-questao', { questao, Topicos, Areas });
+    res.render('professor/editar-questao', { questao, Topicos, Areas, errorMessage});
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar questão');
@@ -323,61 +362,61 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 roteador.patch('/editar-questao', async (req, res) => {
   try {
     const { id, titulo, pergunta, resposta, correta } = req.body;
-    const {areaId, topicosSelecionados, dados } = req.body;
-     
+    const { areaId, topicosSelecionados, dados } = req.body;
+
     await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
-    
+
     const questao = await Questões.findByPk(id, {
       include: [{
         model: Opcao,
         as: 'Opcoes'
       }
-    ]
+      ]
     });
- 
+
 
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
 
-        // Atualiza informações gerais da questão
+    // Atualiza informações gerais da questão
     await Questões.update({
       titulo: titulo,
       pergunta: pergunta,
       resposta: resposta,
-   
+
     }, {
       where: { id: id }
     });
-      
-      const opcoes = JSON.parse(dados)
-  
-      for (const opcao of opcoes) {
-         // Corrige o índice baseado no array opcoesIds
-  
-        // Atualiza descrição da opção
-        const opcaoAnterior = await Opcao.findByPk(opcao.id)
-      
-        if (opcaoAnterior.descricao.startsWith("/uploads")) {
-          await removeFileFromUploads(opcaoAnterior.descricao);
-        }
-  
-        await Opcao.update({
-          descricao: opcao.resposta,
-        }, {
-          where: {
-            id: opcaoAnterior.id
-          }
-        });
+
+    const opcoes = JSON.parse(dados)
+
+    for (const opcao of opcoes) {
+      // Corrige o índice baseado no array opcoesIds
+
+      // Atualiza descrição da opção
+      const opcaoAnterior = await Opcao.findByPk(opcao.id)
+
+      if (opcaoAnterior.descricao.startsWith("/uploads")) {
+        await removeFileFromUploads(opcaoAnterior.descricao);
       }
-   
+
+      await Opcao.update({
+        descricao: opcao.resposta,
+      }, {
+        where: {
+          id: opcaoAnterior.id
+        }
+      });
+    }
+
     if (correta !== undefined && parseInt(correta) > 0) { // Validação básica
       await Opcao.update({
         correta: false
       }, {
-        where: {questao_id: questao.id}
+        where: { questao_id: questao.id }
       });
-    
+
       await Opcao.update({
         correta: true
       }, {
@@ -389,23 +428,10 @@ roteador.patch('/editar-questao', async (req, res) => {
 
     res.redirect('/professor/questoes');
   } catch (error) {
-    console.error('Erro ao atualizar questão:', error);
-    res.status(500).send('Erro ao atualizar questão.');
+    console.error(error);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
-});
-
-
-
-//Rota para registrar novo tópico
-// professorController.js
-roteador.get('/criar-topicos', async (req, res) => {
-  const Areas = await Area.findAll({
-    include: [{
-      model: Topico,
-      as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
-    }]
-  })
-  res.status(200).render('professor/criar-topicos', { Areas });
 });
 
 roteador.post('/registrar-topico', async (req, res) => {
@@ -429,8 +455,9 @@ roteador.post('/registrar-topico', async (req, res) => {
     return res.status(201).json(novoTopico); // Status 201 para criação bem-sucedida
 
   } catch (error) {
-    console.error('Error creating topics:', error);
-    res.status(500).send('Ocorreu um erro ao criar os tópicos.');
+    console.error(error);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
 });
 
@@ -438,10 +465,10 @@ roteador.post('/registrar-topico', async (req, res) => {
 roteador.delete('/excluir-questao/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // Busca a questão pelo ID
     const questao = await Questões.findByPk(id);
-    
+
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
@@ -456,8 +483,9 @@ roteador.delete('/excluir-questao/:id', async (req, res) => {
 
     res.status(200).redirect('/usuario/inicioLogado')
   } catch (error) {
-    console.error('Erro ao excluir questão:', error);
-    res.status(500).send('Ocorreu um erro ao excluir a questão');
+    console.error(error);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
   }
 });
 

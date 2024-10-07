@@ -11,26 +11,23 @@ body *{
     box-sizing: border-box;
 }
 .rodape {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    position: relative; /* Muda para relativo */
     width: 100%; /* Ocupa toda a largura da tela */
-    /* Cor de fundo do rodapé, ajuste conforme necessário */
+    background-color: #201b2c; /* Cor de fundo do rodapé */
     display: flex;
     justify-content: flex-end; /* Alinha o conteúdo à direita */
     align-items: center; /* Centraliza verticalmente o conteúdo */
-    padding-right: 20px; /* Adiciona um pouco de espaço à direita para evitar que o conteúdo fique muito próximo do limite */
+    padding: 10px 20px; /* Adiciona um pouco de espaço interno */
+    margin-top: auto; /* Garante que o footer fique na parte inferior da página */
 }
-
 .oferecimento-container {
     display: flex;
     align-items: center; /* Alinha verticalmente o texto e a imagem */
-    gap: 5px; /* Espaço entre o texto e a imagem */
 }
 
 .texto-branco {
-    color: white; /* Mantém o texto em branco */
-    margin-right: 5px; /* Margem direita para separar o texto da imagem */
+    color: white; 
+    margin-right: 5px; 
 }
 .main-login{
     width: 100vw;
@@ -65,6 +62,7 @@ body *{
     display: flex;
     justify-content: center;
     align-items: center;
+   
 }
 
 .perfil{
@@ -74,6 +72,7 @@ body *{
     display: flex;
     justify-content: center;
     align-items: center;
+   
 }
 
 .pedidos{
@@ -83,6 +82,7 @@ body *{
     display: flex;
     justify-content: center;
     align-items: center;
+   
 }
 .card-login{
     width: 60%;
@@ -94,12 +94,14 @@ body *{
     background: #2f2841;
     border-radius: 20px;
     box-shadow: 0px 10px 40px #00000056;
+   
 }
 
 .card-login > h1{
     color: #00ff88;
     font-weight: 800;
     margin: 0;
+   
 }
 
 .textfield{

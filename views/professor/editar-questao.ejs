@@ -144,6 +144,13 @@
         <div class="container">
 
             <h1 class="title">Editar Questão</h1>
+            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
             <form action="/professor/editar-questao?_method=PATCH" method="POST">
                 <input type="hidden" id="id" name="id" value="<%= questao.id %>">
                 <div class="titulo">

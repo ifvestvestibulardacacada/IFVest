@@ -1,85 +1,70 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
 
-        <!--========== BOX ICONS ==========-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!--========== CSS ==========-->
-        <link rel="stylesheet" href="/css/styles.css">
-        <link rel="stylesheet" href="/css/card.css">
+  <!--========== BOX ICONS ==========-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 
-        <title>Responsive sidebar submenus</title>
-    </head>
-    <body>
-        <%- include('../partials/sidebar') %>
-        <link rel="stylesheet" href="/css/Botão.css">
-        <main>
-            <h1>Funcionalidades disponíveis</h1>
-<p>Selecione uma opção</p>
+  <!--========== CSS ==========-->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/card.css">
 
-<div class="ag-format-container">
-  <div class="ag-courses_box">
-    <div class="ag-courses_item">
-      <a href="/usuario/perfil" class="ag-courses-item_link">
-        <div class="ag-courses-item_bg"></div>
+  <title>Responsive sidebar submenus</title>
+</head>
 
-        <div class="ag-courses-item_title">
-          Perfil
+<body>
+  <%- include('../partials/sidebar') %>
+    <link rel="stylesheet" href="/css/Botão.css">
+    <main>
+      <h1>Selecione uma Opção </h1>
+      <p style="display: none;"></p>
+
+      <div class="ag-format-container" >
+
+        <div class="ag-courses_box">
+        <div class="ag-courses_item">
+          <a href="/usuario/Simulados/meus-simulados" class="ag-courses-item_link">
+            <div class="ag-courses-item_bg"></div>
+
+            <div class="ag-courses-item_title">
+              Meus Simulados
+            </div>
+          </a>
         </div>
-      </a>
-    </div>
 
-    <div class="ag-courses_item">
-      <a href="/usuario/Simulados/meus-simulados"  class="ag-courses-item_link">
-        <div class="ag-courses-item_bg"></div>
+        <div class="ag-courses_item" ">
+          <a href="/usuario/simulados/visualizar" class="ag-courses-item_link">
+            <div class="ag-courses-item_bg"></div>
 
-        <div class="ag-courses-item_title">
-          Meus Simulados
+            <div class="ag-courses-item_title">
+              Simulados
+
+            </div>
+          </a>
         </div>
-      </a>
-    </div>
 
-    <div class="ag-courses_item">
-      <a href="/usuario/simulados/visualizar" class="ag-courses-item_link">
-        <div class="ag-courses-item_bg"></div>
 
-        <div class="ag-courses-item_title">
-          Simulados
-          
+
+
+        <div class="ag-courses_item">
+          <a href="/usuario/criar-simulado" class="ag-courses-item_link">
+            <div class="ag-courses-item_bg"></div>
+
+            <div class="ag-courses-item_title">
+              Criar Simulado
+
+            </div>
+          </a>
         </div>
-      </a>
-    </div>
+      </div>
+      </div>
+    </main>
 
+    <!--========== MAIN JS ==========-->
+    <script src="/js/main.js"></script>
+</body>
 
-    <div class="ag-courses_item">
-      <a href="/usuario/criar-simulado" class="ag-courses-item_link">
-        <div class="ag-courses-item_bg"></div>
-
-        <div class="ag-courses-item_title">
-          Criar Simulado
-          
-        </div>
-      </a>
-    </div>
-    <% if (perfilUsuario==="PROFESSOR" ) { %>
-    <div class="ag-courses_item">
-      <a href="/professor/questoes" class="ag-courses-item_link">
-        <div class="ag-courses-item_bg"></div>
-
-        <div class="ag-courses-item_title">
-         Minhas Questões
-        </div>
-      </a>
-    </div>
-    <% } %>
-  </div>
-</div>
-        </main>
-
-        <!--========== MAIN JS ==========-->
-        <script src="/js/main.js"></script>
-    </body>
 </html>

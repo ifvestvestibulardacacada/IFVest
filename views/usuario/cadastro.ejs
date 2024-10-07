@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -8,20 +9,21 @@
     <link rel='stylesheet' type='text/css' media='screen' href='/css/index.css'>
 
     <style>
-                select {
-                    width: 100%;
-    border: none;
-    border-radius: 10px;
-    padding: 15px;
-    background: #f0ffffde;
-    color: #514869;
-    font-size: 12pt;
-    box-shadow: 0px 10px 40px #00000056;
-    outline: none;
-    box-sizing: border-box;
+        select {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f0ffffde;
+            color: #514869;
+            font-size: 12pt;
+            box-shadow: 0px 10px 40px #00000056;
+            outline: none;
+            box-sizing: border-box;
         }
     </style>
 </head>
+
 <body>
     <div class="main-login">
         <div class="left-login">
@@ -50,15 +52,15 @@
                     </div>
                     <div class="textfield">
                         <label for="perfil">Perfil</label>
-                    <select name="perfil" id="perfil">
-                        <option value="USUARIO">Usuario</option>
-                        <option value="PROFESSOR">Professor</option>
-                    </select><br>
-                    <% if (errorMessage) { %>
-                        <div class="error-message" style="color: red">
-                            <%= errorMessage %>
-                        </div>
-                        <% } %>
+                        <select name="perfil" id="perfil">
+                            <option value="USUARIO">Usuario</option>
+                            <option value="PROFESSOR">Professor</option>
+                        </select><br>
+                        <% if (errorMessage) { %>
+                            <div class="error-message" style="color: red">
+                                <%= errorMessage %>
+                            </div>
+                            <% } %>
                     </div>
                     <button class="btn-login">Cadastro</button>
                     <a href="/login" class="Cadastro-Login">Já possui cadastro? clique aqui</a>
@@ -68,5 +70,36 @@
     </div>
 
 </body>
-</html>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('myForm');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault(); // Previne o comportamento padrão do form
+        
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch('/cadastro', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Erro na resposta');
+            }
+            
+            const result = await response.json();
+            console.log(result); // Exiba ou processe o resultado conforme necessário
+            
+        } catch (error) {
+            console.error('Erro ao enviar o formulário:', error);
+        }
+    });
+});
 
+</script>
+</html>

@@ -36,6 +36,13 @@
 <body>
     <%- include('../partials/sidebar') %>
         <main>
+            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
             <form id="questionario" class="form" action="/usuario/simulados/responder-prova/<%= simulado.id %>"
                 method="POST">
                 <div class="title-div">

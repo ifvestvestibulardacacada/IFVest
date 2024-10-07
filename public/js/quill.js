@@ -37,7 +37,7 @@ function uploadImage(file) {
         let formData = new FormData();
         formData.append('image', file);
 
-        fetch('/uploads/editor', {
+        fetch('/uploads/editor/', {
             method: 'POST',
             body: formData
         })
@@ -58,6 +58,7 @@ function uploadImage(file) {
                 }
             })
             .catch(error => {
+                alert('Erro no upload:', error.message)
                 console.error('Erro no upload:', error);
             });
     }

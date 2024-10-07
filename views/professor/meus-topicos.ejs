@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/topicTable.css">
     <title>Responsive sidebar submenus</title>
+    <link rel="stylesheet" href="/css/minhasquestoes.css">
+</head>
     <style>
         /* Text */
 .text-2xl {
@@ -139,22 +141,28 @@
 }
 
     </style>
-</head>
+
 
 <body>
     <%- include('../partials/sidebar') %>
         <!--========== CONTENTS ==========-->
         <main>
-          
-        <h1 class="text-2xl font-bold mb-4">Tópicos</h1>
+          <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <script>
+                window.onload = function() {
+                    alert("<%= errorMessage %>");
+                };
+            </script>
+        <% } %>
+        <h1 class="uk-heading-divider">Tópicos</h1>
         <form action="/professor/topicos" method="GET" class="mb-4">
             <label for="titulo" class="mr-2">Buscar:</label>
             <input type="text" id="materia" name="materia" required class="py-2">
-            <button type="submit" class="btn">Buscar</button>
+            <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
         </form>
 
        
-            <table id="topicTable">
+            <table class="uk-table uk-table-striped">
                 <thead>
                     <tr>
                         <th>Título</th>
@@ -175,7 +183,9 @@
                                 
                                
                             </td>
-                            <td><button class="btn" data-id="<%= topico.id %>" onclick="exibirForm(<%= topico.id %>)">Editar</button></td>
+                            <td>
+                              <a class="btn" data-id="<%= topico.id %>" onclick="exibirForm(<%= topico.id %>)"><i class="fas fa-edit"></i> Editar</a>
+                            </td>
                         </td>
                         </tr>
                     <% }) %>

@@ -66,6 +66,13 @@
 
     <%- include('../partials/sidebar') %>
         <main>
+            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
             <h1>Editar Simulado</h1>
 
             <form action="/usuario/simulados/<%= simulado.id %>/editar?_method=PATCH" method="POST">
