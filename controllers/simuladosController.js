@@ -398,65 +398,34 @@ roteador.get('/:simuladoId/fazer', async (req, res) => {
   }
 });
 
+//gerar pdf para impressão
 roteador.get('/:simuladoId/imprimir', async (req, res) => {
   try {
     const simuladoId = req.params.simuladoId;
+    // Verifique se simuladoId é um número
+    if (isNaN(simuladoId) || simuladoId <= 0) {
+      return res.status(400).send('ID de simulado inválido');
+    }
 
-    // Busca o simulado no banco de dados
     const simulado = await Simulados.findByPk(simuladoId, {
       include: [{
         model: Questões,
-        as: 'Questões',
+        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
         include: [{
           model: Opcao,
-          as: 'Opcoes'
+          as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
         },
         {
           model: Vestibular,
-          as: 'vestibular'
+          as: 'vestibular' // Certifique-se de que este alias corresponda ao definido na associação
         }]
       }],
     });
 
-    // Crie um novo documento PDF
-    const doc = new PDFDocument();
-
-    // Define o cabeçalho para o download do PDF
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="simulado_${simuladoId}.pdf"`);
-
-    // Começa a escrever no PDF
-    doc.pipe(res);
-
-    // Título do simulado
-    doc.fontSize(18).text(`Simulado: ${simulado.titulo}`, { align: 'center' });
-    doc.moveDown();
-
-    // Itera pelas questões do simulado
-    simulado.Questões.forEach((questao, questaoIndex) => {
-      doc.fontSize(14).text(`Questão ${questaoIndex + 1}: ${questao.titulo}`);
-      
-      if (questao.tipo === 'OBJETIVA') {
-        // Adiciona as opções da questão objetiva
-        questao.Opcoes.forEach((opcao, opcaoIndex) => {
-          doc.fontSize(12).text(`${String.fromCharCode(97 + opcaoIndex)}) ${opcao.descricao}`);
-        });
-      } else if (questao.tipo === 'DISSERTATIVA') {
-        // Adiciona um espaço para resposta
-        doc.moveDown();
-        doc.fontSize(12).text('Resposta: _______________________________________________', { continued: true });
-        doc.moveDown();
-      }
-
-      doc.moveDown(); // Adiciona um espaço entre as questões
-    });
-
-    // Finaliza o documento
-    doc.end();
-
+    res.render('prova/template-prova', { simulado });
   } catch (error) {
     console.error('Erro ao gerar PDF:', error);
-    res.status(500).send('Erro ao gerar PDF');
+    res.status(500).send('Erro ao gerar o PDF');
   }
 });
 
