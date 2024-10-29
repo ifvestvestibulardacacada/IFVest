@@ -20,8 +20,15 @@ module.exports = {
         }
       },
       descricao: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
+      },
+      alternativa: {
+        type: Sequelize.ENUM({
+          values: ['A', 'B', 'C', 'D', 'E']
+        }),
+        allowNull: true,
+        defaultValue: 'A'
       },
       correta: {
         type: Sequelize.BOOLEAN,

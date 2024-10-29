@@ -32,10 +32,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      email_secundario: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
       perfil: {
         type: Sequelize.ENUM({
           values: ['USUARIO', 'PROFESSOR', 'ADMIN']

@@ -20,91 +20,8 @@
 
     <title>Responsive sidebar submenus</title>
 </head>
-<link rel="stylesheet" href="/css/meusSimuladosTable.css">
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
+<link rel="stylesheet" href="/css/meusSimulados.css">
 
-    main {
-        margin: 20px;
-    }
-
-    h1 {
-        color: #333;
-        margin-bottom: 20px;
-        font-size: 24px;
-        /* Aumenta o tamanho do título */
-        font-weight: bold;
-        /* Torna o título em negrito */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    /* Estilos gerais para todos os botões */
-    .button-container {
-        display: flex;
-        /* Usa flexbox para alinhar os botões lado a lado */
-        gap: 10px;
-        /* Espaçamento entre os botões */
-        justify-content: center;
-        /* Centraliza os botões horizontalmente */
-        padding: 10px;
-        /* Padding ao redor do contêiner para dar espaço */
-        /* Fundo claro para o contêiner */
-        /* Sombra suave para dar profundidade */
-    }
-
-    .button {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 8px 12px;
-        border-radius: 5px;
-        border: 1px solid black;
-        color: black;
-        cursor: pointer;
-
-    }
-
-    .uk-heading-divider {
-        text-align: center;
-    }
-
-    .uk-search-input {
-        border: 1px solid black;
-    }
-
-  
-    form input[type="text"] {
-        padding: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    form button{
-        padding: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        border: 1px solid black;
-        background-color: white;
-        color: black;
-    }
-</style>
 
 <body>
     <%- include('../partials/sidebar') %>
@@ -156,6 +73,11 @@
                                             <i class="fas fa-edit"></i> Editar
                                         </div>
                                     </a>
+                                    <a href="/usuario/simulados/<%= simulado.id %>/imprimir" id="generate-pdf" class="button">
+                                        <div class="icon-button">
+                                            <i class="fas fa-print"></i> Gerar PDF
+                                        </div>
+                                    </a>
                                     <a href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-plus"></i> Adicionar Questões
@@ -168,6 +90,12 @@
                                     </a>
                                 </div>
                             </td>
+                            <div id="modal-imprimir" class="modal">
+                                <div class="modal-content">
+                                    <!-- inclusão de um documento html dentro do outro -->
+                                    <iframe id="iframe-imprimir" src="" frameborder="0" width="100%" height="600"></iframe>
+                                </div>
+                            </div>
                         </tr>
                         <% }); %>
                 </tbody>
@@ -198,6 +126,36 @@
         </main>
         <!--========== MAIN JS ==========-->
         <script src="/js/main.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const botoesImprimir = document.querySelectorAll('.button[id="generate-pdf"]'); // seleciona o botão de gerar pdf
+                
+                // Adicionar o evento click
+                botoesImprimir.forEach(botao => {
+                    botao.addEventListener('click', function(e) {
+                        e.preventDefault(); // impedir o redirecionamento para a pagina via link
+                        
+                        // Pega o id do simulado
+                        const simuladoId = this.href.split('/').filter(part => !isNaN(part)).pop(); // split: dividir a URL; filter: pegar apenas o ID do simulado; pop: retornar o ultimo número encontrado
+
+                        const iframe = document.getElementById('iframe-imprimir'); // captura o id do iframe da pagina
+                        iframe.src = `/usuario/simulados/${simuladoId}/imprimir`;  // carregar o conteudo
+                        
+                        // Exibição do conteudo da modal
+                        const modal = document.getElementById('modal-imprimir');
+                        modal.style.display = 'block';
+                    });
+                });
+
+                // Fechamento da modal
+                window.onclick = function(event) {
+                    const modal = document.getElementById('modal-imprimir');
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            });
+            </script>
 </body>
 
 </html>

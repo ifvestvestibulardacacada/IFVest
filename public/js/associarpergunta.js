@@ -1,63 +1,74 @@
-function updateTopicos(Areas) {
-    // Obter o elemento select da área
-    const areaSelect = document.getElementById('areaId');
-    const searchInput = document.getElementById('search');
 
-    // Obter o valor selecionado da área
-    const selectedAreaId = areaSelect.value;
+function atualizarContadorQuestoesSelecionadas() {
+    const idsSelecionados = JSON.parse(sessionStorage.getItem('idsSelecionados<%= simulado.id %>') || []);
+    const numeroQuestoesSelecionadas = idsSelecionados.length;
 
-    // Obter os tópicos correspondentes à área selecionada
-    const selectedArea = Areas.find(area => area.id === parseInt(selectedAreaId));
-    const topicos = selectedArea ? selectedArea.Topico : [];
+    // Atualiza o elemento HTML com o número de questões selecionadas
+    document.getElementById('numero-questoes-selecionadas').textContent = numeroQuestoesSelecionadas.toString();
+}
+function manipularCheckbox(checkbox) {
+    const id = checkbox.value;
+    const chave = 'idsSelecionados<%= simulado.id %>'; // Chave fixa para o sessionStorage
 
-    // Obter o elemento container de tópicos
-    const topicosContainer = document.getElementById('topicosLista');
+    if (checkbox.checked) {
+        // Checkbox marcado, adicionar ID
+        adicionarId(id, chave, checkbox);
+    } else {
+        // Checkbox desmarcado, remover ID
+        removerId(id, chave);
+    }
+    atualizarContadorQuestoesSelecionadas();
+}
 
-    // Limpar as opções de tópicos
-    topicosContainer.innerHTML = '';
+function adicionarId(id, chave, checkbox) {
+    let arrayAtual = JSON.parse(sessionStorage.getItem(chave) || "[]");
+    if (!arrayAtual.includes(id)) {
+        arrayAtual.push(id);
+        sessionStorage.setItem(chave, JSON.stringify(arrayAtual));
+    }
+}
 
-    // Adicionar as opções de tópicos ao container
-    topicos.forEach(topico => {
+function removerId(id, chave) {
+    let arrayAtual = JSON.parse(sessionStorage.getItem(chave) || "[]");
+    let arrayFiltrado = arrayAtual.filter(elemento => elemento !== id);
+    sessionStorage.setItem(chave, JSON.stringify(arrayFiltrado));
+}
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        // Ajuste o atributo name para enviar os valores como um array
-        checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = topico.id; // Certifique-se de que o valor é o ID do tópico
-
-
-        const label = document.createElement('label');
-        label.htmlFor = 'topico-' + topico.id;
-        label.textContent = topico.materia;
-
-        topicosContainer.appendChild(checkbox);
-        topicosContainer.appendChild(label);
-        topicosContainer.appendChild(document.createElement('br')); // Add a line break for better readability
+function verificarEAtualizarCheckboxes() {
+    const idsSelecionados = JSON.parse(sessionStorage.getItem('idsSelecionados<%= simulado.id %>') || []);
+    document.querySelectorAll('input[type="checkbox"][name="questoesSelecionadas"]').forEach(checkbox => {
+        const id = checkbox.value;
+        if (idsSelecionados.includes(id)) {
+            checkbox.checked = true;
+        } else {
+            checkbox.checked = false;
+        }
     });
 }
-document.getElementById('areaId').addEventListener('change', function () {
-    var searchContainer = document.getElementById('topicosSearchContainer');
-    if (this.value === '') {
-        // Oculta a barra de pesquisa se nenhuma área for selecionada
-        searchContainer.style.display = 'none';
-    } else {
-        // Exibe a barra de pesquisa se uma área for selecionada
-        searchContainer.style.display = 'block';
-    }
-});
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('search').addEventListener('input', function (e) {
-        console.log('Pesquisa:', e.target.value);
-        var searchValue = e.target.value.toLowerCase();
-        var listItems = document.querySelectorAll('#dropdown-list li');
 
-        listItems.forEach(function (item) {
-            var label = item.querySelector('label').textContent.toLowerCase();
-            if (label.indexOf(searchValue) > -1) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        });
+// Certifique-se de chamar essa função após o carregamento completo da página
+window.addEventListener('load', function () {
+    verificarEAtualizarCheckboxes(); // Para garantir que os checkboxes estejam corretamente marcados/desmarcados
+    atualizarContadorQuestoesSelecionadas(); // Para atualizar o contador no carregamento da página
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Adiciona um event listener ao botão "Associar Questões"
+    document.querySelector('.botao-associar').addEventListener('click', function (event) {
+        // Preenche o campo oculto com os IDs selecionados
+        const selectedQuestionIds = JSON.parse(sessionStorage.getItem('idsSelecionados<%= simulado.id %>'));
+        const idsAsString = selectedQuestionIds.join(',');
+        document.getElementById('selectedQuestionIds').value = idsAsString;
+
+        // Limpa o item 'idsSelecionados' do sessionStorage
+        sessionStorage.removeItem('idsSelecionados<%= simulado.id %>');
+
+        // Redireciona para a página de sucesso ou realiza outra ação conforme necessário
+        // Por exemplo, redirecionar para a mesma página para limpar os checkboxes
+        this.submit();
     });
 });
+
+

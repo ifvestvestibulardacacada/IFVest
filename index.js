@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 
 
-const { usuarios, simulados, inicio, professor, uploads } = require('./controllers');
+const { usuarios, informacao, inicio, professor, uploads } = require('./controllers');
 
 const app = express();
 
@@ -60,12 +60,10 @@ app.use(async (req, res, next) => {
 app.use('/', inicio);
 app.use(secure_pass);
 app.use('/usuario', usuarios);
-// app.use('/simulados', simulados)
 app.use('/professor', professor);
-app.use("/uploads",  uploads) /// usuario, usuarios(lista com os usuarios)
-// app.use('/comentario', comentarios); //comentarios do usuario
-// app.use('/prof', AreaProfessor);
+app.use("/uploads",  uploads) 
 
+app.use("/desenvolvedores", informacao); 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Working on port 3000!')
 });

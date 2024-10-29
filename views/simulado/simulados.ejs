@@ -11,73 +11,29 @@
     <!--========== CSS ==========-->
     <link rel="stylesheet" href="/css/styles.css">
 
-    <title>Responsive sidebar submenus</title>
+    <link rel="stylesheet" href="/css/simulados.css">
+    <title>Simulados</title>
 </head>
 
 <body>
     <style>
-        .simulado-icon {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-    
-        .simulado-icon:hover {
-        background-color: #0056b3;
-    }
 
-    .simulado-icon-disabled {
-        background-color: #ccc; /* Cor de fundo cinza claro */
-        color: #666; /* Cor do texto cinza escuro */
-        cursor: not-allowed; /* Muda o cursor para indicar que o link não é clicável */
-    }
-    
-     
-        /* Estilização da tabela */
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center; 
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .filtros{
-            display: flex;
-        }
     </style>
     <%- include('../partials/sidebar') %>
         <!--========== CONTENTS ==========-->
         <main>
 
-            <h1>Selecione um simulado</h1>
+            <h1 class="uk-heading-divider">Selecione um simulado</h1>
             <div class="filtros">
                 <form action="/usuario/simulados/visualizar?titulo=" method="GET">
                     <label for="titulo">Buscar:</label>
                     <input type="text" id="titulo" name="titulo" required>
-                    <button type="submit">Pesquisar</button>
+                    <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
                 </form>
-                <form action="/usuario/simulados/visualizar" method="GET">
-                <label for="tipo">Selecione o tipo:</label>
-                    <select name="tipo" id="tipo">
-                        <option value="DISSERTATIVO">Dissertativo</option>
-                        <option value="OBJETIVO">Objetivo</option>
-                        <option value="ALEATORIO">Aleatorio</option>
-                    </select>
-                    <button type="submit">Filtrar por tipo</button>
-                </form>
+               
             </div>
           
-            <table>
+            <table class="uk-table uk-table-striped">
                 <thead>
                     <tr>
                         <th>Título</th>

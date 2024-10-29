@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Tamplete gerarPDF</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Adicione aqui os links para os estilos CSS necessários -->
+    <script type="text/javascript" id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+        </script>
+        
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="/css/uikit.min.css" />
+    <script src="/js/uikit.min.js"></script>
+    <script src="/js/uikit-icons.min.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+    <script src="/js/gerarPDF.js"></script>
+
+    <link rel="stylesheet" href="/css/templateprova.css">
+
+</head>
+
+<body>
+    <main>
+        <div class="uk-flex uk-flex-between">
+            <button  id="generate-pdf" class="bbutton">
+                <i class="fas fa-print"></i> Gerar PDF
+          </button>
+            <button type="button" onclick="fecharModal()" aria-label="Close" uk-close ></button>
+ 
+        </div>
+       
+
+        <div class="title-div">
+            <h4><b></b>Teste de questões <%= simulado.tipo %>
+            </h4>
+           
+        </div>
+
+        <form id="questionario" class="form" action="/usuario/simulados/responder-prova/<%= simulado.id %>"
+            method="POST">
+            <div class="questoes-container">
+                <% simulado.Questões.forEach(questao=> { %>
+                    <div class="name-div">
+                        <div class="titulo">
+                            <p>
+                                <%= questao.titulo %>
+                                    <% if (questao.vestibular && questao.vestibular.nome && questao.vestibular.ano) { %>
+                                        (<%= questao.vestibular.nome %>
+                                            <%= questao.vestibular.ano %>)
+                                                <% } %>
+                            </p>
+                        </div>
+
+                        <div class="name" data-delta='<%= questao.pergunta %>'>
+                            <!-- O conteúdo será inserido via JavaScript -->
+                            <span class="required">*</span>
+                        </div>
+
+                        <% if (questao.tipo==="OBJETIVA" ) { %>
+                           
+                            <% questao.Opcoes.forEach((opcao, index)=> { %>
+                                <div class="opcao">
+                                    <label class="letra" for="opcao<%= opcao.id %>">
+                                        <%= opcao.alternativa %>
+                                    </label>
+                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
+                                        name="questoes[<%= questao.id %>]"
+                                        value="<%= questao.id %>-<%= opcao.id %>">
+                                            <div class="name" data-delta='<%= opcao.descricao %>'>
+                                                  <span class="required">*</span>
+                                            </div>                    
+                                </div>
+                                <% }) %>
+                                    <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
+                                        <textarea name="respostas[questao_<%= questao.id %>]"
+                                            placeholder="Sua resposta"></textarea>
+                                        <% } %>
+                </div>
+                <% }) %>
+            </div>
+        </form>
+
+    </main>
+
+    <!-- Adicione aqui os scripts JS necessários -->
+    <script src="/js/main.js"></script>
+    <script src="/js/quillContentHTML.js"></script>
+    <script>
+        function fecharModal() {
+            parent.document.getElementById('modal-imprimir').style.display = 'none';
+        }
+    </script>
+</body>
+
+
+
+</html>

@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         Quill.register(Mathjax);
+        
         tempQuill.setContents(delta);
 
         // Insira o HTML gerado no elemento atual

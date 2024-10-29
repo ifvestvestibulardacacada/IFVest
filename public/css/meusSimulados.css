@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+main {
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+    /* Aumenta o tamanho do título */
+    font-weight: bold;
+    /* Torna o título em negrito */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Estilos gerais para todos os botões */
+.button-container {
+    display: flex;
+    /* Usa flexbox para alinhar os botões lado a lado */
+    gap: 10px;
+    /* Espaçamento entre os botões */
+    justify-content: center;
+    /* Centraliza os botões horizontalmente */
+    padding: 10px;
+    /* Padding ao redor do contêiner para dar espaço */
+    /* Fundo claro para o contêiner */
+    /* Sombra suave para dar profundidade */
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid black;
+    color: black;
+    cursor: pointer;
+
+}
+
+.uk-heading-divider {
+    text-align: center;
+}
+
+.uk-search-input {
+    border: 1px solid black;
+}
+
+
+form input[type="text"] {
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+form button{
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}

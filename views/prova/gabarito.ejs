@@ -9,35 +9,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/googlef2.css">
-    <link rel="stylesheet" href="/css/textarea.css">
-    <style>
-        .opcao {
-            display: flex;
-            place-content: start;
-            margin-left: 2rem;
-        }
-
-        .letra {
-            margin-right: 10px;
-            /* Ajuste o valor conforme necessário */
-        }
-
-        .radio-input {
-            margin-right: 10px;
-            /* Ajuste o valor conforme necessário */
-        }
-
-        .opcao-correta {
-            background-color: #d4edda;
-            /* Verde claro */
-        }
-
-        .opcao-incorreta {
-            background-color: #f8d7da;
-            /* Vermelho claro */
-        }
-    </style>
-    < </head>
+    <link rel="stylesheet" href="/css/gabarito.css">
+    <%- include('../partials/quillandUIkit') %>
+</head>
 
 <body>
     <%- include('../partials/sidebar') %>
@@ -68,86 +42,31 @@
                         <% const respostaUsuario=respostasUsuario.find(r=> r.questaoId === questao.id); %>
                         <% questao.Opcoes.forEach(opcao=> { %>
                             
-                            <div class="<%= opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-correta' : (!opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-incorreta' : '') %>
-                                <div class="opcao' :)  %> ">
+                            <div class="<%= opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-correta' : (!opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-incorreta' : '') %>">
+                                <div class="opcao" >
+                                    <label class="letra" for="opcao<%= opcao.id %>">
+                                        <%= opcao.alternativa %>
+                                    </label>
                                 <% if (opcao.id ===  respostaUsuario.opcao.id) { %>
                                     <input type="radio" checked>
                                     <% } else { %>
                                         <input type="radio" disabled>
                                         <% } %>
                                 
-                                <label class="opcao-texto">
-                                    <%= opcao.descricao %>
-                                </label>
-                         
+                                        <div class="name" data-delta='<%= opcao.descricao %>'>
+                                                 
+                                            <span class="required">*</span>
+                                        </div>
                             </div>
                             <% }) %>
                     </div>
                     <% }) %>
         </main>
         <!-- Adicione aqui os scripts JS necessários -->
-         <script> 
-                        document.addEventListener('DOMContentLoaded', function () {
-                // Selecione todos os elementos que possuem o atributo data-delta
-                const deltaElements = document.querySelectorAll('[data-delta]');
 
-                deltaElements.forEach(function (element) {
-                    const delta = JSON.parse(element.getAttribute('data-delta'));
-
-                    // Crie uma instância temporária do Quill para renderizar o delta
-                    const tempDiv = document.createElement('div');
-                    const tempQuill = new Quill(tempDiv, { modules: { toolbar: false } });
-                    const Parchment = Quill.imports.parchment;
-                    const Delta = Quill.imports.delta;
-
-                    // Extend the embed
-                    class Mathjax extends Parchment.Embed {
-
-                        // Create node
-                        static create(value) {
-                            const node = super.create(value);
-                            if (typeof value === 'string') {
-                                node.innerHTML = "&#65279;" + this.tex2svg(value) + "&#65279;";
-                                node.contentEditable = 'false';
-                                node.setAttribute('data-value', value);
-                            }
-                            return node;
-                        }
-
-
-                        static value(domNode) {
-                            return domNode.getAttribute('data-value');
-                        }
-
-
-                        static tex2svg(latex) {
-                            let MathJaxNode = document.createElement("DIV");
-                            MathJaxNode.style.visibility = "hidden";
-                            MathJaxNode.innerHTML = latex;
-                            document.body.appendChild(MathJaxNode);
-                            MathJax.typeset();
-                            let svg = MathJaxNode.innerHTML;
-                            document.body.removeChild(MathJaxNode);
-                            return svg;
-                        }
-
-                    }
-
-                    Mathjax.blotName = 'mathjax';
-                    Mathjax.className = 'ql-mathjax';
-                    Mathjax.tagName = 'SPAN';
-
-
-                    Quill.register(Mathjax);
-                    tempQuill.setContents(delta);
-
-                    // Insira o HTML gerado no elemento atual
-                    element.innerHTML = tempDiv.innerHTML;
-                });
-            });
-         </script>
         <script src="/js/main.js"></script>
-        <script src="/js/prova.js"></script>
+        <script src="/js/gabarito.js"></script>
+        <script src="/js/quillContentHTML.js"></script>
 </body>
 
 </html>

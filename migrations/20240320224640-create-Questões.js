@@ -17,11 +17,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
-      resposta: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        defaultValue: " "
-      },
       tipo: {
         type: Sequelize.ENUM({
           values: ['DISSERTATIVA', 'OBJETIVA']

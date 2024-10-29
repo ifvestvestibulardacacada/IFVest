@@ -3,105 +3,12 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <!--========== BOX ICONS ==========-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-        <!--========== CSS ==========-->
-       
-    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"> 
         <link rel="stylesheet" href="/css/minhasquestoes.css">
-        <link rel="stylesheet" href="/css/uikit.min.css" />
-        <script src="/js/uikit.min.js"></script>
-        <script src="/js/uikit-icons.min.js"></script>
-                    <style>
-                            body {
-        font-family: Arial, sans-serif;
-        width:100%;
-        height: 100%;
-    }
 
-    main {
-        margin: 20px;
-    }
+        <%- include('../partials/quillandUIkit') %>
 
-    h1 {
-        color: #333;
-        margin-bottom: 20px;
-        font-size: 24px;
-        /* Aumenta o tamanho do título */
-        font-weight: bold;
-        /* Torna o título em negrito */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    /* Estilos gerais para todos os botões */
-    .button-container {
-        display: flex;
-        /* Usa flexbox para alinhar os botões lado a lado */
-        gap: 10px;
-        /* Espaçamento entre os botões */
-        justify-content: center;
-        /* Centraliza os botões horizontalmente */
-        padding: 10px;
-        /* Padding ao redor do contêiner para dar espaço */
-        /* Fundo claro para o contêiner */
-        /* Sombra suave para dar profundidade */
-    }
-
-    .button {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 8px 12px;
-        border-radius: 5px;
-        border: 1px solid black;
-        color: black;
-        cursor: pointer;
-
-    }
-
-    .uk-heading-divider {
-        text-align: center;
-    }
-
-    .uk-search-input {
-        border: 1px solid black;
-    }
-
-  
-    form input[type="text"] {
-        padding: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    form button{
-        padding: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        border: 1px solid black;
-        background-color: white;
-        color: black;
-    }
-                    </style>  
-        <title>Responsive sidebar submenus</title>
+        <title>Remover Questões</title>
     </head>
     <body>
         <%- include('../partials/sidebar') %>

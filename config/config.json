@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "residentevil6",
-    "database": "ifvest",
+    "database": "ifvest2",
     "host": "localhost",  
     "dialect": "postgres",
     "port": "5432"

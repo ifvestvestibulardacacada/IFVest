@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     Topico.belongsTo(models.Usuario, { foreignKey: 'usuarioId' });
     Topico.belongsTo(models.Area,  
       {foreignKey: 'areaId'},);
-    Topico.hasMany(models.Favorito)
+
     Topico.belongsToMany(models.Questões, { through: 'questoes_topicos', foreignKey: 'topicoId' });
-    Topico.hasMany(models.Video);
+
   };
 
 

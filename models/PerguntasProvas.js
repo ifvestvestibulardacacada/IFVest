@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     },
-    provaId: {
+    simuladoId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

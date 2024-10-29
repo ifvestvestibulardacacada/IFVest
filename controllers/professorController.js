@@ -3,7 +3,6 @@ const { Topico } = require('../models');
 const { Opcao } = require('../models');
 const { Simulados } = require('../models');
 const { Questões } = require('../models');
-const { Vestibular } = require('../models');
 const { Area } = require('../models');
 
 const { Op, NUMBER } = require('sequelize');
@@ -70,48 +69,48 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
 
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
-    const { pergunta, titulo, resposta, areaId, respostas, correta, topicosSelecionados, } = req.body;
+    const {  titulo, pergunta,  areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
+    
 
+    const ArrayRespostas = JSON.parse(respostasSelecionadas);
 
+    const numOpcoes = Object.keys(ArrayRespostas).length;
 
-    const tipo = req.params.tipo.toUpperCase();
+    const alternativas = ['A', 'B', 'C', 'D', 'E'];
+
+    const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
+      alternativa,
+      descricao: ArrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
+  }));
+
     const usuarioId = req.session.idUsuario;
-    if (!pergunta) {
-      throw new Error("Pergunta não pode ser vazio")
-    }
+
+
     if (!topicosSelecionados) {
       throw new Error("Selecione pelo menos um tópico")
     }
 
-    // Aqui, você pode criar a questão usando newVestibularId
-    const questao = await Questões.create({
-      pergunta,
+    const createQuestao = await Questões.create({
+      pergunta: pergunta,
       titulo,
       areaId,
       usuarioId,
-      resposta,
-      tipo, // Usa o novo ID do vestibular
+      tipo: 'OBJETIVA' // Usa o novo ID do vestibular
     });
 
 
-    await questao.addTopicos(topicosSelecionados)
+    await createQuestao.addTopicos(topicosSelecionados)
 
-    if (tipo === 'OBJETIVA') {
-      // Supondo que 'correta' seja o índice da resposta correta, inicializado antes do loop
-      let corretaIndex = parseInt(correta, 10); // Converte 'correta' para um número
 
-      // Adiciona as opções apenas se o tipo do simulado for "objetivo"
-      for (let i = 0; i < respostas.length; i++) {
-        const opcao = respostas[i];
-        // Compara o índice atual com o índice da resposta correta
-        let isCorreta = i + 1 === corretaIndex;
+    for (let opcao of opcoes) {
+      let isTrue = correta === opcao.alternativa ? true : false;
+      await Opcao.create({
+        questao_id: createQuestao.id,
+        descricao: JSON.stringify(opcao.descricao),
+        alternativa: opcao.alternativa,
+        correta: isTrue
 
-        await Opcao.create({
-          questao_id: questao.id,
-          descricao: opcao, // Supondo que cada opção tenha uma propriedade 'descricao'
-          correta: isCorreta // Marca como true se a opção atual é a correta
-        });
-      }
+      })
     }
 
     res.status(201).redirect('/usuario/inicioLogado');
@@ -134,31 +133,13 @@ roteador.get('/manutencao', async (req, res) => {
 // Rota que renderiza a página 'minhas-questoes'
 roteador.get('/questoes', async (req, res) => {
   const usuarioId = req.session.idUsuario;
-  const { titulo, areaId, topicosSelecionados, questaoId, pergunta } = req.query; // Adiciona 'pergunta' aos parâmetros recuperados
+  const { titulo, areaId, topicosSelecionados, pergunta } = req.query; // Adiciona 'pergunta' aos parâmetros recuperados
   const limit = 10; // Número de questões por página
   const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
   const offset = (page - 1) * limit;
 
   try {
-    let questoes;
-    if (questaoId) {
-      // Se questaoId estiver presente, busca apenas a questão específica
-      questoes = await Questões.findOne({
-        where: {
-          usuarioId: usuarioId,
-          id: questaoId,
-        },
-        include: [{
-          model: Area,
-          as: 'Area'
-        }, {
-          model: Topico,
-          as: 'Topicos'
-        }],
-      });
-    } else {
-      // Se não, busca todas as questões como antes
-      questoes = await Questões.findAll({
+    let questoes = await Questões.findAll({
         where: {
           usuarioId: usuarioId,
         },
@@ -172,7 +153,7 @@ roteador.get('/questoes', async (req, res) => {
         limit: limit,
         offset: offset,
       });
-    }
+    
 
     const questoesCount = await Questões.count({
       where: {
@@ -286,7 +267,7 @@ roteador.post('/editar-topico', async (req, res) => {
     res.redirect('/professor/topicos');
   } catch (error) {
     console.error(error);
-    req.session.errorMessage = err.message;
+    req.session.errorMessage = error.message;
     res.redirect('back')
   }
 });
@@ -335,6 +316,14 @@ roteador.get('/editar-questao/:id', async (req, res) => {
       return res.status(404).send('Questão não encontrada');
     }
 
+    const Opcoes = await Opcao.findAll({
+      where:{
+        questao_id: questao.id
+      }
+    })
+
+
+
     let errorMessage = req.session.errorMessage;
 
     if (errorMessage === null) {
@@ -344,7 +333,7 @@ roteador.get('/editar-questao/:id', async (req, res) => {
     req.session.errorMessage = null;
 
     // res.send(JSON.stringify(questao))
-    res.render('professor/editar-questao', { questao, Topicos, Areas, errorMessage});
+    res.render('professor/editar-questao', { questao, Topicos, Areas, errorMessage, Opcoes });
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar questão');
@@ -361,8 +350,20 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 // rota incompleta
 roteador.patch('/editar-questao', async (req, res) => {
   try {
-    const { id, titulo, pergunta, resposta, correta } = req.body;
-    const { areaId, topicosSelecionados, dados } = req.body;
+    const { id, titulo, pergunta, correta, respostasSelecionadas } = req.body;
+    const { areaId, topicosSelecionados } = req.body;
+      
+    const ArrayRespostas = JSON.parse(respostasSelecionadas)
+
+
+    const alternativas = ['A', 'B', 'C', 'D', 'E'];
+    
+    const opcoes = alternativas.map(alternativa => ({
+        alternativa,
+        descricao: ArrayRespostas[`#opcao${alternativa}`].content,
+        id: ArrayRespostas[`#opcao${alternativa}`].id
+    }));
+
 
     await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
 
@@ -374,62 +375,42 @@ roteador.patch('/editar-questao', async (req, res) => {
       ]
     });
 
-
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
 
-    // Atualiza informações gerais da questão
     await Questões.update({
       titulo: titulo,
       pergunta: pergunta,
-      resposta: resposta,
+
 
     }, {
       where: { id: id }
     });
 
-    const opcoes = JSON.parse(dados)
-
-    for (const opcao of opcoes) {
-      // Corrige o índice baseado no array opcoesIds
-
-      // Atualiza descrição da opção
-      const opcaoAnterior = await Opcao.findByPk(opcao.id)
-
-      if (opcaoAnterior.descricao.startsWith("/uploads")) {
-        await removeFileFromUploads(opcaoAnterior.descricao);
+    if (!opcoes) {
+      throw new Error("Selected answers cannot be empty");
+    }
+    for (let opcao of opcoes) {
+      // Inicializa o objeto de atualização
+      const updateData = {
+        descricao: JSON.stringify(opcao.descricao),
+        alternativa: opcao.alternativa,
+      };
+    
+      // Atualiza 'correta' apenas se 'correta' não estiver vazio
+      if (correta) {
+        updateData.correta = correta === opcao.alternativa;
       }
-
-      await Opcao.update({
-        descricao: opcao.resposta,
-      }, {
-        where: {
-          id: opcaoAnterior.id
-        }
+    
+      await Opcao.update(updateData, {
+        where: { id: opcao.id }
       });
     }
-
-    if (correta !== undefined && parseInt(correta) > 0) { // Validação básica
-      await Opcao.update({
-        correta: false
-      }, {
-        where: { questao_id: questao.id }
-      });
-
-      await Opcao.update({
-        correta: true
-      }, {
-        where: {
-          id: parseInt(correta)
-        }
-      });
-    }
-
     res.redirect('/professor/questoes');
   } catch (error) {
     console.error(error);
-    req.session.errorMessage = err.message;
+    req.session.errorMessage = error.message;
     res.redirect('back')
   }
 });
@@ -441,7 +422,7 @@ roteador.post('/registrar-topico', async (req, res) => {
 
     // Verifica se os campos obrigatórios estão preenchidos
     if (!topico || !areaIdTopico || !usuarioId) {
-      return res.status(400).json({ message: 'Os campos tópico e areaId são obrigatórios.' });
+      throw new Error('Os campos tópico e areaId são obrigatórios.' );
     }
 
     // Cria um novo tópico
@@ -456,7 +437,7 @@ roteador.post('/registrar-topico', async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    req.session.errorMessage = err.message;
+    req.session.errorMessage = error.message;
     res.redirect('back')
   }
 });
@@ -484,7 +465,7 @@ roteador.delete('/excluir-questao/:id', async (req, res) => {
     res.status(200).redirect('/usuario/inicioLogado')
   } catch (error) {
     console.error(error);
-    req.session.errorMessage = err.message;
+    req.session.errorMessage = error.message;
     res.redirect('back')
   }
 });

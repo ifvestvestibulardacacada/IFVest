@@ -2,10 +2,6 @@ module.exports = (sequelize, DataTypes) => {
     const Questões = sequelize.define('Questões', {
       pergunta: DataTypes.TEXT,
       titulo: DataTypes.TEXT,
-      resposta: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
       tipo: DataTypes.ENUM({
         values: ['DISSERTATIVA', 'OBJETIVA'],
         allowNull: false
@@ -20,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       Questões.belongsToMany(models.Simulados, { through: 'perguntas_provas', foreignKey: 'QuestõesId' });
       Questões.hasMany(models.Opcao, { foreignKey: 'questao_id', as: 'Opcoes' });
       Questões.hasMany(models.Resposta, { foreignKey: 'questaoId', as: 'Respostas' });
-      Questões.belongsTo(models.Vestibular, {
-        foreignKey: 'vestibularId',
-        as: 'vestibular',
-       });
        Questões.belongsTo(models.Area, {
         foreignKey: 'areaId',
         as: 'Area'

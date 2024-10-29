@@ -1,0 +1,104 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    overflow-y: auto;
+}
+
+/* Estilos para o cabeçalho do modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.modal-title {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Estilos para o fechamento do modal */
+.close-modal {
+    background-color: #f8f8f8;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Estilos para o formulário */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Estilos para os botões */
+
+
+
+
+.label {
+display: block;
+margin-bottom: 8px;
+}
+
+.select {
+width: 100%;
+padding: 8px;
+margin-bottom: 16px; /* Space between elements */
+}
+
+.button-group {
+display: flex;
+justify-content: space-between;
+}
+
+.add-topic-button,
+.topic-button {
+padding: 10px 15px;
+border-radius: 5px;
+border: none;
+cursor: pointer;
+}
+
+.add-topic-button {
+background-color: #007bff; /* Bootstrap primary color */
+color: white;
+}
+
+.topic-button {
+background-color: #28a745; /* Bootstrap success color */
+color: white;
+}

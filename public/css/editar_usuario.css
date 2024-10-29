@@ -108,3 +108,66 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
     padding     : 0.85rem 1.5rem;
     border-color: rgba(24, 28, 33, 0.03) !important;
 }
+.flex-container {
+    display: flex;
+
+
+
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .flex-child {
+
+    border: 1px solid black;
+    margin-bottom: 20px;
+    background-color: #12385c;
+    padding: 20px;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+  }
+
+.magenta {
+    flex: 0.3;
+}
+
+.image-container {
+    position: relative;
+}
+
+.image-container img {
+    width: 100%;
+}
+
+.green{
+    flex: 0.6;
+}
+
+.image-container .text {
+    position: absolute;
+    bottom: 0;
+    color: white; /* Texto branco */
+    width: 100%;
+    padding: 10px;
+}
+
+@media (max-width: 968px) {
+    .flex-child {
+        flex-basis: 100%;
+    }
+}
+.editar-perfil {
+    color: #FF4500;
+    /* Cor do link */
+    text-decoration: underline;
+    /* Sublinha o link */
+    cursor: pointer;
+    /* Muda o cursor para indicar que é um link */
+  }
+
+  .editar-perfil:hover {
+    color: #FF6347;
+    /* Cor do link ao passar o mouse */
+    text-decoration: none;
+    /* Remove a sublinhação ao passar o mouse */
+  }

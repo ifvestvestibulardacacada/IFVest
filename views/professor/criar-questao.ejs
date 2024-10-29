@@ -2,20 +2,14 @@
 <html>
 
 <head>
-    <script type="text/javascript" id="MathJax-script" defer
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-        </script>
+
     <link rel="stylesheet" href="/css/editordropdown.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/criar_questao.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <style>
 
-.title {
-            text-align: center;
-        }
+    <%- include('../partials/quillandUIkit') %>
+    <style>
 
     </style>
 </head>
@@ -23,91 +17,183 @@
 <body>
     <%- include('../partials/sidebar') %>
         <div class="container">
-           
+
+
             <h1 class="title">Criar Questão</h1>
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <hr class="uk-divider-icon">
+            <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
                 <script>
-                    window.onload = function() {
+                    window.onload = function () {
                         alert("<%= errorMessage %>");
                     };
                 </script>
-            <% } %>
-            <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
-                <div class="titulo">
-                    <label for="titulo">TITULO:</label>
-                    <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) " required>
-                </div>
-                <h4>Enunciado</h4>
-                <button type="button" id="delta" style="display:none; " disabled>Show delta in console</button>
-                <button type="button" id="editor-open-btn">Adicionar Equação</button>
-                <%- include('../partials/editorEquacao') %>
-                    <div id="editor-container"></div>
-                    <%- include('../partials/editorEquacao') %>
-                        <h4>Resposta</h4>
-                        <% if ( tipo==="objetiva" ) { %>
-                            <div id="respostas-container">
-                                <span> Adicione o tipo de resposta e selecione apenas a(s) resposta(s)
-                                    correta(s)</span>
+                <% } %>
+                    <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
+                        <div class="titulo">
+                            <label for="titulo">TITULO:</label>
+                            <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) "
+                                required>
+                        </div>
 
 
-                            </div>
-                            <button type="button" onclick="addResposta()">Adicionar resposta</button>
-
-                            <% } else { %>
-
-                                <textarea id="descricao" name="resposta" rows="5" cols="50" required> </textarea>
-                                <% } %>
-                                    <input type="hidden" id="respostasSelecionadas" name="respostasSelecionadas">
-                                    <div>
-
-                                        <h4>Area e Topicos</h4>
-                                        <div>
-                                            <label for="areaId">Selecione uma área:</label>
-                                            <select name="areaId" id="areaId" required
-                                               >
-                                                <option value="">Selecione uma opção</option>
-                                                <% Areas.forEach(area=> { %>
-                                                    <option value="<%= area.id %>">
-                                                        <%= area.area %>
-                                                    </option>
-                                                    <% }); %>
-                                            </select>
-                                        </div>
-
-                                        <label for="topicos">Selecione topico(s):</label>
-                                        <div class="dropdown" style="display: none;" id="topicosSearchContainer">
-                                            <input type="text" id="search" placeholder="Pesquisar...">
-
-                                            <ul id="dropdown-list" required>
-
-                                                <!-- Adicione mais itens conforme necessário -->
-                                            </ul>
-                                        </div>
-
-                                        <input type="hidden" id="pergunta" name="pergunta">
+                        <h4>Enunciado</h4>
 
 
-                                        <!-- Modal para usuario adicionar novos tópicos -->
-                                        <a href="#" onclick="showCreateTopicModal()" id="create-topic-link">Não
-                                            encontrou o tópico que procura? Clique aqui para criar um novo tópico</a>
+                        <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
+                            id="editor-open-btn"> Adicionar Equação
+                        </button>
+
+                        <%- include('../partials/editorEquacao') %>
+                            <div id="editor-container" style="height:150px;"></div>
+
+                            <% if ( tipo==="objetiva" ) { %>
+                                <%- include('../partials/resposta_containers') %>
+                                    <% }else{ %>
+                                        <%- include('../partials/quillInputDissertativa') %>
+                                            <% } %>
+                                                <textarea id="pergunta" name="pergunta" rows="5" cols="50"
+                                                    style="display: none;"> </textarea>
+                                                <textarea id="respostasSelecionadas" name="respostasSelecionadas"
+                                                    rows="5" cols="50" style="display: none;"> </textarea>
+                                                <div>
+                                                    <br>
+                                                    <div uk-grid>
+                                                        <div>
+                                                            <% if ( tipo==="objetiva" ) { %>
+                                                                <label for="opcaoId">Selecione a opção correta:</label>
+                                                                <select name="correta" id="correta" required>
+                                                                    <option value="">Selecione uma opção</option>
+                                                                    <option value="A">Opção 1</option>
+                                                                    <option value="B">Opção 2</option>
+                                                                    <option value="C">Opção 3</option>
+                                                                    <option value="D">Opção 4</option>
+                                                                    <option value="E">Opção 5</option>
+                                                                </select>
+                                                                <% } %>
+                                                                    <div>
+                                                                        <h4>Area e Topicos</h4>
+                                                                        <label for="areaId">Selecione uma área:</label>
+                                                                        <select name="areaId" id="areaId" required>
+                                                                            <option value="">Selecione uma opção
+                                                                            </option>
+                                                                            <% Areas.forEach(area=> { %>
+                                                                                <option value="<%= area.id %>">
+                                                                                    <%= area.area %>
+                                                                                </option>
+                                                                                <% }); %>
+                                                                        </select>
+                                                                    </div>
+                                                        </div>
+                                                        <label for="topicos">Selecione topico(s):</label>
+                                                        <div class="dropdown" style="display: none;"
+                                                            id="topicosSearchContainer">
+                                                            <input type="text" id="search" placeholder="Pesquisar...">
+
+                                                            <ul id="dropdown-list" required>
+
+                                                                <!-- Adicione mais itens conforme necessário -->
+                                                            </ul>
 
 
-                                    </div>
-                                    <div class="button-container">
-                                        <button type="submit" class="botao-registro">Registrar</button>
-                                    </div>
+                                                        </div>
+                                                        <a href="#" onclick="showCreateTopicModal()"
+                                                            id="create-topic-link">Não
+                                                            encontrou o tópico que procura? Clique aqui para criar um
+                                                            novo tópico</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="button-container">
+                                                    <button type="submit" class="botao-registro">Registrar</button>
+                                                </div>
         </div>
 
         </form>
         <%- include('../partials/modalTopicos') %>
+            <script src="/js/quillObjetiva.js"></script>
+            <script src="/js/editor.js"></script>
+            <script src="/js/main.js"></script>
+            <script src="/js/dropdown.js"></script>
+            <script src="/js/editorInputs.js"></script>
+            <script type="module" src="/js/index.js"></script>
 
-        <script src="/js/editor.js"></script>
-        <script src="/js/main.js"></script>
-        <script src="/js/dropdown.js"></script>
-        <script src="/js/quill.js"></script>
-        <script src="/js/editorInputs.js"></script>
-        <script type="module" src="/js/index.js"></script>
-  
+            <script>
+                const tipo = <%- JSON.stringify(tipo) %>;
+
+                const editors = [];
+
+                const quill = initializeQuill('#editor-container');
+                editors.push({ ['#editor-container']: quill });
+
+
+                // Lista de IDs dos containers dos editores (sem a vírgula inicial)
+                // Definindo constantes para os IDs dos editores
+                const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
+                const EDITOR_ID_RESPOSTA = '#opcaoA';
+
+                // Função para criar editores
+                function criarEditores(ids, placeholder) {
+                    ids.forEach(id => {
+                        const editorInstance = initializeQuill(id); // Adicionando o placeholder se necessário
+                        editors.push({ [id]: editorInstance }); // Corrigido para usar a sintaxe correta
+                    });
+                }
+
+                // Verificando o tipo de questão e criando os editores apropriados
+                if (tipo === 'objetiva') {
+                    criarEditores(EDITOR_IDS_OBJETIVA);
+                } else {
+                    const respostaEditor = initializeQuill(EDITOR_ID_RESPOSTA);
+                    editors.push({ [EDITOR_ID_RESPOSTA]: respostaEditor });
+                }
+
+
+                // Função para recuperar a instância de um editor pelo ID
+                function acessarEditorPorId(editorId) {
+                    const editor = editors.find(editor => editor[editorId]);
+                    return editor ? editor[editorId] : null; // Retorna a instância do editor ou null se não encontrado
+                }
+
+                // Função para recuperar o conteúdo de todos os editores
+                function getAllContent() {
+                    const contents = {};
+                    EDITOR_IDS_OBJETIVA.forEach(id => {
+                        const editorInstance = acessarEditorPorId(id); // Acessa o editor pelo ID
+                        if (editorInstance) {
+                            const tamanho = editorInstance.getLength();
+
+                            if (tamanho > 1) {
+                                contents[id] = editorInstance.getContents(); // Armazena o conteúdo no objeto com o ID como chave
+                            }
+                        }
+                    });
+
+                    // Verifica se o objeto contents está vazio e lança um erro se estiver
+                    if (Object.keys(contents).length === 0) {
+                        alert("Erro: Nenhum conteúdo encontrado.");
+                    }
+
+                    return contents;
+                }
+                // Testar a função de mostrar o conteúdo
+
+                function sendEditorContent() {
+                    const data = getAllContent()
+                    console.log(data)
+                    const length = quill.getLength();
+                    const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+                    document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
+                    document.getElementById('pergunta').value = JSON.stringify(pergunta);
+                }
+
+                document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+
+
+            </script>
+
+
+
+
 </body>
 
 </html>

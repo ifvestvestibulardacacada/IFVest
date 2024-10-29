@@ -33,7 +33,32 @@ roteador.get('/:id/editar', async (req, res) => {
   }
 });
 
+roteador.get('/:simuladoId/imprimir', async (req, res) => {
+  try {
+    const simuladoId = req.params.simuladoId;
+    // Verifique se simuladoId é um número
+    if (isNaN(simuladoId) || simuladoId <= 0) {
+      return res.status(400).send('ID de simulado inválido');
+    }
 
+    const simulado = await Simulados.findByPk(simuladoId, {
+      include: [{
+        model: Questões,
+        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+        include: [{
+          model: Opcao,
+          as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+        },
+       ]
+      }],
+    });
+
+    res.render('prova/template-prova', { simulado });
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    res.status(500).send('Erro ao gerar o PDF');
+  }
+});
 roteador.patch('/:simuladoId/editar', async (req, res) => {
   try {
     const { simuladoId } = req.params;
@@ -52,7 +77,7 @@ roteador.patch('/:simuladoId/editar', async (req, res) => {
     if (!updated) {
       throw new Error('Simulado não encontrado ou não atualizado');
     }
-    res.redirect("/usuario/Simulados")
+    res.redirect("/usuario/Simulados/meus-simulados")
   } catch (error) {
     console.error(error);
     req.session.errorMessage = err.message;
@@ -407,10 +432,7 @@ roteador.get('/:simuladoId/fazer', async (req, res) => {
           model: Opcao,
           as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
         },
-        {
-          model: Vestibular,
-          as: 'vestibular' // Certifique-se de que este alias corresponda ao definido na associação
-        }]
+       ]
       }],
 
     });
@@ -467,11 +489,7 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
 
 
     // Prepara os dados para a view
-    const dadosParaView = {
-      questoes: questoesComOpcoesCorretas,
-      respostasUsuario: respostasDoUsuario,
-      simulado: simulado
-    };
+
     let errorMessage = req.session.errorMessage;
 
     if (errorMessage === null) {
@@ -481,7 +499,9 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
     req.session.errorMessage = null;
 
     // Renderiza a view com os dados preparados
-    res.render('prova/gabarito', { dadosParaView, errorMessage });
+    res.render('prova/gabarito', {     questoes: questoesComOpcoesCorretas,
+      respostasUsuario: respostasDoUsuario,
+      simulado: simulado, errorMessage });
 
     //  res.render('prova/gabaritoProva', { simulado });
 
@@ -491,13 +511,13 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
   }
 });
 
-roteador.post('/responder-prova/:provaId', async (req, res) => {
+roteador.post('/responder-prova/:simuladoId', async (req, res) => {
   const { questoes, respostas } = req.body;
   const { idUsuario } = req.session;
-  const { provaId } = req.params;
+  const { simuladoId } = req.params;
   const respostasDissertativas = respostas;
 
-  const simulado = await Simulados.findByPk(provaId)
+  const simulado = await Simulados.findByPk(simuladoId)
   try {
     if (questoes && Object.keys(questoes).length > 0) {
 
@@ -515,7 +535,7 @@ roteador.post('/responder-prova/:provaId', async (req, res) => {
           tipo: 'OBJETIVA',
           opcaoId: opcaoId,
           usuarioId: idUsuario, // Ajuste conforme necessário
-          provaId: provaId, // Ajuste conforme necessário
+          simuladoId: simuladoId, // Ajuste conforme necessário
           questaoId: questaoId,
         });
       }
@@ -531,7 +551,7 @@ roteador.post('/responder-prova/:provaId', async (req, res) => {
           resposta: resposta,
           tipo: 'DISSERTATIVA',
           usuarioId: idUsuario, // Ajuste conforme necessário
-          provaId: provaId, // Ajuste conforme necessário
+          simuladoId: simuladoId, // Ajuste conforme necessário
           questaoId: questaoId,
         });
       }

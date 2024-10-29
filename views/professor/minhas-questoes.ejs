@@ -4,32 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--========== BOX ICONS ==========-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <!-- UIkit CSS -->
-
-    <link rel="stylesheet" href="/css/uikit.min.css" />
-    <script src="/js/uikit.min.js"></script>
-    <script src="/js/uikit-icons.min.js"></script>
-    <!-- UIkit JS -->
-
-    <!--========== CSS ==========-->
     <link rel="stylesheet" href="/css/minhasquestoes.css">
     <link rel="stylesheet" href="/css/styles.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <title>Responsive sidebar submenus</title>
-
-    </style>
+    <script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+    <%- include('../partials/quillandUIkit') %>
+    <title>Minhas Questões</title>
 </head>
 
 <body>
     <%- include('../partials/sidebar') %>
-        <!--========== CONTENTS ==========-->
-        <main>
-         
+        <main>      
             <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
                 <script>
                     window.onload = function() {

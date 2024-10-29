@@ -1,6 +1,3 @@
-// Adicionar evento de escuta para o botão de envio do formulário
-document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
-
 
 document.getElementById('areaId').addEventListener('change', function () {
     var searchContainer = document.getElementById('topicosSearchContainer');
@@ -29,26 +26,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('vestibularId').addEventListener('change', function () {
-        var input = document.getElementById('meuInput');
-        if (this.value === 'outro') {
-            // Mostra o campo de entrada se o usuário selecionar "Outro"
-            input.style.display = 'block';
-        } else {
-            // Esconde o campo de entrada para outras opções
-            input.style.display = 'none';
-            input.value = ''; // Limpa o valor do campo de entrada
-        }
-    });
-
-    // Função para enviar o formulário
-    document.querySelector('form').addEventListener('submit', function (event) {
-        // Impede o envio do formulário para poder testar
-
-        // Aqui você pode adicionar qualquer lógica adicional antes de enviar o formulário
-
-        // Permita que o formulário seja enviado normalmente
-        this.submit(); // Descomente esta linha para enviar o formulário após o teste
-    });
-});

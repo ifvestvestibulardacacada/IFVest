@@ -16,10 +16,10 @@ roteador.post('/', upload.single('image'), async (req, res) => {
     const usuario = await Usuario.findByPk(idUsuario)
 
     if (usuario.imagemPerfil) {
-      await removeFileFromUploads(usuario.imagemPerfil);
+      removeFileFromUploads(usuario.imagemPerfil);
     }
 
-    if(caminhoImagem){
+    if(!caminhoImagem){
       throw new Error('Nenhum arquivo enviado.');
     }
 
@@ -30,7 +30,7 @@ roteador.post('/', upload.single('image'), async (req, res) => {
     res.status(200).redirect(`/usuario/perfil`);
   } catch (error) {
     console.error(error);
-    req.session.errorMessage = err.message;
+    req.session.errorMessage = error.message;
     res.redirect('back')
   }
 });
@@ -45,8 +45,8 @@ roteador.post('/editor', upload.single('image'), async (req, res) => {
 
     res.status(200).json(url);
   } catch (error) {
-    console.error(err);
-    req.session.errorMessage = err.message;
+    console.error(error);
+    req.session.errorMessage = error.message;
     res.redirect('back')
    
   }

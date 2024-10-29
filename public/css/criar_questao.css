@@ -255,3 +255,18 @@ button[type="button"] {
 main {
     margin-top: 50px;
 }
+.title {
+    text-align: center;
+}
+
+.uk-navbar-nav li {
+    width: 100%;
+}
+.ql-tooltip {
+    left: 0 !important;
+    /* Ajuste conforme necessário */
+    top: 30px !important;
+    /* Mantenha ou ajuste conforme necessário */
+    transform: translateX(-50%);
+    /* Centraliza horizontalmente */
+}

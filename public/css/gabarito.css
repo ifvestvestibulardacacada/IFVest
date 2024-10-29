@@ -1,0 +1,20 @@
+textarea {
+  height:100px;
+  max-width:600px;
+  width:100%;
+  background:#fff;
+  border-radius:3px;
+  line-height:2em;
+  border:none;
+  box-shadow:0px 0px 5px 1px rgba(0,0,0,0.1);
+  padding:30px;
+  color: rgba(0, 0, 0, 0.87);
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.14994px;
+  text-align: justify;
+}
+.opcao{
+  display: flex;
+  align-items: center;
+}

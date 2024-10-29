@@ -74,6 +74,10 @@ roteador.patch('/editar/:id', async (req, res) => {
 
     const { senha, nome, usuario, email, novasenha } = req.body;
 
+    if(!nome & !usuario & !email){
+      throw new Error('Um dos campos deve ser preenchido.');
+    }
+
     if (senha && novasenha) {
       const usuarioAtual = await Usuario.findByPk(idUsuarioParaEditar);
 

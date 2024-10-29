@@ -19,7 +19,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      provaId: {
+      simuladoId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

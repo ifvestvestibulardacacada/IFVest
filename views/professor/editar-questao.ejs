@@ -1,329 +1,243 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--========== BOX ICONS ==========-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-
-    <script type="text/javascript" id="MathJax-script" defer
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-        </script>
     <link rel="stylesheet" href="/css/editordropdown.css">
-    <!--========== CSS ==========-->
-    <link rel="stylesheet" href="/css/styles.css">
-    <title>Responsive sidebar submenus</title>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <link rel="stylesheet" href="/css/style.css">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/criar_questao.css">
 
-        .input-resposta,
-        input[type="text"],
-        input[type="input"] {
-            width: 75%;
-            padding: 5px;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-            border: 1px solid #272525;
-            border-radius: 3px;
-            font-size: 14px;
-        }
-
-        .button-container {
-            text-align: center;
-            margin: 0 auto;
-        }
-
-        .botao-registro {
-            padding: 10px 20px;
-            width: 35%;
-            background-color: #007bff;
-            color: white;
-            border: solid 1px black;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        button[type="submit"],
-        button[type="button"] {
-            padding: 5px 5px;
-        }
-
-        .container {
-            max-width: 70%;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .resposta-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        select {
-            border: 1px solid #ccc;
-            outline: none;
-            border-radius: 3px;
-            padding: 5px;
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-
-
-        .button-container {
-            text-align: center;
-        }
-
-        .title {
-            text-align: center;
-        }
-
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Ocultar o conteúdo da página até que o conteúdo carregue */
-        #page-content {
-            display: none;
-        }
-    </style>
-
+    <%- include('../partials/quillandUIkit') %>
 
 </head>
 
 <body>
-    <div id="loading-container"
+    <div class="container">
+        <!--   <div id="loading-container"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
         <div class="spinner"></div>
         Carregando...
-    </div>
+    </div> -->
 
 
-    <%- include('../partials/sidebar') %>
+        <%- include('../partials/sidebar') %>
 
-        <div class="container">
-
-            <h1 class="title">Editar Questão</h1>
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <h1 class="title">Criar Questão</h1>
+            <hr class="uk-divider-icon">
+            <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
                 <script>
-                    window.onload = function() {
+                    window.onload = function () {
                         alert("<%= errorMessage %>");
                     };
                 </script>
-            <% } %>
-            <form action="/professor/editar-questao?_method=PATCH" method="POST">
-                <input type="hidden" id="id" name="id" value="<%= questao.id %>">
-                <div class="titulo">
-                    <label for="titulo">TITULO:</label>
-                    <input type="text" id="titulo" name="titulo" value="<%= questao.titulo %>" required>
-                </div>
-
-
-
-                <div class="coluna-esquerda">
-                    <h4>Enunciado</h4>
-                    <button id="delta" style="display:none;" disabled>Show delta in console</button>
-                    <button type="button" id="editor-open-btn">Adicionar Equação</button>
-                    <%- include('../partials/editorEquacao') %>
-                        <div id="editor-container">
-
+                <% } %>
+                    <form action="/professor/editar-questao?_method=PATCH" method="POST">
+                        <input type="hidden" id="id" name="id" value="<%= questao.id %>">
+                        <div class="titulo">
+                            <label for="titulo">TITULO:</label>
+                            <input type="text" id="titulo" name="titulo" value="<%= questao.titulo %>" required>
                         </div>
+
+
+                        <h4>Enunciado</h4>
+
+                        <button type="button" id="delta" style="display:none; " disabled>Show delta in console</button>
+                        <button type="button" id="editor-open-btn"> Adicionar Equação</button>
                         <%- include('../partials/editorEquacao') %>
-
-                            <% if (questao.tipo==="OBJETIVA" ) { %>
-                                <div id="respostas-container">
-                                    <h4>Resposta(s)</h4>
-                                    <% questao.Opcoes.forEach((opcao, index)=> { %>
-                                        <div class="resposta-item">
-                                            <input type="checkbox" name="correta[]" value="<%= opcao.id %>">
-                                            <input type="hidden" name="opcoesIds[]" value="<%= opcao.id %>">
-                                            <% if (opcao.descricao.includes('/uploads')) { %>
-                                                <!-- Se a descrição contiver uma tag de imagem, renderiza como HTML -->
-                                                <input type="text" name="opcoes[<%= opcao.id %>]"
-                                                    placeholder="Sua resposta">
-
-                                                <input type="file" name="files[]" id="inputFile" class="input-resposta"
-                                                    placeholder="Sua resposta" onchange="previewImage(this);">
-                                                <img id="imagePreview" src="<%= opcao.descricao %>"
-                                                    alt="Descrição da opção <%= index + 1 %>" width="150" height="200">
-                                                <% } else { %>
-
-                                                    <input type="text" data-id="<%= opcao.id %>" name="opcoes[]"
-                                                        placeholder="Sua resposta" value="<%= opcao.descricao %>">
-                                                    <% } %>
-                                        </div>
-                                        <% }); %>
-                                </div>
-                                <h4>Área e Tópicos</h4>
-                                <div>
-                                    <label for="areaId">Selecione uma área:</label>
-                                    <select name="areaId" id="areaId"
-                                        onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>, <%= JSON.stringify(questao.Topicos) %>)">
-
-                                        <% Areas.forEach(area=> { %>
-                                            <option value="<%= area.id %>" <%=area.id===questao.areaId ? 'selected' : ''
-                                                %>
-
-                                                >
-                                                <%= area.area %>
-                                            </option>
-                                            <% }); %>
-                                    </select>
-                                </div>
-
-                                <label for="topicos">Selecione tópico(s):</label>
-                                <div class="dropdown" id="topicosSearchContainer">
-                                    <input type="text" id="search" placeholder="Pesquisar...">
-                                    <ul id="dropdown-list">
-                                        <% questao.Topicos.forEach(topic=> { %>
-                                            <li>
-                                                <input type="checkbox" name="topicosSelecionados[]"
-                                                    value="<%= topic.id %>" checked>
-                                                <label for="topico-<%= topic.id %>">
-                                                    <%= topic.materia %>
-                                                </label>
-                                            </li>
-                                            <% }); %>
-                                    </ul>
-                                </div>
-
-                                <input type="hidden" id="dados" name="dados" >
-                                <!-- Modal para usuario adicionar novos tópicos -->
-
-
-
-                                <div>
-
-
-                                    <div>
-                                    </div>
-
-                                    <% } else { %>
-                                        <label for="descricao">Resposta :</label>
-                                        <textarea id="descricao" name="resposta" rows="5" cols="50"
-                                            required> <%= questao.resposta %></textarea>
-                                        <% } %>
-
-                                            <input type="hidden" id="pergunta" name="pergunta">
-                                            <div class="button-container">
-                                                <button type="submit" class="botao-registro">Registrar</button>
-                                            </div>
-
-
-
-            </form>
-
-        </div>
-        </div>
-        <script>
-
-            function sendEditorContent() {
-                const editorContent = quill.getContents()
-                document.getElementById('pergunta').value = JSON.stringify(editorContent);
-
-                const inputs = document.querySelectorAll('input[data-id]');
-                const dados = [];
-
-                inputs.forEach(input => {
-                    dados.push({
-                        id: input.dataset.id,
-                        resposta: input.value
-                    });
-                });
-
-                document.getElementById('dados').value = JSON.stringify(dados);
-
-            }
-
-            document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+                            <div id="editor-container" style="height:150px;"></div>
 
 
 
 
-            document.addEventListener('DOMContentLoaded', function () {
-                // Exibir o spinner enquanto o conteúdo carrega
-                function checkQuillLoaded() {
-                    // Pegue o conteúdo da pergunta e faça o parse para JSON
-                    const parsedContent = <%- JSON.stringify(questao.pergunta) %>;
-
-                    if (parsedContent && quill) {
-                        // Insira o conteúdo no Quill
-                        quill.setContents(JSON.parse(parsedContent));
+                            <% if ( questao.tipo==="OBJETIVA" ) { %>
+                                <%- include('../partials/resposta_containers') %>
+                                    <% }else{ %>
+                                        <%- include('../partials/quillInputDissertativa') %>
+                                            <% } %>
 
 
-                        // Remova o spinner e mostre o conteúdo da página após a inserção do conteúdo no editor
-                        document.getElementById('loading-container').style.display = 'none';
-                        document.getElementById('page-content').style.display = 'block';
-                    } else {
-                        // Se o conteúdo não foi carregado, tente novamente em 100ms
-                        setTimeout(checkQuillLoaded, 100);
-                    }
+
+
+
+                                                <textarea id="pergunta" name="pergunta" rows="5" cols="50"
+                                                    style="display: none;"> </textarea>
+                                                <textarea id="respostasSelecionadas" name="respostasSelecionadas"
+                                                    rows="5" cols="50" style="display: none;"> </textarea>
+                                                <div>
+                                                    <br>
+                                                    <div uk-grid>
+                                                        <div>
+                                                            <% if ( questao.tipo==="OBJETIVA" ) { %>
+                                                                <label for="opcaoId">Selecione a opção correta:</label>
+                                                                <select name="correta" id="correta">
+                                                                    <option value="">Selecione uma opção</option>
+                                                                    <option value="A">Opção 1</option>
+                                                                    <option value="B">Opção 2</option>
+                                                                    <option value="C">Opção 3</option>
+                                                                    <option value="D">Opção 4</option>
+                                                                    <option value="E">Opção 5</option>
+                                                                </select>
+                                                                <% } %>
+                                                                    <div>
+                                                                        <div>
+                                                                            <label for="areaId">Selecione uma
+                                                                                área:</label>
+                                                                            <select name="areaId" id="areaId"
+                                                                                onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>, <%= JSON.stringify(questao.Topicos) %>)">
+
+                                                                                <% Areas.forEach(area=> { %>
+                                                                                    <option value="<%= area.id %>"
+                                                                                        <%=area.id===questao.areaId
+                                                                                        ? 'selected' : '' %>
+
+                                                                                        >
+                                                                                        <%= area.area %>
+                                                                                    </option>
+                                                                                    <% }); %>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                        </div>
+
+                                                        <label for="topicos">Selecione tópico(s):</label>
+                                                        <div class="dropdown" id="topicosSearchContainer">
+                                                            <input type="text" id="search" placeholder="Pesquisar...">
+                                                            <ul id="dropdown-list">
+                                                                <% questao.Topicos.forEach(topic=> { %>
+                                                                    <li>
+                                                                        <input type="checkbox"
+                                                                            name="topicosSelecionados[]"
+                                                                            value="<%= topic.id %>" checked>
+                                                                        <label for="topico-<%= topic.id %>">
+                                                                            <%= topic.materia %>
+                                                                        </label>
+                                                                    </li>
+                                                                    <% }); %>
+                                                            </ul>
+                                                        </div>
+
+
+
+                                                        <!-- Modal para usuario adicionar novos tópicos -->
+
+
+                                                        <a href="#" onclick="showCreateTopicModal()"
+                                                            id="create-topic-link">Não
+                                                            encontrou o tópico que procura? Clique aqui para criar um
+                                                            novo tópico</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="button-container">
+                                                    <button type="submit" class="botao-registro">Registrar</button>
+                                                </div>
+    </div>
+
+    </form>
+    </div>
+    </div>
+
+    <script src="/js/quillObjetiva.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editors = [];
+        const opcoesIds = [];
+        const tipo = <%- JSON.stringify(questao.tipo) %>;
+
+        const parsedContent = <%- JSON.stringify(questao.pergunta) %>;
+        const parsedOpcoes = <%- JSON.stringify(Opcoes) %>;
+        const deltaContent = JSON.parse(parsedContent);
+
+        const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
+
+        const quill = initializeQuill('#editor-container');
+            quill.setContents(deltaContent)
+
+            editors.push(quill);
+            const editorIds = (tipo === 'OBJETIVA') ? ['A', 'B', 'C', 'D', 'E'] : ['A'];
+            editorIds.forEach(id => {
+                // Encontre a opção correspondente em parsedOpcoes
+                const opcao = parsedOpcoes.find(op => op.alternativa === id);
+
+                // Verifique se a opção foi encontrada
+                const editorInstance = initializeQuill(`#opcao${id}`);
+                if (opcao) {
+
+                    editorInstance.setContents(JSON.parse(opcao.descricao))
+                    editors.push({ [`#opcao${id}`]: editorInstance });
+                    opcoesIds.push({ [`#opcao${id}`]: opcao.id });
+                    // Adicione tanto a instância quanto o ID
+                } else {
+                    console.warn(`Opção não encontrada para o ID: ${id}`);
                 }
-
-                // Executa a função para verificar o carregamento do Quill
-                checkQuillLoaded();
-
-                // Tempo máximo para o spinner sumir (caso algo falhe)
-                setTimeout(function () {
-                    document.getElementById('loading-container').style.display = 'none';
-                    document.getElementById('page-content').style.display = 'block';
-                }, 5000);
             });
 
+        function acessarEditorPorId(editorId) {
+            const editor = editors.find(editor => editor[editorId]);
+            return editor ? editor[editorId] : null; // Retorna a instância do editor ou null se não encontrado
+        }
 
-  
+
+        // Função para recuperar o conteúdo de todos os editores
+        function getAllContent() {
+            const contents = {};
+            EDITOR_IDS_OBJETIVA.forEach(id => {
+                const opcaoId = opcoesIds.find((opcao => opcao[id]))
+                console.log(opcaoId[id])
+                const editorInstance = acessarEditorPorId(id);
+                // Acessa o editor pelo ID
+                if (editorInstance) {
+                    const tamanho = editorInstance.getLength();
+
+                    if (tamanho > 1) {
+                        contents[id] = { content: editorInstance.getContents(), id: opcaoId[id] } // Armazena o conteúdo no objeto com o ID como chave
+                    }
+                }
+            });
+
+            // Verifica se o objeto contents está vazio e lança um erro se estiver
+
+            return contents;
+        }
+
+        // Testar a função de mostrar o conteúdo
+        function showContent() {
+            const editorInstance = getEditorById('#editor-container');
+            if (editorInstance) {
+                console.log(editorInstance.root.innerHTML);  // Exibe o conteúdo no console
+            } else {
+                console.log("Editor não encontrado");
+            }
+        }
+
+        function sendEditorContent() {
+            const data = getAllContent()      
+            const length = quill.getLength();
+            const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+        
+            document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
+            const respostas = document.getElementById('respostasSelecionadas')
+            console.log(respostas)
+            document.getElementById('pergunta').value = JSON.stringify(pergunta);
+        }
+
+        document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+
+        })
+
+     
 
 
-        </script>
 
-
-        <!--========== MAIN JS ==========-->
-        <script src="/js/dropdownEditar.js"></script>
-        <script src="/js/editarQuestao.js"></script>
-        <script src="/js/main.js"></script>
-        <script src="/js/editor.js"></script>
-        <script src="/js/jscolor.min.js"></script>
-        <script type="module" src="/js/index.js"></script>
+    </script>
+    <!--========== MAIN JS ==========-->
+    <script src="/js/dropdownEditar.js"></script>
+    <script src="/js/editarQuestao.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/editor.js"></script>
+    <script src="/js/jscolor.min.js"></script>
+    <script type="module" src="/js/index.js"></script>
 
 </body>
 

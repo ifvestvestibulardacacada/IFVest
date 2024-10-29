@@ -32,14 +32,20 @@ function addItemsToDropdown(Areas) {
 
 // Function to update selected topics
 function updateSelectedTopics() {
-    const selectedTopics = document.querySelectorAll('#dropdown-list input[type="checkbox"]:checked');
-    const selectedTopicIds = Array.from(selectedTopics).map(function (checkbox) {
-        return checkbox.id.replace('topico-', '');
-    });
+   
+        const selectedTopics = document.querySelectorAll('#dropdown-list input[type="checkbox"]:checked');
 
-    document.getElementById('topicosSelecionados').value = JSON.stringify(selectedTopicIds);
+        // Verifica se há tópicos selecionados
+
+
+        const selectedTopicIds = Array.from(selectedTopics).map(function (checkbox) {
+            return checkbox.id.replace('topico-', '');
+        });
+
+        // Atualiza o valor do campo oculto com os IDs dos tópicos selecionados
+        document.getElementById('topicosSelecionados').value = JSON.stringify(selectedTopicIds);
+
 }
-
 // Function to handle search in the dropdown
 function handleSearch(inputValue) {
     const dropdownList = document.getElementById('dropdown-list');
@@ -79,7 +85,7 @@ async function loadTopicDropdown(AreaId) {
    
     const data = await response.json();
     const topicos = data;
-console.log(data)
+
 
     const dropdownList = document.getElementById('dropdown-list');
     dropdownList.innerHTML = '';

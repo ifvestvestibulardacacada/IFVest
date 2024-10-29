@@ -29,6 +29,12 @@ Opcao.init({
     correta: {
         type: DataTypes.BOOLEAN,
         allowNull: false
+    },
+    alternativa: {
+        type: DataTypes.ENUM({
+            values: ['A', 'B', 'C', 'D', 'E']
+       }),
+      allowNull: false,
     }
 }, {
     sequelize,

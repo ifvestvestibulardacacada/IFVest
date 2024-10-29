@@ -13,8 +13,6 @@ const editorBox = document.querySelector('#editor-box')
 const symbolsBox = document.querySelector("#symbols-box")
 const symbolsBoxBtn = document.querySelector("#symbols-box-btn")
 const editorContainer = document.querySelector(".editor-container")
-let element = document.querySelector("trix-editor")
-let content = document.getElementById('content');
 
 // Sections elements /////////////////////////////////////////////////////////////////////////
 // Main section
@@ -60,6 +58,8 @@ editorCloseBtn.addEventListener('click', () => {
     editorBox.classList.add('hide');
     symbolsBox.classList.add('hide');
 })
+
+
 editorBtn.addEventListener('click', () => {
     editorBox.classList.remove('hide');
     equationInput.focus();
@@ -132,7 +132,7 @@ comparisonSection.addEventListener('mouseout', () => {
 })
 
 insertBtn.addEventListener('click', () => {
-    var latex = equationPreview.outerHTML
+    var latex = equationPreview.outerHTML;
     var range = quill.getSelection(true);
     quill.deleteText(range.index, range.length);
     quill.insertEmbed(range.index, 'mathjax', latex);
@@ -140,9 +140,8 @@ insertBtn.addEventListener('click', () => {
     quill.setSelection(range.index + range.length + 1);
     symbolsBox.classList.add('hide');
     editorContainer.classList.add('hide');
-    // Se houver uma seleção, substitua-a pela fórmula
+});
 
-  });
 symbolButtons.forEach(element => {
 
     let button = new Button();
@@ -160,3 +159,4 @@ symbolButtons.forEach(element => {
         MathJax.Hub.Typeset()
     })
 })
+

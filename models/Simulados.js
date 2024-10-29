@@ -23,12 +23,12 @@ module.exports = (sequelize, DataTypes) => {
     Simulados.belongsTo(models.Usuario, { foreignKey: 'usuarioId' });
     
     Simulados.hasMany(models.Resposta, {
-      foreignKey: 'provaId',
+      foreignKey: 'simuladoId',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     });
     // Associação com o modelo PerguntasProvas (um questionário tem várias perguntas)
-    Simulados.belongsToMany(models.Questões, { through: 'perguntas_provas', foreignKey: 'provaId' });
+    Simulados.belongsToMany(models.Questões, { through: 'perguntas_provas', foreignKey: 'simuladoId' });
 
   };
   
