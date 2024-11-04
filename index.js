@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 
 
-const { usuarios, informacao, inicio, professor, uploads } = require('./controllers');
+const { usuarios, informacao,simulados, inicio, professor, uploads } = require('./controllers');
 
 const app = express();
 
@@ -62,7 +62,7 @@ app.use(secure_pass);
 app.use('/usuario', usuarios);
 app.use('/professor', professor);
 app.use("/uploads",  uploads) 
-
+app.use("/simulados",  simulados) 
 app.use("/desenvolvedores", informacao); 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Working on port 3000!')

@@ -10,6 +10,46 @@ const { Resposta } = require('../models');
 const { Op } = require('sequelize');
 const roteador = Router()
 
+roteador.get('/criar-simulado', async (req, res) => {
+  let errorMessage = req.session.errorMessage;
+  if (errorMessage === null) {
+    errorMessage = " ";
+  }
+
+  req.session.errorMessage = null;
+
+  res.render('simulado/criar-simulado', { errorMessage });
+});
+
+roteador.post('/criar-simulado', async (req, res) => {
+  const { titulo, descricao, tipo } = req.body;
+  const usuarioId = req.session.idUsuario;
+  const tipoformatado = tipo.toUpperCase()
+
+  if (!titulo || !descricao || !tipo) {
+    throw new Error("Dados Invalidos !!! ")
+  }
+
+  try {
+    const simulado = await Simulados.create({
+      titulo,
+      descricao,
+      usuarioId: usuarioId,
+      tipo: tipoformatado
+    });
+
+    if (!simulado) {
+      throw new Error("Simulado não criado!!! ")
+    }
+
+    res.redirect(`/simulados/${simulado.id}/adicionar-questoes`);
+  } catch (err) {
+    console.error(err);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
+  }
+});
+
 roteador.get('/:id/editar', async (req, res) => {
   const simuladoId = req.params.id
   try {
@@ -77,7 +117,7 @@ roteador.patch('/:simuladoId/editar', async (req, res) => {
     if (!updated) {
       throw new Error('Simulado não encontrado ou não atualizado');
     }
-    res.redirect("/usuario/Simulados/meus-simulados")
+    res.redirect("/simulados/meus-simulados")
   } catch (error) {
     console.error(error);
     req.session.errorMessage = err.message;
@@ -347,7 +387,7 @@ roteador.post('/:simuladoId/adicionar-questoes', async (req, res) => {
 
     await simulado.addQuestões(idsInteiros);
 
-    res.redirect(`/usuario/simulados/meus-simulados`);
+    res.redirect(`/simulados/meus-simulados`);
   } catch (error) {
     console.error(error);
     req.session.errorMessage = err.message;
@@ -375,7 +415,7 @@ roteador.patch('/:simuladoId/editar', async (req, res) => {
       descricao: descricao || simulado.descricao
     });
 
-    res.redirect(`/usuario/simulados/meus-simulados`);
+    res.redirect(`/simulados/meus-simulados`);
   } catch (error) {
     console.error(error);
     req.session.errorMessage = error.message;
@@ -408,7 +448,7 @@ roteador.delete('/:simuladoId/remover-questoes', async (req, res) => {
     // Este método é fornecido pelo Sequelize para associações belongsToMany
     await simulado.removeQuestões(questoesSelecionadas);
 
-    res.redirect(`/usuario/simulados/`);
+    res.redirect(`/simulados/`);
   } catch (error) {
     console.error(error);
     req.session.errorMessage = err.message;
@@ -527,6 +567,8 @@ roteador.post('/responder-prova/:simuladoId', async (req, res) => {
         return acc;
       }, {});
 
+
+
       for (let questaoId in questoesObj) {
         const opcaoId = questoesObj[questaoId];
 
@@ -558,11 +600,9 @@ roteador.post('/responder-prova/:simuladoId', async (req, res) => {
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (simulado.tipo === "OBJETIVO") {
-      res.status(200).redirect(`/usuario/simulados/${simulado.id}/gabarito`)
-    } else {
-      res.redirect(`/usuario/simulados/meus-simulados`);
-    }
+   
+      res.status(200).redirect(`/simulados/${simulado.id}/gabarito`)
+
 
   } catch (error) {
     console.error(error);

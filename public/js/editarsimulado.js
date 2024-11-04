@@ -12,7 +12,7 @@ function enviarFormulario() {
     };
     console.log(data)
     // Enviar os dados para a URL especificada
-    fetch(`http://localhost:3000/usuario/simulados/${id}/editar`, { // Use o ID do Simulado na URL
+    fetch(`http://localhost:3000/simulados/${id}/editar`, { // Use o ID do Simulado na URL
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

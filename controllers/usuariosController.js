@@ -138,47 +138,9 @@ roteador.delete('/:id', async (req, res) => {
   }
 });
 
-roteador.get('/criar-simulado', async (req, res) => {
-  let errorMessage = req.session.errorMessage;
-  if (errorMessage === null) {
-    errorMessage = " ";
-  }
 
-  req.session.errorMessage = null;
 
-  res.render('simulado/criar-simulado', { errorMessage });
-});
-
-roteador.post('/criar-simulado', async (req, res) => {
-  const { titulo, descricao, tipo } = req.body;
-  const usuarioId = req.session.idUsuario;
-  const tipoformatado = tipo.toUpperCase()
-
-  if (!titulo || !descricao || !tipo) {
-    throw new Error("Dados Invalidos !!! ")
-  }
-
-  try {
-    const simulado = await Simulados.create({
-      titulo,
-      descricao,
-      usuarioId: usuarioId,
-      tipo: tipoformatado
-    });
-
-    if (!simulado) {
-      throw new Error("Simulado não criado!!! ")
-    }
-
-    res.redirect(`/usuario/Simulados/${simulado.id}/adicionar-questoes`);
-  } catch (err) {
-    console.error(err);
-    req.session.errorMessage = err.message;
-    res.redirect('back')
-  }
-});
-
-roteador.use('/simulados', simulados)
+// roteador.use('/simulados', simulados)
 
 module.exports = roteador;
 

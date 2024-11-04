@@ -26,7 +26,7 @@
                         };
                     </script>
                 <% } %>
-                <form action="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" method="GET">
+                <form action="/simulados/<%= simulado.id %>/adicionar-questoes" method="GET">
                     <!-- Campo de filtragem por título -->
                     <input type="text" name="titulo" placeholder="Filtrar por título">
                     <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
@@ -76,7 +76,7 @@
                 </form>
             </div>
 
-            <form action="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" method="POST">
+            <form action="/simulados/<%= simulado.id %>/adicionar-questoes" method="POST">
                 <div class="table-container">
                     <table class="uk-table uk-table-striped">
                         <thead>
@@ -127,17 +127,17 @@
                 <div class="pagination-container">
                     <% if (page> 1) { %>
                         <a
-                            href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page - 1 %>">Anterior</a>
+                            href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page - 1 %>">Anterior</a>
                         <% } %>
                             <% for (let i=1; i <=totalPages; i++) { %>
-                                <a href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= i %>"
+                                <a href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= i %>"
                                     class="<%= page === i ? 'active' : '' %>">
                                     <%= i %>
                                 </a>
                                 <% } %>
                                     <% if (page < totalPages) { %>
                                         <a
-                                            href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
+                                            href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
                                         <% } %>
                 </div>
                 <button type="submit" class="botao-associar">Associar Questões</button>

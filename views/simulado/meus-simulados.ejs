@@ -34,7 +34,7 @@
                 </script>
             <% } %>
             <h1 class="uk-heading-divider"><span>MEUS SIMULADOS</span></h1>
-            <form action="/usuario/Simulados/meus-simulados" method="GET">
+            <form action="/simulados/meus-simulados" method="GET">
 
                 <input type="text" name="titulo" placeholder="Filtrar por título">
                 <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
@@ -63,27 +63,27 @@
                             </td>
                             <td>
                                 <div class="button-container">
-                                    <a href="/usuario/simulados/<%= simulado.id %>/fazer" class="button">
+                                    <a href="/simulados/<%= simulado.id %>/fazer" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-play"></i> Fazer Simulado
                                         </div>
                                     </a>
-                                    <a href="/usuario/simulados/<%= simulado.id %>/editar" class="button">
+                                    <a href="/simulados/<%= simulado.id %>/editar" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-edit"></i> Editar
                                         </div>
                                     </a>
-                                    <a href="/usuario/simulados/<%= simulado.id %>/imprimir" id="generate-pdf" class="button">
+                                    <a href="/simulados/<%= simulado.id %>/imprimir" id="generate-pdf" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-print"></i> Gerar PDF
                                         </div>
                                     </a>
-                                    <a href="/usuario/simulados/<%= simulado.id %>/adicionar-questoes" class="button">
+                                    <a href="/simulados/<%= simulado.id %>/adicionar-questoes" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-plus"></i> Adicionar Questões
                                         </div>
                                     </a>
-                                    <a href="/usuario/simulados/<%= simulado.id %>/remover-questoes" class="button">
+                                    <a href="/simulados/<%= simulado.id %>/remover-questoes" class="button">
                                         <div class="icon-button">
                                             <i class="fas fa-minus"></i> Remover Questões
                                         </div>
@@ -139,7 +139,7 @@
                         const simuladoId = this.href.split('/').filter(part => !isNaN(part)).pop(); // split: dividir a URL; filter: pegar apenas o ID do simulado; pop: retornar o ultimo número encontrado
 
                         const iframe = document.getElementById('iframe-imprimir'); // captura o id do iframe da pagina
-                        iframe.src = `/usuario/simulados/${simuladoId}/imprimir`;  // carregar o conteudo
+                        iframe.src = `/simulados/${simuladoId}/imprimir`;  // carregar o conteudo
                         
                         // Exibição do conteudo da modal
                         const modal = document.getElementById('modal-imprimir');

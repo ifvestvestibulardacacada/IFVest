@@ -16,7 +16,13 @@
 
 <body>
     <%- include('../partials/sidebar') %>
-        <div class="container">
+    
+           <div class="container">
+           <div id="loading-container"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+        <div class="spinner"></div>
+        Carregando...
+    </div> 
 
 
             <h1 class="title">Criar Questão</h1>
@@ -119,13 +125,8 @@
 
             <script>
                 // Select all input elements of type text
-                const inputElements = document.querySelectorAll('input[type="text"]');
-
-                // Iterate over each input element and change the data-formula attribute
-                inputElements.forEach((inputElement, index) => {
-                    inputElement.setAttribute('data-formula', `new_formula_${index + 1}`); // Example of setting a unique formula
-                });
-                const tipo = <% - JSON.stringify(tipo) %>;
+          const loadingContainer = document.getElementById('loading-container');
+                const tipo = <%- JSON.stringify(tipo) %>;
 
                 const editors = [];
 
@@ -159,7 +160,7 @@
                     const respostaEditor = initializeQuill(EDITOR_ID_RESPOSTA);
                     editors.push({ [EDITOR_ID_RESPOSTA]: respostaEditor });
                 }
-
+  loadingContainer.style.display = 'none';
 
                 // Função para recuperar a instância de um editor pelo ID
                 function acessarEditorPorId(editorId) {

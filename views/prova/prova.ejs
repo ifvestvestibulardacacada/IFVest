@@ -26,7 +26,7 @@
                     };
                 </script>
             <% } %>
-            <form id="questionario" class="form" action="/usuario/simulados/responder-prova/<%= simulado.id %>"
+            <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id %>"
                 method="POST">
                 <div class="title-div">
                     <h1> <%= simulado.tipo %>
@@ -51,24 +51,28 @@
                         </div>
                         <% if (questao.tipo==="OBJETIVA" ) { %>
                            
-                                <% questao.Opcoes.forEach((opcao, index)=> { %>
-                                    <div class="opcao">
-                                        <label class="letra" for="opcao<%= opcao.id %>">
-                                            <%= opcao.alternativa %>
-                                        </label>
-                                        <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
-                                            name="questoes[<%= questao.id %>]"
-                                            value="<%= questao.id %>-<%= opcao.id %>">
-                  
-                                        
-
-                                                <div class="name" data-delta='<%= opcao.descricao %>'>
-                                                 
-                                                    <span class="required">*</span>
-                                                </div>
-                                              
+                            <% 
+                            // Mapeia as letras para as opções
+                            const letras = ['A', 'B', 'C', 'D', 'E'];
+                            const opcoesOrdenadas = letras.map(letra => 
+                                questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
+                            ).filter(opcao => opcao); // Filtra opções que não foram encontradas
+                            %>
+                            
+                            <% opcoesOrdenadas.forEach((opcao, index) => { %>
+                                <div class="opcao">
+                                    <label class="letra" for="opcao<%= opcao.id %>">
+                                        <%= opcao.alternativa %>
+                                    </label>
+                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
+                                        name="questoes[<%= questao.id %>]"
+                                        value="<%= questao.id %>-<%= opcao.id %>">
+                                    
+                                    <div class="name" data-delta='<%= opcao.descricao %>'>
+                                        <span class="required">*</span>
                                     </div>
-                                    <% }) %>
+                                </div>
+                            <% }) %>
                                         <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
                                             <textarea name="respostas[questao_<%= questao.id %>]"
                                                 placeholder="Sua resposta"></textarea>

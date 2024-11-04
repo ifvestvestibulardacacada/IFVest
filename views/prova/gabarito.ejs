@@ -40,7 +40,14 @@
                             <span class="required">*</span>
                         </div>
                         <% const respostaUsuario=respostasUsuario.find(r=> r.questaoId === questao.id); %>
-                        <% questao.Opcoes.forEach(opcao=> { %>
+                        <% 
+                            // Mapeia as letras para as opções
+                            const letras = ['A', 'B', 'C', 'D', 'E'];
+                            const opcoesOrdenadas = letras.map(letra => 
+                                questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
+                            ).filter(opcao => opcao); // Filtra opções que não foram encontradas
+                            %>
+                        <% opcoesOrdenadas.forEach(opcao=> { %>
                             
                             <div class="<%= opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-correta' : (!opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-incorreta' : '') %>">
                                 <div class="opcao" >
@@ -53,10 +60,12 @@
                                         <input type="radio" disabled>
                                         <% } %>
                                 
-                                        <div class="name" data-delta='<%= opcao.descricao %>'>
+                                        <div class="opcao-texto"  data-delta='<%= opcao.descricao %>'>
                                                  
                                             <span class="required">*</span>
-                                        </div>
+                                  
+                                        </div>      
+                                    </div>
                             </div>
                             <% }) %>
                     </div>

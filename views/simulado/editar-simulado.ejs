@@ -30,7 +30,7 @@
             <% } %>
             <h1>Editar Simulado</h1>
 
-            <form action="/usuario/simulados/<%= simulado.id %>/editar?_method=PATCH" method="POST">
+            <form action="/simulados/<%= simulado.id %>/editar?_method=PATCH" method="POST">
                 <label for="titulo">Título do Simulados:</label>
                 <input type="text" id="titulo" value="<%= simulado.titulo %>" name="titulo" required>
 

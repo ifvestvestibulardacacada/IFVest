@@ -14,7 +14,30 @@ textarea {
   letter-spacing: 0.14994px;
   text-align: justify;
 }
-.opcao{
+
+.opcao {
   display: flex;
   align-items: center;
+  place-content: start;
+  margin-left: 2rem;
+}
+
+.letra {
+  margin-right: 10px;
+  /* Ajuste o valor conforme necessário */
+}
+
+.radio-input {
+  margin-right: 10px;
+  /* Ajuste o valor conforme necessário */
+}
+
+.opcao-correta {
+  background-color: #d4edda;
+  /* Verde claro */
+}
+
+.opcao-incorreta {
+  background-color: #f8d7da;
+  /* Vermelho claro */
 }

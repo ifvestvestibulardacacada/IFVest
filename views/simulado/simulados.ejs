@@ -25,7 +25,7 @@
 
             <h1 class="uk-heading-divider">Selecione um simulado</h1>
             <div class="filtros">
-                <form action="/usuario/simulados/visualizar?titulo=" method="GET">
+                <form action="/simulados/visualizar?titulo=" method="GET">
                     <label for="titulo">Buscar:</label>
                     <input type="text" id="titulo" name="titulo" required>
                     <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
@@ -50,7 +50,7 @@
                      
                             <td>
                               
-                                    <a href="/usuario/simulados/<%= simulado.id %>/fazer" class="simulado-icon">
+                                    <a href="/simulados/<%= simulado.id %>/fazer" class="simulado-icon">
                                         <i class="fas fa-play"></i> Fazer Simulado
                                     </a>
                         

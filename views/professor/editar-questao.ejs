@@ -14,7 +14,7 @@
 
 <body>
     <div class="container">
-        <!--   <div id="loading-container"
+           <div id="loading-container"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
         <div class="spinner"></div>
         Carregando...
@@ -145,18 +145,18 @@
     <script src="/js/quillObjetiva.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-     
+            const loadingContainer = document.getElementById('loading-container');
             const editors = [];
-        const opcoesIds = [];
-        const tipo = <%- JSON.stringify(questao.tipo) %>;
+            const opcoesIds = [];
+            const tipo = <%- JSON.stringify(questao.tipo) %>;
 
-        const parsedContent = <%- JSON.stringify(questao.pergunta) %>;
-        const parsedOpcoes = <%- JSON.stringify(Opcoes) %>;
-        const deltaContent = JSON.parse(parsedContent);
+            const parsedContent = <%- JSON.stringify(questao.pergunta) %>;
+            const parsedOpcoes = <%- JSON.stringify(Opcoes) %>;
+            const deltaContent = JSON.parse(parsedContent);
 
-        const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
+            const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
 
-        const quill = initializeQuill('#editor-container');
+            const quill = initializeQuill('#editor-container');
             quill.setContents(deltaContent)
 
             editors.push(quill);
@@ -177,57 +177,57 @@
                     console.warn(`Opção não encontrada para o ID: ${id}`);
                 }
             });
-
-        function acessarEditorPorId(editorId) {
-            const editor = editors.find(editor => editor[editorId]);
-            return editor ? editor[editorId] : null; // Retorna a instância do editor ou null se não encontrado
-        }
-
-
-        // Função para recuperar o conteúdo de todos os editores
-        function getAllContent() {
-            const contents = {};
-            EDITOR_IDS_OBJETIVA.forEach(id => {
-                const opcaoId = opcoesIds.find((opcao => opcao[id]))
-                console.log(opcaoId[id])
-                const editorInstance = acessarEditorPorId(id);
-                // Acessa o editor pelo ID
-                if (editorInstance) {
-                    const tamanho = editorInstance.getLength();
-
-                    if (tamanho > 1) {
-                        contents[id] = { content: editorInstance.getContents(), id: opcaoId[id] } // Armazena o conteúdo no objeto com o ID como chave
-                    }
-                }
-            });
-
-            // Verifica se o objeto contents está vazio e lança um erro se estiver
-
-            return contents;
-        }
-
-        // Testar a função de mostrar o conteúdo
-        function showContent() {
-            const editorInstance = getEditorById('#editor-container');
-            if (editorInstance) {
-                console.log(editorInstance.root.innerHTML);  // Exibe o conteúdo no console
-            } else {
-                console.log("Editor não encontrado");
+            loadingContainer.style.display = 'none';
+            function acessarEditorPorId(editorId) {
+                const editor = editors.find(editor => editor[editorId]);
+                return editor ? editor[editorId] : null; // Retorna a instância do editor ou null se não encontrado
             }
-        }
 
-        function sendEditorContent() {
-            const data = getAllContent()      
-            const length = quill.getLength();
-            const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
-        
-            document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
-            const respostas = document.getElementById('respostasSelecionadas')
-            console.log(respostas)
-            document.getElementById('pergunta').value = JSON.stringify(pergunta);
-        }
 
-        document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+            // Função para recuperar o conteúdo de todos os editores
+            function getAllContent() {
+                const contents = {};
+                EDITOR_IDS_OBJETIVA.forEach(id => {
+                    const opcaoId = opcoesIds.find((opcao => opcao[id]))
+                    console.log(opcaoId[id])
+                    const editorInstance = acessarEditorPorId(id);
+                    // Acessa o editor pelo ID
+                    if (editorInstance) {
+                        const tamanho = editorInstance.getLength();
+
+                        if (tamanho > 1) {
+                            contents[id] = { content: editorInstance.getContents(), id: opcaoId[id] } // Armazena o conteúdo no objeto com o ID como chave
+                        }
+                    }
+                });
+
+                // Verifica se o objeto contents está vazio e lança um erro se estiver
+
+                return contents;
+            }
+
+            // Testar a função de mostrar o conteúdo
+            function showContent() {
+                const editorInstance = getEditorById('#editor-container');
+                if (editorInstance) {
+                    console.log(editorInstance.root.innerHTML);  // Exibe o conteúdo no console
+                } else {
+                    console.log("Editor não encontrado");
+                }
+            }
+
+            function sendEditorContent() {
+                const data = getAllContent()
+                const length = quill.getLength();
+                const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+
+                document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
+                const respostas = document.getElementById('respostasSelecionadas')
+                console.log(respostas)
+                document.getElementById('pergunta').value = JSON.stringify(pergunta);
+            }
+
+            document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
 
         })
 

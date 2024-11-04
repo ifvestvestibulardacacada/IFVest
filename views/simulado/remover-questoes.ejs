@@ -25,7 +25,7 @@
                 <h1 class="uk-heading-divider">REMOVER QUESTÕES</h1>
                
 
-                <form action="/usuario/simulados/<%= simulado.id %>/remover-questoes" method="GET">
+                <form action="/simulados/<%= simulado.id %>/remover-questoes" method="GET">
                     <!-- Campo de filtragem por título -->
                     <input type="text" name="titulo" placeholder="Filtrar por título">
                     <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
@@ -33,7 +33,7 @@
 
 
 
-            <form action="/usuario/Simulados/<%= simulado.id %>/remover-questoes?_method=DELETE" method="POST">
+            <form action="/simulados/<%= simulado.id %>/remover-questoes?_method=DELETE" method="POST">
                 <table class="table-container">
                     <thead>
                         <tr>
