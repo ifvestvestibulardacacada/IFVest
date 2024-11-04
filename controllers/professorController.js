@@ -85,22 +85,21 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
 
     const usuarioId = req.session.idUsuario;
 
-
     if (!topicosSelecionados) {
       throw new Error("Selecione pelo menos um tópico")
     }
+    const tipo = numOpcoes > 1 ? 'OBJETIVA' : 'DISSERTATIVA'
 
     const createQuestao = await Questões.create({
       pergunta: pergunta,
       titulo,
       areaId,
       usuarioId,
-      tipo: 'OBJETIVA' // Usa o novo ID do vestibular
+      tipo: tipo // Usa o novo ID do vestibular
     });
 
 
     await createQuestao.addTopicos(topicosSelecionados)
-
 
     for (let opcao of opcoes) {
       let isTrue = correta === opcao.alternativa ? true : false;
@@ -317,10 +316,12 @@ roteador.get('/editar-questao/:id', async (req, res) => {
     }
 
     const Opcoes = await Opcao.findAll({
-      where:{
+      where: {
         questao_id: questao.id
-      }
-    })
+      },
+      order: [['alternativa', 'ASC']] // Ordena as opções pela coluna 'alternativa' em ordem ascendente
+    });
+    const correta = Opcoes.filter(opcao => opcao.correta === true);
 
 
 
@@ -333,7 +334,7 @@ roteador.get('/editar-questao/:id', async (req, res) => {
     req.session.errorMessage = null;
 
     // res.send(JSON.stringify(questao))
-    res.render('professor/editar-questao', { questao, Topicos, Areas, errorMessage, Opcoes });
+    res.render('professor/editar-questao', { questao, Topicos, Areas, errorMessage, Opcoes, correta });
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao buscar questão');

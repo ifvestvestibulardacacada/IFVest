@@ -42,7 +42,8 @@ footer a {
     align-items: center;
     flex-wrap: wrap;
     gap: 5px;
-    width: 800px;
+    width: 600px;
+    height: 200px;
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 10px;
     border:1px solid rgb(210, 210, 210);
@@ -107,7 +108,8 @@ footer a {
     justify-content: center;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 600px;
+    width: 500px;
+   
     padding: 20px;
     border:1px solid rgb(210, 210, 210);
     border-radius: 7px;

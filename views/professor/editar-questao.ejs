@@ -71,12 +71,16 @@
                                                             <% if ( questao.tipo==="OBJETIVA" ) { %>
                                                                 <label for="opcaoId">Selecione a opção correta:</label>
                                                                 <select name="correta" id="correta">
-                                                                    <option value="">Selecione uma opção</option>
-                                                                    <option value="A">Opção 1</option>
-                                                                    <option value="B">Opção 2</option>
-                                                                    <option value="C">Opção 3</option>
-                                                                    <option value="D">Opção 4</option>
-                                                                    <option value="E">Opção 5</option>
+                                                                    <% Opcoes.forEach(opcao=> { %>
+                                                                        <option value="<%= opcao.alternativa %>"
+                                                                            <%=opcao.correta 
+                                                                            ? 'selected' : '' %>
+
+                                                                            >
+                                                                            Opção <%= opcao.alternativa %>
+                                                                        </option>
+                                                                        <% }); %>
+                                                                  
                                                                 </select>
                                                                 <% } %>
                                                                     <div>
@@ -141,6 +145,7 @@
     <script src="/js/quillObjetiva.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+     
             const editors = [];
         const opcoesIds = [];
         const tipo = <%- JSON.stringify(questao.tipo) %>;

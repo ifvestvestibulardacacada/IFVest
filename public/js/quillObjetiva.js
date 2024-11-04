@@ -1,6 +1,6 @@
-function initializeQuill(editorId) {
+function initializeQuill(editorId, placeholder) {
     const quill = new Quill(editorId, {
-        placeholder: 'Adicione aqui o Enunciado da questão',
+        placeholder: `${placeholder}`,
         theme: 'snow',
         imageResize: {
             displaySize: true
@@ -75,6 +75,8 @@ function uploadImage(file, quillInstance) {
         });
     }
 }
+
+
 
 const Parchment = Quill.imports.parchment;
 const Delta = Quill.imports.delta;

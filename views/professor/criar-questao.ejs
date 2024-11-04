@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="/css/criar_questao.css">
 
     <%- include('../partials/quillandUIkit') %>
-    <style>
+        <style>
 
-    </style>
+        </style>
 </head>
 
 <body>
@@ -40,11 +40,11 @@
 
 
                         <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
-                            id="editor-open-btn"> Adicionar Equação
+                            style="display: none;" id="editor-open-btn"> Adicionar Equação
                         </button>
 
                         <%- include('../partials/editorEquacao') %>
-                            <div id="editor-container" style="height:150px;"></div>
+                            <div id="editor-container" style="height:300px;"></div>
 
                             <% if ( tipo==="objetiva" ) { %>
                                 <%- include('../partials/resposta_containers') %>
@@ -63,11 +63,11 @@
                                                                 <label for="opcaoId">Selecione a opção correta:</label>
                                                                 <select name="correta" id="correta" required>
                                                                     <option value="">Selecione uma opção</option>
-                                                                    <option value="A">Opção 1</option>
-                                                                    <option value="B">Opção 2</option>
-                                                                    <option value="C">Opção 3</option>
-                                                                    <option value="D">Opção 4</option>
-                                                                    <option value="E">Opção 5</option>
+                                                                    <option value="A">Opção A</option>
+                                                                    <option value="B">Opção B</option>
+                                                                    <option value="C">Opção C</option>
+                                                                    <option value="D">Opção D</option>
+                                                                    <option value="E">Opção E</option>
                                                                 </select>
                                                                 <% } %>
                                                                     <div>
@@ -118,13 +118,26 @@
             <script type="module" src="/js/index.js"></script>
 
             <script>
-                const tipo = <%- JSON.stringify(tipo) %>;
+                // Select all input elements of type text
+                const inputElements = document.querySelectorAll('input[type="text"]');
+
+                // Iterate over each input element and change the data-formula attribute
+                inputElements.forEach((inputElement, index) => {
+                    inputElement.setAttribute('data-formula', `new_formula_${index + 1}`); // Example of setting a unique formula
+                });
+                const tipo = <% - JSON.stringify(tipo) %>;
 
                 const editors = [];
 
-                const quill = initializeQuill('#editor-container');
+                const quill = initializeQuill('#editor-container', 'Digite aqui o Enunciado da questão');
                 editors.push({ ['#editor-container']: quill });
-
+                quill.getModule('toolbar').addHandler('formula', function () {
+                    // Simulando um clique no botão editor-open-btn
+                    const editorOpenBtn = document.getElementById('editor-open-btn');
+                    if (editorOpenBtn) {
+                        editorOpenBtn.click(); // Chama o listener associado ao botão
+                    }
+                });
 
                 // Lista de IDs dos containers dos editores (sem a vírgula inicial)
                 // Definindo constantes para os IDs dos editores
@@ -134,7 +147,7 @@
                 // Função para criar editores
                 function criarEditores(ids, placeholder) {
                     ids.forEach(id => {
-                        const editorInstance = initializeQuill(id); // Adicionando o placeholder se necessário
+                        const editorInstance = initializeQuill(id, 'Digite aqui a alternativa'); // Adicionando o placeholder se necessário
                         editors.push({ [id]: editorInstance }); // Corrigido para usar a sintaxe correta
                     });
                 }
