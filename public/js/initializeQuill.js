@@ -1,4 +1,4 @@
-function initializeQuill(editorId, placeholder) {
+function initializeQuill(editorId, buttonId, placeholder) {
     const quill = new Quill(editorId, {
         placeholder: `${placeholder}`,
         theme: 'snow',
@@ -31,6 +31,19 @@ function initializeQuill(editorId, placeholder) {
         }
     });
 
+    quill.getModule('toolbar').addHandler('formula', function () {
+        // Obtém o botão que acionou o evento
+        const editorOpenBtn = document.getElementById(`${buttonId}`);
+        
+        if (editorOpenBtn) {
+            // Simula um clique no botão se necessário
+           // Chama o listener associado ao botão, se houver algum
+    
+            // Obtém a posição do botão
+
+            editorOpenBtn.click(); 
+        }
+    });
     quill.getModule('toolbar').addHandler('image', function () {
         const imageInput = document.createElement('input');
         imageInput.type = 'file';

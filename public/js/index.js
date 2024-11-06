@@ -8,12 +8,17 @@ const equationPreview = document.querySelector('#equation-preview')
 const insertBtn = document.querySelector('#insert-btn')
 const clearBtn = document.querySelector('#clear-btn')
 const editorBtn = document.querySelector("#editor-open-btn")
+const opcaoBtnA = document.querySelector("#editor-open-btnA")
+const opcaoBtnB = document.querySelector("#editor-open-btnB")
+const opcaoBtnC = document.querySelector("#editor-open-btnC")
+const opcaoBtnD = document.querySelector("#editor-open-btnD")
+const opcaoBtnE = document.querySelector("#editor-open-btnE")
 const editorCloseBtn = document.querySelector("#editor-close-btn")
 const editorBox = document.querySelector('#editor-box')
 const symbolsBox = document.querySelector("#symbols-box")
 const symbolsBoxBtn = document.querySelector("#symbols-box-btn")
 const editorContainer = document.querySelector(".editor-container")
-
+let editorId;
 // Sections elements /////////////////////////////////////////////////////////////////////////
 // Main section
 const section_1 = document.querySelector("#section-1")
@@ -57,12 +62,51 @@ symbolsBoxBtn.addEventListener('click', () => {
 editorCloseBtn.addEventListener('click', () => {
     editorBox.classList.add('hide');
     symbolsBox.classList.add('hide');
+    document.getElementById('overlay').style.display = 'none';
 })
 
 
 editorBtn.addEventListener('click', () => {
+    editorId = "#editor-container"
     editorBox.classList.remove('hide');
+    symbolsBox.classList.remove('hide');
     equationInput.focus();
+    document.getElementById('overlay').style.display = 'block';
+})
+opcaoBtnA.addEventListener('click', () => {
+    editorId = "#opcaoA"
+    editorBox.classList.remove('hide');
+    symbolsBox.classList.remove('hide');
+    equationInput.focus();
+    document.getElementById('overlay').style.display = 'block';
+})
+opcaoBtnB.addEventListener('click', () => {
+    editorId = "#opcaoB"
+    editorBox.classList.remove('hide');
+    symbolsBox.classList.remove('hide');
+    equationInput.focus();
+    document.getElementById('overlay').style.display = 'block';
+})
+opcaoBtnC.addEventListener('click', () => {
+    editorId = "#opcaoC"
+    editorBox.classList.remove('hide');
+    symbolsBox.classList.remove('hide');
+    equationInput.focus();
+    document.getElementById('overlay').style.display = 'block';
+})
+opcaoBtnD.addEventListener('click', () => {
+    editorId = "#opcaoD"
+    editorBox.classList.remove('hide');
+    symbolsBox.classList.remove('hide');
+    equationInput.focus();
+    document.getElementById('overlay').style.display = 'block';
+})
+opcaoBtnE.addEventListener('click', () => {
+    editorId = "#opcaoE"
+    editorBox.classList.remove('hide');
+    symbolsBox.classList.remove('hide');
+    equationInput.focus();
+    document.getElementById('overlay').style.display = 'block';
 })
 
 /// Sections event listeners //////////////////////////////////////////////////////////////////
@@ -132,12 +176,15 @@ comparisonSection.addEventListener('mouseout', () => {
 })
 
 insertBtn.addEventListener('click', () => {
+    
+    let editor = acessarEditorPorId(editorId)
+    console.log(editor)
     var latex = equationPreview.outerHTML;
-    var range = quill.getSelection(true);
-    quill.deleteText(range.index, range.length);
-    quill.insertEmbed(range.index, 'mathjax', latex);
-    quill.insertText(range.index + range.length + 1 , ' ');
-    quill.setSelection(range.index + range.length + 1);
+    var range = editor.getSelection(true);
+    editor.deleteText(range.index, range.length);
+    editor.insertEmbed(range.index, 'mathjax', latex);
+    editor.insertText(range.index + range.length + 1, ' ');
+    editor.setSelection(range.index + range.length + 1);
     symbolsBox.classList.add('hide');
     editorContainer.classList.add('hide');
 });

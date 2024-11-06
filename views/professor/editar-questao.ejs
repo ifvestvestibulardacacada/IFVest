@@ -22,7 +22,7 @@
 
 
         <%- include('../partials/sidebar') %>
-
+        <div class="overlay" id="overlay"></div>
             <h1 class="title">Criar Questão</h1>
             <hr class="uk-divider-icon">
             <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
@@ -51,9 +51,9 @@
 
 
                             <% if ( questao.tipo==="OBJETIVA" ) { %>
-                                <%- include('../partials/resposta_containers') %>
+                                <%- include('../partials/resposta_objetiva') %>
                                     <% }else{ %>
-                                        <%- include('../partials/quillInputDissertativa') %>
+                                        <%- include('../partials/resposta_dissertativa') %>
                                             <% } %>
 
 
@@ -142,7 +142,7 @@
     </div>
     </div>
 
-    <script src="/js/quillObjetiva.js"></script>
+    <script src="/js/initializeQuill.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const loadingContainer = document.getElementById('loading-container');
@@ -156,7 +156,7 @@
 
             const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
 
-            const quill = initializeQuill('#editor-container');
+            const quill = initializeQuill('#editor-container', 'editor-open-btn');
             quill.setContents(deltaContent)
 
             editors.push(quill);
@@ -166,7 +166,7 @@
                 const opcao = parsedOpcoes.find(op => op.alternativa === id);
 
                 // Verifique se a opção foi encontrada
-                const editorInstance = initializeQuill(`#opcao${id}`);
+                const editorInstance = initializeQuill(`#opcao${id}`, `editor-open-btn${id}`);
                 if (opcao) {
 
                     editorInstance.setContents(JSON.parse(opcao.descricao))

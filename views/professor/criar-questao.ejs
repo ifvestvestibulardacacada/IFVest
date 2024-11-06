@@ -16,13 +16,13 @@
 
 <body>
     <%- include('../partials/sidebar') %>
-    
-           <div class="container">
-           <div id="loading-container"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-        <div class="spinner"></div>
-        Carregando...
-    </div> 
+    <div class="overlay" id="overlay"></div>
+        <div class="container">
+            <div id="loading-container"
+                style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                <div class="spinner"></div>
+                Carregando...
+            </div>
 
 
             <h1 class="title">Criar Questão</h1>
@@ -44,19 +44,18 @@
 
                         <h4>Enunciado</h4>
 
-
                         <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
-                            style="display: none;" id="editor-open-btn"> Adicionar Equação
-                        </button>
-
-                        <%- include('../partials/editorEquacao') %>
-                            <div id="editor-container" style="height:300px;"></div>
-
+                        style="display: none;" id="editor-open-btn"> Adicionar Equação
+                    </button>
+ 
+                            <div id="editor-container" style="height:150px;"></div>
+                          
                             <% if ( tipo==="objetiva" ) { %>
                                 <%- include('../partials/resposta_containers') %>
                                     <% }else{ %>
-                                        <%- include('../partials/quillInputDissertativa') %>
+                                        <%- include('../partials/resposta_dissertativa') %>
                                             <% } %>
+                                            <%- include('../partials/editorEquacao') %>
                                                 <textarea id="pergunta" name="pergunta" rows="5" cols="50"
                                                     style="display: none;"> </textarea>
                                                 <textarea id="respostasSelecionadas" name="respostasSelecionadas"
@@ -108,6 +107,9 @@
                                                             novo tópico</a>
                                                     </div>
                                                 </div>
+                                   
+                    
+                                          
 
                                                 <div class="button-container">
                                                     <button type="submit" class="botao-registro">Registrar</button>
@@ -116,7 +118,7 @@
 
         </form>
         <%- include('../partials/modalTopicos') %>
-            <script src="/js/quillObjetiva.js"></script>
+            <script src="/js/initializeQuill.js"></script>
             <script src="/js/editor.js"></script>
             <script src="/js/main.js"></script>
             <script src="/js/dropdown.js"></script>
@@ -125,31 +127,25 @@
 
             <script>
                 // Select all input elements of type text
-          const loadingContainer = document.getElementById('loading-container');
+                const loadingContainer = document.getElementById('loading-container');
                 const tipo = <%- JSON.stringify(tipo) %>;
 
                 const editors = [];
 
-                const quill = initializeQuill('#editor-container', 'Digite aqui o Enunciado da questão');
+                const quill = initializeQuill('#editor-container', 'editor-open-btn', 'Digite aqui o Enunciado da questão');
                 editors.push({ ['#editor-container']: quill });
-                quill.getModule('toolbar').addHandler('formula', function () {
-                    // Simulando um clique no botão editor-open-btn
-                    const editorOpenBtn = document.getElementById('editor-open-btn');
-                    if (editorOpenBtn) {
-                        editorOpenBtn.click(); // Chama o listener associado ao botão
-                    }
-                });
+
 
                 // Lista de IDs dos containers dos editores (sem a vírgula inicial)
                 // Definindo constantes para os IDs dos editores
-                const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
-                const EDITOR_ID_RESPOSTA = '#opcaoA';
+                const EDITOR_IDS_OBJETIVA = ['A', 'B', 'C', 'D', 'E'];
+                const EDITOR_ID_RESPOSTA = 'A';
 
                 // Função para criar editores
                 function criarEditores(ids, placeholder) {
                     ids.forEach(id => {
-                        const editorInstance = initializeQuill(id, 'Digite aqui a alternativa'); // Adicionando o placeholder se necessário
-                        editors.push({ [id]: editorInstance }); // Corrigido para usar a sintaxe correta
+                        const editorInstance = initializeQuill(`#opcao${id}`,`editor-open-btn${id}`,  'Digite aqui a alternativa'); // Adicionando o placeholder se necessário
+                        editors.push({ [`#opcao${id}`]: editorInstance }); // Corrigido para usar a sintaxe correta
                     });
                 }
 
@@ -157,10 +153,10 @@
                 if (tipo === 'objetiva') {
                     criarEditores(EDITOR_IDS_OBJETIVA);
                 } else {
-                    const respostaEditor = initializeQuill(EDITOR_ID_RESPOSTA);
+                    const respostaEditor = initializeQuill(`#opcao${id}`, 'Digite aqui a resposta',`editor-open-btn${id}`);
                     editors.push({ [EDITOR_ID_RESPOSTA]: respostaEditor });
                 }
-  loadingContainer.style.display = 'none';
+                loadingContainer.style.display = 'none';
 
                 // Função para recuperar a instância de um editor pelo ID
                 function acessarEditorPorId(editorId) {
