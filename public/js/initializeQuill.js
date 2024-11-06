@@ -10,12 +10,12 @@ function initializeQuill(editorId, buttonId, placeholder) {
                 ['bold', 'italic', 'underline', 'strike'],
                 ['link', 'image'],
                 ['blockquote'],
-              
+
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                 [{ 'script': 'sub' }, { 'script': 'super' }],
                 ['align', { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
                 ['formula'],
-                
+
             ]
         }
     });
@@ -34,14 +34,31 @@ function initializeQuill(editorId, buttonId, placeholder) {
     quill.getModule('toolbar').addHandler('formula', function () {
         // Obtém o botão que acionou o evento
         const editorOpenBtn = document.getElementById(`${buttonId}`);
-        
+        const editorContainer = document.querySelector('.editor-container');
+
+        // Adiciona uma margem superior de 20 pixels
+        // Mapeamento dos IDs dos botões para os valores de marginTop
+        const marginMap = {
+            'editor-open-btn': '20px',
+            'editor-open-btnA': '50px',
+            'editor-open-btnB': '200px',
+            'editor-open-btnC': '300px',
+            'editor-open-btnD': '400px',
+            'editor-open-btnE': '500px'
+        };
+
+        // Verifica se o ID do botão existe no mapeamento
+        if (marginMap[buttonId]) {
+            editorContainer.style.marginTop = marginMap[buttonId];
+        }
+
         if (editorOpenBtn) {
             // Simula um clique no botão se necessário
-           // Chama o listener associado ao botão, se houver algum
-    
+            // Chama o listener associado ao botão, se houver algum
+
             // Obtém a posição do botão
 
-            editorOpenBtn.click(); 
+            editorOpenBtn.click();
         }
     });
     quill.getModule('toolbar').addHandler('image', function () {
@@ -56,7 +73,7 @@ function initializeQuill(editorId, buttonId, placeholder) {
 
         imageInput.click();
     });
-  
+
     return quill;
 }
 
@@ -70,22 +87,22 @@ function uploadImage(file, quillInstance) {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            const imageUrl = data; // Supondo que a resposta fornece uma URL da imagem
-            const range = quillInstance.getSelection();
+            .then(response => response.json())
+            .then(data => {
+                const imageUrl = data; // Supondo que a resposta fornece uma URL da imagem
+                const range = quillInstance.getSelection();
 
-            if (range) {
-                quillInstance.insertEmbed(range.index, 'image', imageUrl);
-                quillInstance.formatText(range.index, range.index + 1, { height: '200px', width: '100px' });
-            } else {
-                quillInstance.insertEmbed(quillInstance.getLength(), 'image', imageUrl);
-            }
-        })
-        .catch(error => {
-            alert('Erro no upload:', error.message);
-            console.error('Erro no upload:', error);
-        });
+                if (range) {
+                    quillInstance.insertEmbed(range.index, 'image', imageUrl);
+                    quillInstance.formatText(range.index, range.index + 1, { height: '200px', width: '100px' });
+                } else {
+                    quillInstance.insertEmbed(quillInstance.getLength(), 'image', imageUrl);
+                }
+            })
+            .catch(error => {
+                alert('Erro no upload:', error.message);
+                console.error('Erro no upload:', error);
+            });
     }
 }
 
