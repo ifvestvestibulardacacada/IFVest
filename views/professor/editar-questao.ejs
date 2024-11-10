@@ -187,21 +187,23 @@
             // Função para recuperar o conteúdo de todos os editores
             function getAllContent() {
                 const contents = {};
-                EDITOR_IDS_OBJETIVA.forEach(id => {
-                    const opcaoId = opcoesIds.find((opcao => opcao[id]))
-                    console.log(opcaoId[id])
-                    const editorInstance = acessarEditorPorId(id);
+                editorIds.forEach(id => {
+                    const opcaoId = opcoesIds.find((opcao => opcao[`#opcao${id}`]))
+                   
+                    const editorInstance = acessarEditorPorId(`#opcao${id}`);
                     // Acessa o editor pelo ID
                     if (editorInstance) {
                         const tamanho = editorInstance.getLength();
 
                         if (tamanho > 1) {
-                            contents[id] = { content: editorInstance.getContents(), id: opcaoId[id] } // Armazena o conteúdo no objeto com o ID como chave
+                            contents[`#opcao${id}`] = { content: editorInstance.getContents(), id: opcaoId[`#opcao${id}`] } // Armazena o conteúdo no objeto com o ID como chave
                         }
                     }
                 });
 
-                // Verifica se o objeto contents está vazio e lança um erro se estiver
+                if (Object.keys(contents).length === 0) {
+                        alert("Erro: Nenhum conteúdo encontrado.");
+                    }
 
                 return contents;
             }
@@ -220,7 +222,7 @@
                 const data = getAllContent()
                 const length = quill.getLength();
                 const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
-
+                localStorage.setItem('data', JSON.stringify(data))
                 document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
                 const respostas = document.getElementById('respostasSelecionadas')
                 console.log(respostas)

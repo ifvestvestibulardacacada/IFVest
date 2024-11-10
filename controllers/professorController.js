@@ -70,6 +70,11 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
     const {  titulo, pergunta,  areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
+    const tipo = req.params.tipo.toUpperCase()
+
+        if (!respostasSelecionadas) {
+      throw new Error("Respostas não pode ser vazio")
+    }
     
 
     const ArrayRespostas = JSON.parse(respostasSelecionadas);
@@ -88,14 +93,14 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
     if (!topicosSelecionados) {
       throw new Error("Selecione pelo menos um tópico")
     }
-    const tipo = numOpcoes > 1 ? 'OBJETIVA' : 'DISSERTATIVA'
+    
 
     const createQuestao = await Questões.create({
       pergunta: pergunta,
       titulo,
       areaId,
       usuarioId,
-      tipo: tipo // Usa o novo ID do vestibular
+      tipo // Usa o novo ID do vestibular
     });
 
 
@@ -357,13 +362,15 @@ roteador.patch('/editar-questao', async (req, res) => {
     const ArrayRespostas = JSON.parse(respostasSelecionadas)
 
 
+    const numOpcoes = Object.keys(ArrayRespostas).length;
+
     const alternativas = ['A', 'B', 'C', 'D', 'E'];
-    
-    const opcoes = alternativas.map(alternativa => ({
-        alternativa,
-        descricao: ArrayRespostas[`#opcao${alternativa}`].content,
-        id: ArrayRespostas[`#opcao${alternativa}`].id
-    }));
+
+    const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
+      alternativa,
+      descricao: ArrayRespostas[`#opcao${alternativa}`].content,
+      id: ArrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
+  }));
 
 
     await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
@@ -399,7 +406,7 @@ roteador.patch('/editar-questao', async (req, res) => {
         alternativa: opcao.alternativa,
       };
     
-      // Atualiza 'correta' apenas se 'correta' não estiver vazio
+
       if (correta) {
         updateData.correta = correta === opcao.alternativa;
       }

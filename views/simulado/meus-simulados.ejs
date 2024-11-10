@@ -44,7 +44,7 @@
                 <thead>
                     <tr>
                         <th>Título</th>
-                        <th>Descricao</th>
+                  
                         <th>Tipo</th>
                         <th>Ações</th>
                     </tr>
@@ -52,12 +52,10 @@
                 <tbody>
                     <% simulados.forEach(simulado=> { %>
                         <tr>
-                            <td>
+                            <td uk-tooltip="title: <%= simulado.descricao %>; pos: top-left">
                                 <%= simulado.titulo %>
                             </td>
-                            <td>
-                                <%= simulado.descricao %>
-                            </td>
+                       
                             <td>
                                 <%= simulado.tipo %>
                             </td>

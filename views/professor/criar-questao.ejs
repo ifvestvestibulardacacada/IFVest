@@ -16,7 +16,7 @@
 
 <body>
     <%- include('../partials/sidebar') %>
-    <div class="overlay" id="overlay"></div>
+        <div class="overlay" id="overlay"></div>
         <div class="container">
             <div id="loading-container"
                 style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
@@ -45,16 +45,16 @@
                         <h4>Enunciado</h4>
 
                         <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
-                        style="display: none;" id="editor-open-btn"> Adicionar Equação
-                    </button>
- 
-                            <div id="editor-container" style="height:150px;"></div>
-                          
-                            <% if ( tipo==="objetiva" ) { %>
-                                <%- include('../partials/resposta_objetiva') %>
-                                    <% }else{ %>
-                                        <%- include('../partials/resposta_dissertativa') %>
-                                            <% } %>
+                            style="display: none;" id="editor-open-btn"> Adicionar Equação
+                        </button>
+
+                        <div id="editor-container" style="height:150px;"></div>
+
+                        <% if ( tipo==="objetiva" ) { %>
+                            <%- include('../partials/resposta_objetiva') %>
+                                <% }else{ %>
+                                    <%- include('../partials/resposta_dissertativa') %>
+                                        <% } %>
                                             <%- include('../partials/editorEquacao') %>
                                                 <textarea id="pergunta" name="pergunta" rows="5" cols="50"
                                                     style="display: none;"> </textarea>
@@ -107,12 +107,12 @@
                                                             novo tópico</a>
                                                     </div>
                                                 </div>
-                                   
-                    
-                                          
+
+
+
 
                                                 <div class="button-container">
-                                                    <button type="submit" class="botao-registro">Registrar</button>
+                                                    <button type="button" class="botao-registro">Registrar</button>
                                                 </div>
         </div>
 
@@ -144,7 +144,7 @@
                 // Função para criar editores
                 function criarEditores(ids, placeholder) {
                     ids.forEach(id => {
-                        const editorInstance = initializeQuill(`#opcao${id}`,`editor-open-btn${id}`,  'Digite aqui a alternativa'); // Adicionando o placeholder se necessário
+                        const editorInstance = initializeQuill(`#opcao${id}`, `editor-open-btn${id}`, 'Digite aqui a alternativa'); // Adicionando o placeholder se necessário
                         editors.push({ [`#opcao${id}`]: editorInstance }); // Corrigido para usar a sintaxe correta
                     });
                 }
@@ -153,7 +153,7 @@
                 if (tipo === 'objetiva') {
                     criarEditores(EDITOR_IDS_OBJETIVA);
                 } else {
-                    const respostaEditor = initializeQuill(`#opcao${id}`, 'Digite aqui a resposta',`editor-open-btn${id}`);
+                    const respostaEditor = initializeQuill(`#opcao${EDITOR_ID_RESPOSTA}`, `editor-open-btn${EDITOR_ID_RESPOSTA}`, 'Digite aqui a resposta');
                     editors.push({ [EDITOR_ID_RESPOSTA]: respostaEditor });
                 }
                 loadingContainer.style.display = 'none';
@@ -168,20 +168,20 @@
                 function getAllContent() {
                     const contents = {};
                     EDITOR_IDS_OBJETIVA.forEach(id => {
-                        const editorInstance = acessarEditorPorId(id); // Acessa o editor pelo ID
+                        const editorInstance = acessarEditorPorId(`#opcao${id}`); // Acessa o editor pelo ID
                         if (editorInstance) {
                             const tamanho = editorInstance.getLength();
 
                             if (tamanho > 1) {
-                                contents[id] = editorInstance.getContents(); // Armazena o conteúdo no objeto com o ID como chave
+                                contents[`#opcao${id}`] = editorInstance.getContents(); // Armazena o conteúdo no objeto com o ID como chave
                             }
                         }
                     });
-
-                    // Verifica se o objeto contents está vazio e lança um erro se estiver
                     if (Object.keys(contents).length === 0) {
                         alert("Erro: Nenhum conteúdo encontrado.");
                     }
+                    // Verifica se o objeto contents está vazio e lança um erro se estiver
+
 
                     return contents;
                 }
@@ -192,6 +192,7 @@
                     console.log(data)
                     const length = quill.getLength();
                     const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+                    localStorage.setItem('data', JSON.stringify(data))
                     document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
                     document.getElementById('pergunta').value = JSON.stringify(pergunta);
                 }

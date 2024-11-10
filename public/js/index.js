@@ -187,6 +187,7 @@ insertBtn.addEventListener('click', () => {
     editor.setSelection(range.index + range.length + 1);
     symbolsBox.classList.add('hide');
     editorContainer.classList.add('hide');
+    document.getElementById('overlay').style.display = 'none';
 });
 
 symbolButtons.forEach(element => {
