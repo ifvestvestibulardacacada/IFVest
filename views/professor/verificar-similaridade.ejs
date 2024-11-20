@@ -73,14 +73,42 @@
         <% resultados.forEach(resultado => { %>
             <div class="resultado">
                 <div class="pergunta"><strong>Pergunta:</strong></div>
-                <div class="resposta"><%= resultado.pergunta %></div>
+                <div class="resposta" data-json='<%= resultado.pergunta %>'></div>
                 <div class="pergunta"><strong>Resposta:</strong></div>
-                <div class="resposta"><%= resultado.resposta %></div>
+                <div class="resposta" data-json='<%= resultado.resposta %>'></div>
                 <a href="/professor/questoes?pergunta=<%= encodeURIComponent(resultado.pergunta) %>" class="acao">Ver na página de minhas questões</a>
             </div>
-            
         <% }); %>
         <a href="/usuario/inicioLogado" class="acao">Voltar</a>
     </div>
+
+    <script>
+        // Função para extrair texto do JSON
+        function extrairTextoJSON(jsonStr) {
+            try {
+                const json = JSON.parse(jsonStr); // Converte JSON
+                if (json.ops) {
+                    return json.ops.map(op => op.insert).join('').trim(); // Extrai texto
+                }
+                return jsonStr;
+            } catch (error) {
+                console.error("Erro ao processar JSON:", error);
+                return jsonStr;
+            }
+        }
+
+        // Processa elementos na página
+        document.addEventListener('DOMContentLoaded', () => {
+            const respostas = document.querySelectorAll('.resposta');
+            respostas.forEach(resposta => {
+                const jsonStr = resposta.getAttribute('data-json');
+                resposta.textContent = extrairTextoJSON(jsonStr);
+            });
+        });
+    </script>
 </body>
+
+
+
+
 </html>
