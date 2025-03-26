@@ -14,15 +14,15 @@
 
 <body>
     <div class="container">
-           <div id="loading-container"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-        <div class="spinner"></div>
-        Carregando...
-    </div> -->
+        <div id="loading-container"
+            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+            <div class="spinner"></div>
+            Carregando...
+        </div> -->
 
 
         <%- include('../partials/sidebar') %>
-        <div class="overlay" id="overlay"></div>
+            <div class="overlay" id="overlay"></div>
             <h1 class="title">Criar Questão</h1>
             <hr class="uk-divider-icon">
             <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
@@ -51,8 +51,10 @@
 
 
                             <% if ( questao.tipo==="OBJETIVA" ) { %>
+                                <script type="module" src="/js/index.js"></script>
                                 <%- include('../partials/resposta_objetiva') %>
                                     <% }else{ %>
+                                        <script type="module" src="/js/indexDissertativa.js"></script>
                                         <%- include('../partials/resposta_dissertativa') %>
                                             <% } %>
 
@@ -73,14 +75,13 @@
                                                                 <select name="correta" id="correta">
                                                                     <% Opcoes.forEach(opcao=> { %>
                                                                         <option value="<%= opcao.alternativa %>"
-                                                                            <%=opcao.correta 
-                                                                            ? 'selected' : '' %>
+                                                                            <%=opcao.correta ? 'selected' : '' %>
 
                                                                             >
                                                                             Opção <%= opcao.alternativa %>
                                                                         </option>
                                                                         <% }); %>
-                                                                  
+
                                                                 </select>
                                                                 <% } %>
                                                                     <div>
@@ -88,7 +89,7 @@
                                                                             <label for="areaId">Selecione uma
                                                                                 área:</label>
                                                                             <select name="areaId" id="areaId"
-                                                                                onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>, <%= JSON.stringify(questao.Topicos) %>)">
+                                                                                >
 
                                                                                 <% Areas.forEach(area=> { %>
                                                                                     <option value="<%= area.id %>"
@@ -105,37 +106,47 @@
                                                         </div>
 
                                                         <label for="topicos">Selecione tópico(s):</label>
+                                                        <!-- <div class="dropdown" style="display: none;"
+                                                        id="topicosSearchContainer">
+                                                        <input type="text" id="search" placeholder="Pesquisar...">
+
+                                                        <ul id="dropdown-list" required>
+
+                                                            
+                                                        </ul> -->
                                                         <div class="dropdown" id="topicosSearchContainer">
                                                             <input type="text" id="search" placeholder="Pesquisar...">
                                                             <ul id="dropdown-list">
-                                                                <% questao.Topicos.forEach(topic=> { %>
+                                                                <div id="loading-indicator" style="display: none;">Carregando...</div>
+                                                                <% Topicos.forEach(topic => { %>
                                                                     <li>
-                                                                        <input type="checkbox"
-                                                                            name="topicosSelecionados[]"
-                                                                            value="<%= topic.id %>" checked>
+                                                                        <input type="checkbox" name="topicosSelecionados[]"
+                                                                            value="<%= topic.id %>"
+                                                                            <% if (questao.Topicos && questao.Topicos.filter(t => t.id === topic.id).length > 0) { %> checked <% } %> >
                                                                         <label for="topico-<%= topic.id %>">
                                                                             <%= topic.materia %>
                                                                         </label>
                                                                     </li>
-                                                                    <% }); %>
+                                                                <% }); %>
                                                             </ul>
                                                         </div>
+                                                        
 
 
 
-                                                        <!-- Modal para usuario adicionar novos tópicos -->
+                                                    <!-- Modal para usuario adicionar novos tópicos -->
 
 
-                                                        <a href="#" onclick="showCreateTopicModal()"
-                                                            id="create-topic-link">Não
-                                                            encontrou o tópico que procura? Clique aqui para criar um
-                                                            novo tópico</a>
-                                                    </div>
+                                                    <a href="#" onclick="showCreateTopicModal()"
+                                                        id="create-topic-link">Não
+                                                        encontrou o tópico que procura? Clique aqui para criar um
+                                                        novo tópico</a>
                                                 </div>
+    </div>
 
-                                                <div class="button-container">
-                                                    <button type="submit" class="botao-registro">Registrar</button>
-                                                </div>
+    <div class="button-container">
+        <button type="submit" class="botao-registro">Registrar</button>
+    </div>
     </div>
 
     </form>
@@ -149,7 +160,8 @@
             const editors = [];
             const opcoesIds = [];
             const tipo = <%- JSON.stringify(questao.tipo) %>;
-
+            const Topicos = <%- JSON.stringify(questao.Topicos) %>;
+            console.log(Topicos)
             const parsedContent = <%- JSON.stringify(questao.pergunta) %>;
             const parsedOpcoes = <%- JSON.stringify(Opcoes) %>;
             const deltaContent = JSON.parse(parsedContent);
@@ -189,7 +201,7 @@
                 const contents = {};
                 editorIds.forEach(id => {
                     const opcaoId = opcoesIds.find((opcao => opcao[`#opcao${id}`]))
-                   
+
                     const editorInstance = acessarEditorPorId(`#opcao${id}`);
                     // Acessa o editor pelo ID
                     if (editorInstance) {
@@ -202,8 +214,8 @@
                 });
 
                 if (Object.keys(contents).length === 0) {
-                        alert("Erro: Nenhum conteúdo encontrado.");
-                    }
+                    alert("Erro: Nenhum conteúdo encontrado.");
+                }
 
                 return contents;
             }
@@ -231,9 +243,13 @@
 
             document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
 
+            document.getElementById('areaId').addEventListener('change', async function () {
+                const AreaId = this.value;
+                await loadTopicDropdown(AreaId, Topicos);
+            });
+
         })
 
-     
 
 
 
@@ -244,7 +260,6 @@
     <script src="/js/main.js"></script>
     <script src="/js/editor.js"></script>
     <script src="/js/jscolor.min.js"></script>
-    <script type="module" src="/js/index.js"></script>
 
 </body>
 

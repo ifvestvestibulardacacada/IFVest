@@ -230,8 +230,9 @@ roteador.get('/:simuladoId/remover-questoes', async (req, res) => {
       include: [
         {
           model: Questões,
-          as: 'Questões', through: { attributes: [] }
-        }
+          as: 'Questões', through: { attributes: [] },
+          
+        },
       ]
     });
 
@@ -248,7 +249,12 @@ roteador.get('/:simuladoId/remover-questoes', async (req, res) => {
         as: 'Simulados',
         where: { id: simuladoId },
         through: { attributes: [] }
-      }],
+      }, {
+        model: Area, // Ensure you have an Area model defined
+        as: 'Area',  // Use the appropriate alias for the relationship
+       
+      },],
+      order: [[{ model: Area, as: 'Area' }, 'area', 'ASC']],
       limit: limit,
       offset: offset
     });
@@ -448,7 +454,37 @@ roteador.delete('/:simuladoId/remover-questoes', async (req, res) => {
     // Este método é fornecido pelo Sequelize para associações belongsToMany
     await simulado.removeQuestões(questoesSelecionadas);
 
-    res.redirect(`/simulados/`);
+    res.redirect(`/simulados/meus-simulados`);
+  } catch (error) {
+    console.error(error);
+    req.session.errorMessage = err.message;
+    res.redirect('back')
+  }
+});
+roteador.delete('/:simuladoId/excluir-simulado', async (req, res) => {
+  try {
+    const { simuladoId } = req.params;
+   
+    // Primeiro, verifique se o simulado existe
+    const simulado = await Simulados.findByPk(simuladoId, {
+      include: [{
+        model: Questões,
+        as: 'Questões'
+      }]
+    });
+
+    if (!simulado) {
+      return res.status(404).send('Simulado não encontrado.');
+    }
+
+
+    // Agora, remova as questões do simulado usando o método removeQuestoes
+    // Este método é fornecido pelo Sequelize para associações belongsToMany
+
+
+    await simulado.destroy()
+
+    res.redirect(`/simulados/meus-simulados`);
   } catch (error) {
     console.error(error);
     req.session.errorMessage = err.message;
@@ -463,20 +499,26 @@ roteador.get('/:simuladoId/fazer', async (req, res) => {
   try {
     const simuladoId = req.params.simuladoId;
     let errorMessage = req.session.errorMessage;
-
-    const simulado = await Simulados.findByPk(simuladoId, {
+    const simulado = await Simulados.findByPk(simuladoId, {   
+    });
+    const questoes = await Questões.findAll({
+      where: {},
       include: [{
-        model: Questões,
-        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
-        include: [{
-          model: Opcao,
-          as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
-        },
-       ]
+        model: Simulados,
+        as: 'Simulados',
+        where: { id: simuladoId },
+        through: { attributes: [] }
+      }, {
+        model: Area,
+        as: 'Area',
+      },
+      {
+        model: Opcao,
+        as: 'Opcoes'
       }],
+      order: [[{ model: Area, as: 'Area' }, 'area', 'ASC']], // Replace 'name' with the actual column name
 
     });
-
     if (errorMessage === null) {
       errorMessage = " ";
     }
@@ -485,7 +527,7 @@ roteador.get('/:simuladoId/fazer', async (req, res) => {
 
 
 
-    res.render('prova/prova', { simulado, errorMessage });
+    res.render('prova/prova', { simulado,questoes, errorMessage, });
     //  res.send(simulado)
   } catch (error) {
     console.error('Erro ao buscar perguntas da prova:', error);
@@ -498,20 +540,28 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
   const userId = req.session.idUsuario;
   const simuladoId = req.params.simuladoId;
   try {
-    const simulado = await Simulados.findByPk(simuladoId, {
+    const simulado = await Simulados.findByPk(simuladoId, {   
+    });
+    const todasQuestoes = await Questões.findAll({
+      where: {},
       include: [{
-        model: Questões,
-        as: 'Questões',
-        include: [{
-          model: Opcao,
-          as: 'Opcoes',
-          // Inclui apenas as opções corretas
-        },
-        ]
+        model: Simulados,
+        as: 'Simulados',
+        where: { id: simuladoId },
+        through: { attributes: [] }
+      }, {
+        model: Area,
+        as: 'Area',
+      },
+      {
+        model: Opcao,
+        as: 'Opcoes'
       }],
-    })
+      order: [[{ model: Area, as: 'Area' }, 'area', 'ASC']], // Replace 'name' with the actual column name
 
-    const questoesComOpcoesCorretas = simulado.Questões;
+    });
+
+    const questoesComOpcoesCorretas = todasQuestoes;
 
     // Consulta as respostas do usuário para cada questão
     const respostasDoUsuario = await Resposta.findAll({
@@ -528,6 +578,7 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
     });
 
 
+
     // Prepara os dados para a view
 
     let errorMessage = req.session.errorMessage;
@@ -539,7 +590,7 @@ roteador.get('/:simuladoId/gabarito', async (req, res) => {
     req.session.errorMessage = null;
 
     // Renderiza a view com os dados preparados
-    res.render('prova/gabarito', {     questoes: questoesComOpcoesCorretas,
+    res.render('prova/gabarito', {     questoes: todasQuestoes,      
       respostasUsuario: respostasDoUsuario,
       simulado: simulado, errorMessage });
 

@@ -51,8 +51,10 @@
                         <div id="editor-container" style="height:150px;"></div>
 
                         <% if ( tipo==="objetiva" ) { %>
+                            <script type="module" src="/js/index.js"></script>
                             <%- include('../partials/resposta_objetiva') %>
                                 <% }else{ %>
+                                    <script type="module" src="/js/indexObjetiva.js"></script>
                                     <%- include('../partials/resposta_dissertativa') %>
                                         <% } %>
                                             <%- include('../partials/editorEquacao') %>
@@ -112,7 +114,7 @@
 
 
                                                 <div class="button-container">
-                                                    <button type="button" class="botao-registro">Registrar</button>
+                                                    <button type="submit" class="botao-registro">Registrar</button>
                                                 </div>
         </div>
 
@@ -123,7 +125,7 @@
             <script src="/js/main.js"></script>
             <script src="/js/dropdown.js"></script>
             <script src="/js/editorInputs.js"></script>
-            <script type="module" src="/js/index.js"></script>
+
 
             <script>
                 // Select all input elements of type text

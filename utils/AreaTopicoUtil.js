@@ -31,6 +31,7 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
         where: { id: idQuestao }
       });
     }
+    
 
     await questao.addTopicos(topicosSelecionados);
   } catch (error) {

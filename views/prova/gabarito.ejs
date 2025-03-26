@@ -28,11 +28,19 @@
                     <h1>Teste de questões <%= simulado.tipo %>
                     </h1>
                 </div>
-                <% questoes.forEach(questao=> { %>
+                <% questoes.forEach((questao, index)=> { %>
                     <div class="name-div">
                         <div class="titulo">
                             <p>
-                                <%= questao.titulo %>
+                                <% 
+                                            const titulo = typeof questao.titulo === "string" ? questao.titulo : "";
+                                            const regex = /\(([^)]+)\)/; 
+                                            const match = regex.exec(titulo); // Usa exec para buscar conteúdo
+                                            const conteudo = match ? match[1] : "Sem Vestibular";
+                                        %>
+                                        <!-- Exiba valores extraídos no HTML para debugging -->
+                                        Questão <%= (index+1) %>
+                                         ( <%=conteudo %> )
                             </p>
                         </div>
                         <div class="name" data-delta='<%= questao.pergunta %>'>

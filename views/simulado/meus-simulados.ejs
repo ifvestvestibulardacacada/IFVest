@@ -17,7 +17,84 @@
     <!-- Outros elementos do head -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <style>
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Fundo semi-transparente */
+        }
 
+        .modal-content {
+            background-color: #fff;
+            /* Fundo branco */
+            border-radius: 8px;
+            /* Bordas arredondadas */
+            padding: 20px;
+            /* Espaçamento interno */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Sombra */
+            width: 400px;
+            /* Largura do modal */
+            text-align: center;
+            /* Centraliza o texto */
+        }
+
+        .close {
+            color: #aaa;
+            /* Cor do botão de fechar */
+            float: right;
+            /* Posiciona à direita */
+            font-size: 28px;
+            /* Tamanho da fonte */
+            font-weight: bold;
+            /* Negrito */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            /* Muda a cor ao passar o mouse */
+            text-decoration: none;
+            /* Remove sublinhado */
+            cursor: pointer;
+            /* Muda o cursor para pointer */
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+            /* Espaçamento acima dos botões */
+        }
+
+        .modal-buttons button {
+            background-color: #007bff;
+            /* Cor do botão de confirmar */
+            color: white;
+            /* Cor do texto do botão */
+            border: none;
+            /* Remove borda padrão */
+            border-radius: 5px;
+            /* Bordas arredondadas nos botões */
+            padding: 10px 20px;
+            /* Espaçamento interno dos botões */
+            cursor: pointer;
+            /* Muda o cursor para pointer */
+            margin-right: 10px;
+            /* Espaçamento entre os botões */
+        }
+
+        .modal-buttons button:hover {
+            background-color: #0056b3;
+            /* Cor ao passar o mouse no botão de confirmar */
+        }
+    </style>
     <title>Responsive sidebar submenus</title>
 </head>
 <link rel="stylesheet" href="/css/meusSimulados.css">
@@ -26,119 +103,143 @@
 <body>
     <%- include('../partials/sidebar') %>
         <main>
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
                 <script>
-                    window.onload = function() {
+                    window.onload = function () {
                         alert("<%= errorMessage %>");
                     };
                 </script>
-            <% } %>
-            <h1 class="uk-heading-divider"><span>MEUS SIMULADOS</span></h1>
-            <form action="/simulados/meus-simulados" method="GET">
+                <% } %>
+                    <h1 class="uk-heading-divider"><span>MEUS SIMULADOS</span></h1>
+                    <form action="/simulados/meus-simulados" method="GET">
 
-                <input type="text" name="titulo" placeholder="Filtrar por título">
-                <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
-            </form>
+                        <input type="text" name="titulo" placeholder="Filtrar por título">
+                        <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
+                    </form>
 
-            <table class="uk-table uk-table-striped">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                  
-                        <th>Tipo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% simulados.forEach(simulado=> { %>
-                        <tr>
-                            <td uk-tooltip="title: <%= simulado.descricao %>; pos: top-left">
-                                <%= simulado.titulo %>
-                            </td>
-                       
-                            <td>
-                                <%= simulado.tipo %>
-                            </td>
-                            <td>
-                                <div class="button-container">
-                                    <a href="/simulados/<%= simulado.id %>/fazer" class="button">
-                                        <div class="icon-button">
-                                            <i class="fas fa-play"></i> Fazer Simulado
+                    <table class="uk-table uk-table-striped">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+
+                                <th>Tipo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% simulados.forEach(simulado=> { %>
+                                <tr>
+                                    <td uk-tooltip="title: <%= simulado.descricao %>; pos: top-left">
+                                        <%= simulado.titulo %>
+                                    </td>
+
+                                    <td>
+                                        <%= simulado.tipo %>
+                                    </td>
+                                    <td>
+                                        <div class="button-container">
+                                            <a href="/simulados/<%= simulado.id %>/fazer" class="button">
+                                                <div class="icon-button">
+                                                    <i class="fas fa-play"></i> Fazer Simulado
+                                                </div>
+                                            </a>
+                                            <a href="/simulados/<%= simulado.id %>/editar" class="button">
+                                                <div class="icon-button">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </div>
+                                            </a>
+                                            <a href="/simulados/<%= simulado.id %>/imprimir" id="generate-pdf"
+                                                class="button">
+                                                <div class="icon-button">
+                                                    <i class="fas fa-print"></i> Gerar PDF
+                                                </div>
+                                            </a>
+                                            <a href="/simulados/<%= simulado.id %>/adicionar-questoes" class="button">
+                                                <div class="icon-button">
+                                                    <i class="fas fa-plus"></i> Adicionar Questões
+                                                </div>
+                                            </a>
+                                            <a href="/simulados/<%= simulado.id %>/remover-questoes" class="button">
+                                                <div class="icon-button">
+                                                    <i class="fas fa-minus"></i> Remover Questões
+                                                </div>
+                                            </a>
+                                            <a href="#" class="button" onclick="openModal(<%= simulado.id %>)">
+                                                <div class="icon-button">
+                                                    <i class="fa-solid fa-trash"></i> Excluir Simulado
+                                                </div>
+                                            </a>
+
                                         </div>
-                                    </a>
-                                    <a href="/simulados/<%= simulado.id %>/editar" class="button">
-                                        <div class="icon-button">
-                                            <i class="fas fa-edit"></i> Editar
+                                    </td>
+                                    <div id="modal-imprimir" class="modal">
+                                        <div class="modal-content">
+                                            <!-- inclusão de um documento html dentro do outro -->
+                                            <iframe id="iframe-imprimir" src="" frameborder="0" width="100%"
+                                                height="600"></iframe>
                                         </div>
-                                    </a>
-                                    <a href="/simulados/<%= simulado.id %>/imprimir" id="generate-pdf" class="button">
-                                        <div class="icon-button">
-                                            <i class="fas fa-print"></i> Gerar PDF
-                                        </div>
-                                    </a>
-                                    <a href="/simulados/<%= simulado.id %>/adicionar-questoes" class="button">
-                                        <div class="icon-button">
-                                            <i class="fas fa-plus"></i> Adicionar Questões
-                                        </div>
-                                    </a>
-                                    <a href="/simulados/<%= simulado.id %>/remover-questoes" class="button">
-                                        <div class="icon-button">
-                                            <i class="fas fa-minus"></i> Remover Questões
-                                        </div>
-                                    </a>
+                                    </div>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+
+                    <div id="modal-excluir" class="modal" style="display:none;">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                            <form id="deleteAccountForm" action="" method="POST">
+                                <p>Você tem certeza que deseja excluir este simulado?</p>
+                                <div>
+                                    <button type="submit" style="background-color: greenyellow">Confirmar</button>
+
+                                    <button type="button" style="background-color: red"onclick="closeModal()">Cancelar</button>
                                 </div>
-                            </td>
-                            <div id="modal-imprimir" class="modal">
-                                <div class="modal-content">
-                                    <!-- inclusão de um documento html dentro do outro -->
-                                    <iframe id="iframe-imprimir" src="" frameborder="0" width="100%" height="600"></iframe>
-                                </div>
-                            </div>
-                        </tr>
-                        <% }); %>
-                </tbody>
-            </table>
+                         
+                            </form>
+                        </div>
+                    </div>
 
 
-            <% if (totalPages> 1) { %>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <% if (currentPage> 1) { %>
-                            <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">Anterior</a>
-                            </li>
-                            <% } %>
-                                <% for(let i=1; i <=totalPages; i++) { %>
-                                    <li class="page-item <%= currentPage == i? 'active' : '' %>">
-                                        <a class="page-link" href="?page=<%= i %>">
-                                            <%= i %>
-                                        </a>
+                    <% if (totalPages> 1) { %>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <% if (currentPage> 1) { %>
+                                    <li class="page-item"><a class="page-link"
+                                            href="?page=<%= currentPage - 1 %>">Anterior</a>
                                     </li>
                                     <% } %>
-                                        <% if (currentPage < totalPages) { %>
-                                            <li class="page-item"><a class="page-link"
-                                                    href="?page=<%= currentPage + 1 %>">Próximo</a></li>
+                                        <% for(let i=1; i <=totalPages; i++) { %>
+                                            <li class="page-item <%= currentPage == i? 'active' : '' %>">
+                                                <a class="page-link" href="?page=<%= i %>">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
                                             <% } %>
-                    </ul>
-                </nav>
-                <% } %>
+                                                <% if (currentPage < totalPages) { %>
+                                                    <li class="page-item"><a class="page-link"
+                                                            href="?page=<%= currentPage + 1 %>">Próximo</a></li>
+                                                    <% } %>
+                            </ul>
+                        </nav>
+                        <% } %>
         </main>
         <!--========== MAIN JS ==========-->
         <script src="/js/main.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const botoesImprimir = document.querySelectorAll('.button[id="generate-pdf"]'); // seleciona o botão de gerar pdf
-                
+
                 // Adicionar o evento click
                 botoesImprimir.forEach(botao => {
-                    botao.addEventListener('click', function(e) {
+                    botao.addEventListener('click', function (e) {
                         e.preventDefault(); // impedir o redirecionamento para a pagina via link
-                        
+
                         // Pega o id do simulado
                         const simuladoId = this.href.split('/').filter(part => !isNaN(part)).pop(); // split: dividir a URL; filter: pegar apenas o ID do simulado; pop: retornar o ultimo número encontrado
 
                         const iframe = document.getElementById('iframe-imprimir'); // captura o id do iframe da pagina
                         iframe.src = `/simulados/${simuladoId}/imprimir`;  // carregar o conteudo
-                        
+
                         // Exibição do conteudo da modal
                         const modal = document.getElementById('modal-imprimir');
                         modal.style.display = 'block';
@@ -146,14 +247,40 @@
                 });
 
                 // Fechamento da modal
-                window.onclick = function(event) {
+                window.onclick = function (event) {
                     const modal = document.getElementById('modal-imprimir');
                     if (event.target == modal) {
                         modal.style.display = "none";
                     }
                 }
             });
-            </script>
+            let simuladoId;
+
+
+
+            function openModal(id) {
+                simuladoId = id; // Armazena o ID do simulado
+                document.getElementById('modal-excluir').style.display = 'block';
+                // Ajusta a ação do formulário com o ID do simulado
+                document.getElementById('deleteAccountForm').action = `/simulados/${simuladoId}/excluir-simulado?_method=DELETE`;
+            }
+
+
+
+            function closeModal() {
+                document.getElementById('modal-excluir').style.display = 'none';
+            }
+
+
+
+            // Fechar modal ao clicar fora dele
+            window.onclick = function (event) {
+                const modal = document.getElementById('modal-excluir');
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+        </script>
 </body>
 
 </html>

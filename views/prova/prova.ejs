@@ -19,76 +19,86 @@
 <body>
     <%- include('../partials/sidebar') %>
         <main>
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
                 <script>
-                    window.onload = function() {
+                    window.onload = function () {
                         alert("<%= errorMessage %>");
                     };
                 </script>
-            <% } %>
-            <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id %>"
-                method="POST">
-                <div class="title-div">
-                    <h1> <%= simulado.tipo %>
-                    </h1>
-                </div>
-
-                <% simulado.Questões.forEach(questao=> { %>
-                    <div class="name-div">
-                        <div class="titulo">
-                            <p>
-                                <%= questao.titulo %>
-                                    <% if (questao.vestibular && questao.vestibular.nome && questao.vestibular.ano) { %>
-                                        (<%= questao.vestibular.nome %>
-                                            <%= questao.vestibular.ano %>)
-                                                <% } %>
-                            </p>
+                <% } %>
+                    <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id %>"
+                        method="POST">
+                        <div class="title-div">
+                            <h1>
+                                <%= simulado.tipo %>
+                            </h1>
                         </div>
 
-                        <div class="name" data-delta='<%= questao.pergunta %>'>
-                            <!-- O conteúdo será inserido via JavaScript -->
-                            <span class="required">*</span>
-                        </div>
-                        <% if (questao.tipo==="OBJETIVA" ) { %>
+                        <% questoes.forEach((questao, index)=> { %>
+                            <div class="name-div">
+                                <div class="titulo">
+                                    <p>
+                                        <% 
+                                            const titulo = typeof questao.titulo === "string" ? questao.titulo : "";
+                                            const regex = /\(([^)]+)\)/; 
+                                            const match = regex.exec(titulo); // Usa exec para buscar conteúdo
+                                            const conteudo = match ? match[1] : "";
+                                        %>
+                                        <!-- Exiba valores extraídos no HTML para debugging -->
+                                        Questão <%= (index+1) %> 
+                                          (<%=conteudo %> -
+                                         <%= questao.Area.area%>)
+                                    </p>
                            
-                            <% 
-                            // Mapeia as letras para as opções
-                            const letras = ['A', 'B', 'C', 'D', 'E'];
-                            const opcoesOrdenadas = letras.map(letra => 
-                                questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
-                            ).filter(opcao => opcao); // Filtra opções que não foram encontradas
-                            %>
-                            
-                            <% opcoesOrdenadas.forEach((opcao, index) => { %>
-                                <div class="opcao">
-                                    <label class="letra" for="opcao<%= opcao.id %>">
-                                        <%= opcao.alternativa %>
-                                    </label>
-                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
-                                        name="questoes[<%= questao.id %>]"
-                                        value="<%= questao.id %>-<%= opcao.id %>">
-                                    
-                                    <div class="name" data-delta='<%= opcao.descricao %>'>
-                                        <span class="required">*</span>
-                                    </div>
                                 </div>
-                            <% }) %>
-                                        <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
-                                            <textarea name="respostas[questao_<%= questao.id %>]"
-                                                placeholder="Sua resposta"></textarea>
-                                            <% } %>
-                    </div>
-                    <% }) %>
+                         
+                                  
+                             
+                                <div class="name" data-delta='<%= questao.pergunta %>'>
+                                    <!-- O conteúdo será inserido via JavaScript -->
+                                    <span class="required">*</span>
+                                </div>
+                                <% if (questao.tipo==="OBJETIVA" ) { %>
 
-                        <div class="espaco">
-                            <button class="btn" type="submit">Enviar</button>
-                        </div>
-            </form>
+                                    <% const letras=['A', 'B' , 'C' , 'D' , 'E' ];
+                                        const opcoesOrdenadas=letras.map(letra=>
+                                        questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
+                                        ).filter(opcao => opcao); // Filtra opções que não foram encontradas
+                                        %>
+
+                                        <% opcoesOrdenadas.forEach((opcao, index)=> { %>
+                                            <div class="opcao">
+                                                <label class="letra" for="opcao<%= opcao.id %>">
+                                                    <%= opcao.alternativa %>
+                                                </label>
+                                                <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
+                                                    name="questoes[<%= questao.id %>]"
+                                                    value="<%= questao.id %>-<%= opcao.id %>">
+
+                                                <div class="name" data-delta='<%= opcao.descricao %>'>
+                                                    <span class="required">*</span>
+                                                </div>
+                                            </div>
+                                            <% }) %>
+                                                <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
+                                                    <textarea name="respostas[questao_<%= questao.id %>]"
+                                                        placeholder="Sua resposta"></textarea>
+                                                    <% } %>
+                            </div>
+                            <% }) %>
+
+                                <div class="espaco">
+                                    <button class="btn" type="submit">Enviar</button>
+                                </div>
+                    </form>
         </main>
 
         <!-- Adicione aqui os scripts JS necessários -->
         <script src="/js/main.js"></script>
         <script src="/js/quillContentHTML.js"></script>
+        <script>
+   
+        </script>
 </body>
 
 </html>

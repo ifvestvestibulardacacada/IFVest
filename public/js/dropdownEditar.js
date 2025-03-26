@@ -1,35 +1,34 @@
 // Function to add items to the dropdown
-function addItemsToDropdown(Areas, Topicos) {
-    const areaSelect = document.getElementById('areaId');
-    const selectedAreaId = areaSelect.value;
-    const selectedArea = Areas.find(area => area.id === parseInt(selectedAreaId));
-    const topicos = selectedArea ? selectedArea.Topico : [];
+async function addItemsToDropdown(AreaId, Topicos) {
+    const response = await fetch(`/professor/topicos/${AreaId}`);
+   
+    const data = await response.json();
+    const topicos = data;
+
 
     const dropdownList = document.getElementById('dropdown-list');
     dropdownList.innerHTML = '';
 
-    topicos.forEach(function (topico) {
+    topicos.forEach(topic => {
         const listItem = document.createElement('li');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = topico.id;
+        checkbox.value = topic.id;
 
         const label = document.createElement('label');
-        label.htmlFor = 'topico-' + topico.id;
-        label.textContent = topico.materia;
+        label.htmlFor = 'topico-' + topic.id;
+        label.textContent = topic.materia;
         
-    
-
         let isSelected = false;
         Topicos.forEach(t => {
-            if (t.id === topico.id) {
+            if (t.id === topic.id) {
                 isSelected = true;
                 return false; // Sair do loop interno
             }
         });
 
-        checkbox.checked = isSelected;// Inicializa como não selecionado
+        checkbox.checked = isSelected; // Inicializa como selecionado
 
         checkbox.addEventListener('change', function () {
             updateSelectedTopics();
@@ -41,6 +40,58 @@ function addItemsToDropdown(Areas, Topicos) {
     });
 }
 
+async function loadTopicDropdown(AreaId, Topicos) {
+    const loadingContainer = document.getElementById('loading-container');
+       const dropdownList = document.getElementById('dropdown-list');
+   
+       // Mostra o indicador de carregamento
+       loadingContainer.style.display = 'block';
+       dropdownList.innerHTML = ''; // Limpa a lista antes de carregar novos itens
+   
+       try {
+           const response = await fetch(`/professor/topicos/${AreaId}`);
+   
+           // Verifica se a resposta foi bem-sucedida
+           if (!response.ok) {
+               throw new Error(`Erro na requisição: ${response.statusText}`);
+           }
+   
+           const data = await response.json();
+   
+           // Garante que topicos seja um array
+           const topicos = Array.isArray(data) ? data : [];
+   
+           topicos.forEach(topic => {
+               const listItem = document.createElement('li');
+               const checkbox = document.createElement('input');
+               checkbox.type = 'checkbox';
+               checkbox.name = 'topicosSelecionados[]';
+               checkbox.value = topic.id;
+   
+               const label = document.createElement('label');
+               label.htmlFor = 'topico-' + topic.id;
+               label.textContent = topic.materia;
+   
+               // Verifica se o tópico está selecionado
+               let isSelected = Topicos.some(t => t.id === topic.id);
+               checkbox.checked = isSelected; // Inicializa como selecionado
+   
+               checkbox.addEventListener('change', function () {
+                   updateSelectedTopics();
+               });
+   
+               listItem.appendChild(checkbox);
+               listItem.appendChild(label);
+               dropdownList.appendChild(listItem);
+           });
+       } catch (error) {
+           console.error("Erro ao adicionar itens ao dropdown:", error);
+           alert("Ocorreu um erro ao carregar os tópicos. Tente novamente."); // Mensagem ao usuário
+       } finally {
+           // Oculte o indicador de carregamento após a conclusão
+           loadingContainer.style.display = 'none';
+       }
+   }
 
 // Function to update selected topics
 function updateSelectedTopics() {

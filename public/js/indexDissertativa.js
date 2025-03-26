@@ -9,10 +9,7 @@ const insertBtn = document.querySelector('#insert-btn')
 const clearBtn = document.querySelector('#clear-btn')
 const editorBtn = document.querySelector("#editor-open-btn")
 const opcaoBtnA = document.querySelector("#editor-open-btnA")
-const opcaoBtnB = document.querySelector("#editor-open-btnB")
-const opcaoBtnC = document.querySelector("#editor-open-btnC")
-const opcaoBtnD = document.querySelector("#editor-open-btnD")
-const opcaoBtnE = document.querySelector("#editor-open-btnE")
+
 const editorCloseBtn = document.querySelector("#editor-close-btn")
 const editorBox = document.querySelector('#editor-box')
 const symbolsBox = document.querySelector("#symbols-box")
@@ -81,34 +78,7 @@ opcaoBtnA.addEventListener('click', () => {
     document.getElementById('overlay').style.display = 'block';
 })
 
-opcaoBtnB.addEventListener('click', () => {
-    editorId = "#opcaoB"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-})
-opcaoBtnC.addEventListener('click', () => {
-    editorId = "#opcaoC"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-})
-opcaoBtnD.addEventListener('click', () => {
-    editorId = "#opcaoD"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-})
-opcaoBtnE.addEventListener('click', () => {
-    editorId = "#opcaoE"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-})
+
 
 /// Sections event listeners //////////////////////////////////////////////////////////////////
 section_1_btn.forEach(element => {

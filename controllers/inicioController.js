@@ -3,8 +3,8 @@ const express = require('express');
 const { Usuario } = require('../models');
 const bcrypt = require('bcrypt');
 const roteador = Router()
+const jwt = require('jsonwebtoken');
 
-const app = express()
 // rota da pagina inicial
 roteador.get('/home', (req, res) => {
     res.status(200).render('usuario/inicio');
@@ -17,8 +17,12 @@ roteador.get('/editor', async (req, res) => {
 // rota de deslogar usuario
 roteador.post('/logoff', (req, res) => {
     console.log("....deslogando")
-    req.session.destroy();
-    res.redirect('/usuario/login');
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.redirect('/usuario/login');
+    });
+ 
+
 });
 
 // rotas de login
@@ -31,7 +35,6 @@ roteador.get('/login', (req, res) => {
     req.session.errorMessage = null; // Limpa a mensagem de erro após exibi-la
     res.status(200).render('usuario/login', { errorMessage });
 });
-
 roteador.post('/login', async (req, res) => {
     const {usuario, senha} =  req.body;
         
@@ -57,12 +60,22 @@ roteador.post('/login', async (req, res) => {
         if (!senhaCorreta) {
             throw new Error("Usuario ou Senha invalidos");
         }
+        req.session.regenerate((err) => { 
+            if (err) throw err;
+        });
 
         req.session.login = true;
         req.session.idUsuario = usuarioEncontrado.id;
         req.session.perfil = usuarioEncontrado.perfil;
         req.session.nomeUsuario = usuarioEncontrado.usuario;
         req.session.imagemPerfil = usuarioEncontrado.imagemPerfil;
+
+        await new Promise((resolve, reject) => {
+            req.session.save(err => {
+                if(err) reject(err);
+                else resolve();
+            });
+        });
 
         return res.redirect('/usuario/inicioLogado');
     } catch (err) {
@@ -103,5 +116,4 @@ roteador.post('/cadastro', async (req, res) => {
 
 });
 
-app.use(roteador)
-module.exports = app;
+module.exports = roteador;

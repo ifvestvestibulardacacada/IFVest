@@ -43,15 +43,15 @@
                     <button type="submit">Filtrar por área</button>
 
                     <!-- Campo de seleção para tópicos -->
-                    <select name="topicosSelecionados">
-                        <option value="">Todas os tópicos</option>
-                        <% topicos.forEach(topico=> { %>
+                    <select name="topicosSelecionados[]" id="topicosSelecionados" >
+                        <% topicos.forEach(topico => { %>
                             <option value="<%= topico.id %>">
                                 <%= topico.materia %>
                             </option>
-                            <% }); %>
+                        <% }); %>
                     </select>
                     <button type="submit">Filtrar por tópicos</button>
+                    
 
 
                     <div class="container">

@@ -41,6 +41,7 @@
                             <th>Título</th>
                             <th>Tipo</th>
                             <th>Questão</th>
+                            <th>Area</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +59,9 @@
                                         <!-- O conteúdo será inserido via JavaScript -->
                                         <span class="required">*</span>
                                     </div>
+                                </td>
+                                <td>
+                                    <%= questao.Area.area %>
                                 </td>
                             </tr>
                         <% }); %>
@@ -86,7 +90,7 @@
         <!--========== MAIN JS ==========-->
 
 
-
+        
         <script src="/js/main.js"></script>
         <script src="/js/editarsimulado.js"></script>
         <script src="/js/quillContentHtmlTable.js"></script>

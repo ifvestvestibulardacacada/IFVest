@@ -69,13 +69,13 @@ roteador.get('/registrar-questao/:tipo', async (req, res) => {
 
 roteador.post('/registrar-questao/:tipo', async (req, res) => {
   try {
-    const {  titulo, pergunta,  areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
+    const { titulo, pergunta, areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
     const tipo = req.params.tipo.toUpperCase()
 
-        if (!respostasSelecionadas) {
+    if (!respostasSelecionadas) {
       throw new Error("Respostas não pode ser vazio")
     }
-    
+
 
     const ArrayRespostas = JSON.parse(respostasSelecionadas);
 
@@ -86,14 +86,14 @@ roteador.post('/registrar-questao/:tipo', async (req, res) => {
     const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
       alternativa,
       descricao: ArrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
-  }));
+    }));
 
     const usuarioId = req.session.idUsuario;
 
     if (!topicosSelecionados) {
       throw new Error("Selecione pelo menos um tópico")
     }
-    
+
 
     const createQuestao = await Questões.create({
       pergunta: pergunta,
@@ -144,20 +144,20 @@ roteador.get('/questoes', async (req, res) => {
 
   try {
     let questoes = await Questões.findAll({
-        where: {
-          usuarioId: usuarioId,
-        },
-        include: [{
-          model: Area,
-          as: 'Area'
-        }, {
-          model: Topico,
-          as: 'Topicos'
-        }],
-        limit: limit,
-        offset: offset,
-      });
-    
+      where: {
+        usuarioId: usuarioId,
+      },
+      include: [{
+        model: Area,
+        as: 'Area'
+      }, {
+        model: Topico,
+        as: 'Topicos'
+      }],
+      limit: limit,
+      offset: offset,
+    });
+
 
     const questoesCount = await Questões.count({
       where: {
@@ -297,7 +297,7 @@ roteador.get('/editar-questao/:id', async (req, res) => {
 
   try {
 
-    const Topicos = await Topico.findAll()
+
 
     const Areas = await Area.findAll({
       include: [{
@@ -319,7 +319,11 @@ roteador.get('/editar-questao/:id', async (req, res) => {
     if (!questao) {
       return res.status(404).send('Questão não encontrada');
     }
-
+    const Topicos = await Topico.findAll({
+      where: {
+        areaId: questao.areaId
+      }
+    })
     const Opcoes = await Opcao.findAll({
       where: {
         questao_id: questao.id
@@ -358,7 +362,7 @@ roteador.patch('/editar-questao', async (req, res) => {
   try {
     const { id, titulo, pergunta, correta, respostasSelecionadas } = req.body;
     const { areaId, topicosSelecionados } = req.body;
-      
+
     const ArrayRespostas = JSON.parse(respostasSelecionadas)
 
 
@@ -370,7 +374,7 @@ roteador.patch('/editar-questao', async (req, res) => {
       alternativa,
       descricao: ArrayRespostas[`#opcao${alternativa}`].content,
       id: ArrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
-  }));
+    }));
 
 
     await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
@@ -405,12 +409,12 @@ roteador.patch('/editar-questao', async (req, res) => {
         descricao: JSON.stringify(opcao.descricao),
         alternativa: opcao.alternativa,
       };
-    
+
 
       if (correta) {
         updateData.correta = correta === opcao.alternativa;
       }
-    
+
       await Opcao.update(updateData, {
         where: { id: opcao.id }
       });
@@ -430,7 +434,7 @@ roteador.post('/registrar-topico', async (req, res) => {
 
     // Verifica se os campos obrigatórios estão preenchidos
     if (!topico || !areaIdTopico || !usuarioId) {
-      throw new Error('Os campos tópico e areaId são obrigatórios.' );
+      throw new Error('Os campos tópico e areaId são obrigatórios.');
     }
 
     // Cria um novo tópico

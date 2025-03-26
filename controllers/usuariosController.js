@@ -138,9 +138,10 @@ roteador.delete('/:id', async (req, res) => {
   }
 });
 
+roteador.get('/sobreNos', (req, res) => {
+  res.status(200).render('desenvolvedores/sobreNos');
+});
 
-
-// roteador.use('/simulados', simulados)
 
 module.exports = roteador;
 

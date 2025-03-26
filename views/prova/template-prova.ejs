@@ -44,43 +44,40 @@
         <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id %>"
             method="POST">
             <div class="questoes-container">
-                <% simulado.Questões.forEach(questao=> { %>
-                    <div class="name-div">
-                        <div class="titulo">
-                            <p>
-                                <%= questao.titulo %>
-                                    <% if (questao.vestibular && questao.vestibular.nome && questao.vestibular.ano) { %>
-                                        (<%= questao.vestibular.nome %>
-                                            <%= questao.vestibular.ano %>)
-                                                <% } %>
-                            </p>
-                        </div>
-
-                        <div class="name" data-delta='<%= questao.pergunta %>'>
-                            <!-- O conteúdo será inserido via JavaScript -->
-                            <span class="required">*</span>
-                        </div>
-
-                        <% if (questao.tipo==="OBJETIVA" ) { %>
-                           
-                            <% questao.Opcoes.forEach((opcao, index)=> { %>
-                                <div class="opcao">
-                                    <label class="letra" for="opcao<%= opcao.id %>">
-                                        <%= opcao.alternativa %>
-                                    </label>
-                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
-                                        name="questoes[<%= questao.id %>]"
-                                        value="<%= questao.id %>-<%= opcao.id %>">
-                                            <div class="name" data-delta='<%= opcao.descricao %>'>
-                                                  <span class="required">*</span>
-                                            </div>                    
+                <% simulado.Questões.forEach((questao, index) => { %>
+                    <div class="questao"> <!-- Adicionando a classe 'questao' -->
+                     
+                            <div class="name-div">
+                                <div class="titulo">
+                                    <p>
+                                        Questão <%= (index + 1) %>
+                                    </p>
                                 </div>
-                                <% }) %>
-                                    <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
-                                        <textarea name="respostas[questao_<%= questao.id %>]"
-                                            placeholder="Sua resposta"></textarea>
-                                        <% } %>
-                </div>
+                                <div class="name" data-delta='<%= questao.pergunta %>'>
+                                    <span class="required">*</span>
+                                </div>
+            
+                                <% if (questao.tipo === "OBJETIVA") { %>
+                                    <% questao.Opcoes.forEach((opcao, index) => { %>
+                                        <div class="opcao">
+                                            <label class="letra" for="opcao<%= opcao.id %>">
+                                                <%= opcao.alternativa %>
+                                            </label>
+                                            <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
+                                                name="questoes[<%= questao.id %>]"
+                                                value="<%= questao.id %>-<%= opcao.id %>">
+                                            <div class="name" data-delta='<%= opcao.descricao %>'>
+                                                <span class="required">*</span>
+                                            </div>                    
+                                        </div>
+                                    <% }) %>
+                                <% } else if (questao.tipo === "DISSERTATIVA") { %>
+                                    <textarea name="respostas[questao_<%= questao.id %>]"
+                                        placeholder="Sua resposta"></textarea>
+                                <% } %>
+                            </div>
+                       
+                    </div> <!-- Fim da div 'questao' -->
                 <% }) %>
             </div>
         </form>
